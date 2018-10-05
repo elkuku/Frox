@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Export result{% endblock %}
+
+{% block body %}
+    <h3>GPX</h3>
+    <textarea name="gpx" id="gpx" cols="100" rows="10">{{ gpx }}</textarea>
+    <h3>MaxField</h3>
+    <textarea name="gpx" id="gpx" cols="100" rows="10">{{ maxField }}</textarea>
+{% endblock %}

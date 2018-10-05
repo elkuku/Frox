@@ -42,6 +42,11 @@ class Waypoint
      */
     private $category;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Province", inversedBy="waypoints")
+     */
+    private $province;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Waypoint
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getProvince(): ?Province
+    {
+        return $this->province;
+    }
+
+    public function setProvince(?Province $province): self
+    {
+        $this->province = $province;
 
         return $this;
     }

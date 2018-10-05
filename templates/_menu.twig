@@ -1,9 +1,18 @@
 <ul class="navbar-nav mr-auto">
     <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ path('map') }}#">Map</a>
+        <a class="nav-link" href="{{ path('map') }}">Map</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('import') }}">Import</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('export') }}">Export</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('admin') }}">Admin</a>
     </li>
     <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>

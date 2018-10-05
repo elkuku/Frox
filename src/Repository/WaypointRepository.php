@@ -19,6 +19,21 @@ class WaypointRepository extends ServiceEntityRepository
         parent::__construct($registry, Waypoint::class);
     }
 
+    /**
+     * @return Waypoint[] Returns an array of Waypoint objects
+     */
+    public function findById($id)
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('w.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Waypoint[] Returns an array of Waypoint objects
 //     */
