@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Waypoint;
+use App\Helper\Paginator\PaginatorOptions;
+use App\Helper\Paginator\PaginatorRepoTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,6 +17,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class WaypointRepository extends ServiceEntityRepository
 {
+    use PaginatorRepoTrait;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Waypoint::class);
@@ -62,4 +67,51 @@ class WaypointRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * @param PaginatorOptions $options
+     *
+     * @return Paginator
+     */
+    public function getRawList(PaginatorOptions $options): Paginator
+    {
+        $criteria = $options->getCriteria();
+
+        $query = $this->createQueryBuilder('w')
+            ->orderBy('w.' . $options->getOrder(), $options->getOrderDir());
+
+        if (isset($criteria['province']) && $criteria['province'])
+        {
+            $query->where('w.province = :province')
+                ->setParameter('province', $criteria['province']);
+        }
+
+        if ($options->searchCriteria('city'))
+        {
+            $query->andWhere('w.city LIKE :city')
+                ->setParameter('city', '%'.$options->searchCriteria('city').'%');
+        }
+
+        if ($options->searchCriteria('store'))
+        {
+            $query->andWhere('t.store = :store')
+                ->setParameter('store', (int) $options->searchCriteria('store'));
+        }
+
+        if ($options->searchCriteria('date_from'))
+        {
+            $query->andWhere('t.date >= :date_from')
+                ->setParameter('date_from', $options->searchCriteria('date_from'));
+        }
+
+        if ($options->searchCriteria('date_to'))
+        {
+            $query->andWhere('t.date <= :date_to')
+                ->setParameter('date_to', $options->searchCriteria('date_to'));
+        }
+
+        $query = $query->getQuery();
+
+        return $this->paginate($query, $options->getPage(), $options->getLimit());
+    }
 }

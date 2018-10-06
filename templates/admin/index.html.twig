@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Admin{% endblock %}
+
+{% block body %}
+    <h1>Admin</h1>
+    <form action="{{ path('run-export') }}" method="post">
+
+        <table class="table table-condensed table-hover">
+
+            <thead>
+            <tr>
+                <th>Export</th>
+                <th>Name</th>
+                <th>Lat/Lon</th>
+                <th>Category</th>
+                <th>Link</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for waypoint in waypoints %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="points[]" value="{{ waypoint.id }}"/>
+                    </td>
+                    <td>{{ waypoint.name }}</td>
+                    <td>
+                        {{ waypoint.lat }}
+                        {{ waypoint.lon }}
+                    </td>
+                    <td>{{ waypoint.category.name }}</td>
+                    <td>
+                        {% if get_url('intel') %}
+                            <a href="https://{{ get_url('intel') }}?pll={{ waypoint.lat }},{{ waypoint.lon }}">Intel</a>
+                        {% else %}
+                            no intel URL set
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+        <button type="submit" class="btn btn-success">Export</button>
+    </form>
+{% endblock %}

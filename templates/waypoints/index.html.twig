@@ -7,31 +7,36 @@
     <script type="text/javascript" src="{{ asset('build/paginator.js') }}"></script>
 {% endblock %}
 
-{% block title %}{{ parent() }} - Export{% endblock %}
+{% block title %}{{ parent() }} - Waypoints{% endblock %}
 
 {% block body %}
-    <h1>Export</h1>
+    <h1>Waypoints</h1>
 
-<form method="post">
+    <form method="post">
 
-    <div class="row">
-        <div class="col-xs-2">{{ paginator.listLimit(paginatorOptions) }}</div>
-        <div class="col-xs-10">{{ paginator.pagination(paginatorOptions) }}</div>
-    </div>
-
-    {#<form action="{{ path('run-export') }}" method="post">#}
+        <div class="row">
+            <div class="col-xs-2">{{ paginator.listLimit(paginatorOptions) }}</div>
+            <div class="col-xs-10">{{ paginator.pagination(paginatorOptions) }}</div>
+        </div>
 
         <table class="table table-condensed table-hover">
 
             <thead>
             <tr>
-                <th>Province</th>
-                <th>City</th>
+                <th>Action</th>
                 <th>Name</th>
+                <th>Lat/Lon</th>
+                <th>Province</th>
+
+                <th>City</th>
+
+                <th>Category</th>
                 <th>Link</th>
-                <th>Export</th>
             </tr>
             <tr>
+                <th></th>
+                <th></th>
+                <th></th>
                 <th{{ paginatorOptions.searchCriteria('province') ? ' class="cell-active"' : '' }}>
                     <select name="paginatorOptions[criteria][province]" class="form-control paginatorResetChange">
                         <option value="0">...</option>
@@ -49,16 +54,23 @@
                 </th>
                 <th></th>
                 <th></th>
-                <th></th>
             </tr>
             </thead>
 
             <tbody>
             {% for waypoint in waypoints %}
                 <tr>
+                    <td>
+                        <a href="{{ path('waypoints_edit', {'id': waypoint.id}) }}">Edit</a>
+                    </td>
+                    <td>{{ waypoint.name }}</td>
+                    <td>
+                        {{ waypoint.lat }}
+                        {{ waypoint.lon }}
+                    </td>
                     <td>{{ waypoint.province ? waypoint.province.name : 'n/a' }}</td>
                     <td>{{ waypoint.city }}</td>
-                    <td>{{ waypoint.name }}</td>
+                    <td>{{ waypoint.category.name }}</td>
                     <td>
                         {% if get_url('intel') %}
                             <a href="https://{{ get_url('intel') }}?pll={{ waypoint.lat }},{{ waypoint.lon }}">Intel</a>
@@ -66,17 +78,14 @@
                             no intel URL set
                         {% endif %}
                     </td>
-                    <td>
-                        <input type="checkbox" name="points[]" value="{{ waypoint.id }}"/>
-                    </td>
                 </tr>
             {% endfor %}
             </tbody>
 
         </table>
-        <button type="submit" class="btn btn-success">Export</button>
-    {{ paginator.formFields(paginatorOptions) }}
 
-</form>
+        {{ paginator.formFields(paginatorOptions) }}
+
+    </form>
 
 {% endblock %}

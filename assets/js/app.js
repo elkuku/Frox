@@ -11,6 +11,8 @@ require('../css/app.css');
 require('bootstrap')
 require('bootstrap/dist/css/bootstrap.css')
 
+require('open-iconic/font/css/open-iconic-bootstrap.css')
+
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // var $ = require('jquery');
 
