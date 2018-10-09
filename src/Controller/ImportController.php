@@ -19,24 +19,16 @@ class ImportController extends AbstractController
     public function index(Request $request)
     {
         $form = $this->createForm(ImportFormType::class);
-        // only handles data on POST
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($waypoint);
-//            $em->flush();
 
-//            echo $dat
             if ($data['gpxRaw']) {
                 $points = $this->importGpx($data['gpxRaw'], $data['province'], $data['city']);
-
                 if ($points) {
                     $this->addFlash('success', $points.' Waypoint(s) imported!');
-
                 } else {
                     $this->addFlash('warning', 'No Waypoints imported!');
-
                 }
             }
 
@@ -77,7 +69,7 @@ class ImportController extends AbstractController
         );
     }
 
-    private function importGpx(string $gpxData, ?Province $province = null, string $city = '')
+    private function importGpx(string $gpxData, ?Province $province = null, ?string $city = '')
     {
         $repository    = $this->getDoctrine()
             ->getRepository(Waypoint::class);

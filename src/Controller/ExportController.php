@@ -31,14 +31,11 @@ class ExportController extends AbstractController
 
         $paginatorOptions->setMaxPages((int)ceil($waypoints->count() / $paginatorOptions->getLimit()));
 
-//        $waypoints = $this->getDoctrine()
-//            ->getRepository(Waypoint::class)
-//            ->findAll();
-
         return $this->render(
             'export/index.html.twig',
             [
                 'waypoints'        => $waypoints,
+                'waypoints_cnt'        => $waypoints->count(),
                 'provinces'        => $provinceRepository->findAll(),
                 'paginatorOptions' => $paginatorOptions,
             ]

@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block body %}
+    <div id="result">
+        <span id="result_message">0</span> waypoints selected&nbsp;
+        <button id="result_submit">Export</button>
+    </div>
     <div id="map"></div>
 
     <script src="{{ asset('build/map.js') }}"></script>

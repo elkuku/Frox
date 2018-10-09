@@ -8,6 +8,7 @@ use App\Helper\Paginator\PaginatorTrait;
 use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -42,8 +43,8 @@ class WaypointsController extends AbstractController
     public function edit(Request $request, Waypoint $waypoint)
     {
         $form = $this->createForm(WaypointFormType::class, $waypoint);
-        // only handles data on POST
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $waypoint = $form->getData();
             $em = $this->getDoctrine()->getManager();
@@ -52,10 +53,10 @@ class WaypointsController extends AbstractController
             $this->addFlash('success', 'Waypoint updated!');
             return $this->redirectToRoute('waypoints');
         }
+
         return $this->render('waypoints/edit.html.twig', [
             'form' => $form->createView()
         ]);
-
     }
 
     /**
@@ -73,5 +74,30 @@ class WaypointsController extends AbstractController
                 'waypoints' => $waypoints,
             ]
         );
+    }
+
+    /**
+     * @Route("/waypoints_map", name="map-waypoints")
+     */
+    public function map(): JsonResponse
+    {
+        $waypoints = $this->getDoctrine()
+            ->getRepository(Waypoint::class)
+            ->findAll();
+
+        $wps = [];
+
+        foreach ($waypoints as $waypoint) {
+            $w = [];
+
+            $w['name'] = $waypoint->getName();
+            $w['lat'] = $waypoint->getLat();
+            $w['lng'] = $waypoint->getLon();
+            $w['id'] = $waypoint->getId();
+
+            $wps[] = $w;
+        }
+
+        return $this->json($wps);
     }
 }

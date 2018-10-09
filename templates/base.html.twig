@@ -33,11 +33,14 @@
 </nav>
 
 <main role="main" class="container-fluid">
+    <noscript><h1 class="alert alert-danger">Please activate Javascript</h1></noscript>
+    {% include ('_flash-messages.html.twig') %}
 
     {% block body %}{% endblock %}
 
 </main><!-- /.container -->
 
+{#<script src="{{ asset('build/js/common.js') }}"></script>#}
 <script src="{{ asset('build/app.js') }}"></script>
 
 {% block javascripts %}{% endblock %}

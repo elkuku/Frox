@@ -23,35 +23,34 @@
 
             <thead>
             <tr>
-                <th>Action</th>
-                <th>Name</th>
-                <th>Lat/Lon</th>
+                <th>Id</th>
                 <th>Province</th>
-
                 <th>City</th>
-
                 <th>Category</th>
+                <th>Name</th>
                 <th>Link</th>
+                <th>Action</th>
             </tr>
             <tr>
                 <th></th>
-                <th></th>
-                <th></th>
                 <th{{ paginatorOptions.searchCriteria('province') ? ' class="cell-active"' : '' }}>
-                    <select name="paginatorOptions[criteria][province]" class="form-control paginatorResetChange">
-                        <option value="0">...</option>
-                        {% for province in provinces %}
-                            <option value="{{ province.id }}"
-                                    {{ paginatorOptions.searchCriteria('province') == province.id ? ' selected="selected"' : '' }}>
-                                {{ province.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                <select name="paginatorOptions[criteria][province]" class="form-control paginatorResetChange">
+                <option value="0">...</option>
+                {% for province in provinces %}
+                <option value="{{ province.id }}"
+                {{ paginatorOptions.searchCriteria('province') == province.id ? ' selected="selected"' : '' }}>
+                {{ province.name }}
+                </option>
+                {% endfor %}
+                </select>
                 </th>
                 <th{{ paginatorOptions.searchCriteria('city') ? ' class="cell-active"' : '' }}>
-                    <br/>
-                    {{ paginator.criteria('city', paginatorOptions) }}
+                <br/>
+                {{ paginator.criteria('city', paginatorOptions) }}
                 </th>
+                <th></th>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th></th>
             </tr>
@@ -60,23 +59,20 @@
             <tbody>
             {% for waypoint in waypoints %}
                 <tr>
-                    <td>
-                        <a href="{{ path('waypoints_edit', {'id': waypoint.id}) }}">Edit</a>
-                    </td>
-                    <td>{{ waypoint.name }}</td>
-                    <td>
-                        {{ waypoint.lat }}
-                        {{ waypoint.lon }}
-                    </td>
+                    <td>{{ waypoint.id }}</td>
                     <td>{{ waypoint.province ? waypoint.province.name : 'n/a' }}</td>
                     <td>{{ waypoint.city }}</td>
                     <td>{{ waypoint.category.name }}</td>
+                    <td>{{ waypoint.name }}</td>
                     <td>
                         {% if get_url('intel') %}
                             <a href="https://{{ get_url('intel') }}?pll={{ waypoint.lat }},{{ waypoint.lon }}">Intel</a>
                         {% else %}
                             no intel URL set
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('waypoints_edit', {'id': waypoint.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% endfor %}

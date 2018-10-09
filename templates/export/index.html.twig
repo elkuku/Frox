@@ -5,6 +5,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('build/paginator.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('build/export.js') }}"></script>
 {% endblock %}
 
 {% block title %}{{ parent() }} - Export{% endblock %}
@@ -12,14 +13,13 @@
 {% block body %}
     <h1>Export</h1>
 
-<form method="post">
+    <form method="post">
 
-    <div class="row">
-        <div class="col-xs-2">{{ paginator.listLimit(paginatorOptions) }}</div>
-        <div class="col-xs-10">{{ paginator.pagination(paginatorOptions) }}</div>
-    </div>
-
-    {#<form action="{{ path('run-export') }}" method="post">#}
+        <div class="row">
+            Found {{ waypoints_cnt }} waypoints. Show&nbsp;
+            <div class="col-xs-2">{{ paginator.listLimit(paginatorOptions) }}</div>
+            <div class="col-xs-10">{{ paginator.pagination(paginatorOptions) }}</div>
+        </div>
 
         <table class="table table-condensed table-hover">
 
@@ -49,7 +49,9 @@
                 </th>
                 <th></th>
                 <th></th>
-                <th></th>
+                <th>
+                    <input type="checkbox" id="checkAll">
+                </th>
             </tr>
             </thead>
 
@@ -74,9 +76,11 @@
             </tbody>
 
         </table>
-        <button type="submit" class="btn btn-success">Export</button>
-    {{ paginator.formFields(paginatorOptions) }}
 
-</form>
+        <button type="submit" class="btn btn-success">Export</button>
+
+        {{ paginator.formFields(paginatorOptions) }}
+
+    </form>
 
 {% endblock %}
