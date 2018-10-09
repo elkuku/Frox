@@ -7,7 +7,7 @@ var markersLayer = new L.LayerGroup()
 
 var LeafIcon = L.Icon.extend({
     options: {
-        shadowUrl: 'img/leaf-shadow.png',
+        shadowUrl: 'build/img/leaf-shadow.png',
         iconSize: [38, 95],
         shadowSize: [50, 64],
         iconAnchor: [22, 94],
@@ -16,9 +16,9 @@ var LeafIcon = L.Icon.extend({
     }
 })
 
-var greenIcon = new LeafIcon({iconUrl: 'img/leaf-green.png'}),
-    redIcon = new LeafIcon({iconUrl: 'img/leaf-red.png'}),
-    orangeIcon = new LeafIcon({iconUrl: 'img/leaf-orange.png'})
+var greenIcon = new LeafIcon({iconUrl: 'build/img/leaf-green.png'}),
+    redIcon = new LeafIcon({iconUrl: 'build/img/leaf-red.png'}),
+    orangeIcon = new LeafIcon({iconUrl: 'build/img/leaf-orange.png'})
 
 var ajaxRequest
 var plotlist

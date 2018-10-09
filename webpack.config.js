@@ -1,5 +1,6 @@
 const fs = require('fs')
 const Encore = require('@symfony/webpack-encore')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 Encore
     // directory where compiled assets will be stored
@@ -45,6 +46,10 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     .autoProvidejQuery()
+
+    .addPlugin(new CopyWebpackPlugin([
+        { from: './assets/img', to: 'img' }
+    ]))
 ;
 
 //module.exports = Encore.getWebpackConfig();
