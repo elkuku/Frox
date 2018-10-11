@@ -140,7 +140,10 @@ $('#result_Gpx').on('click', function () {
 })
 
 $('#build').on('click', function () {
-    doPostRequest('/export_maxfields', {points: selectedMarkers, buildName: $('#build_name').val()})
+    doPostRequest('/export_maxfields', {
+        points: selectedMarkers,
+        buildName: $('#build_name').val()
+    })
 })
 
 // $(function () {

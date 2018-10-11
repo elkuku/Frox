@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ExportController extends AbstractController
@@ -21,7 +20,7 @@ class ExportController extends AbstractController
     /**
      * @Route("/export", name="export")
      */
-    public function index(WaypointRepository $repository, ProvinceRepository $provinceRepository, Request $request): Response
+    public function index(WaypointRepository $repository, ProvinceRepository $provinceRepository, MaxFieldGenerator $maxFieldGenerator, Request $request): Response
     {
         $points    = $request->request->get('points');
 
@@ -31,11 +30,9 @@ class ExportController extends AbstractController
                 'export/result.html.twig',
                 [
                     'gpx'      => $this->createGpx($wayPoints),
-                    'maxField' => $this->createMaxFields($wayPoints),
+                    'maxField' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
                 ]
             );
-
-//            return $this->export($repository->findBy(['id' => $points]));
         }
 
         $paginatorOptions = $this->getPaginatorOptions($request);
@@ -58,14 +55,14 @@ class ExportController extends AbstractController
     /**
      * @Route("/export2", name="export2")
      */
-    public function export2(WaypointRepository $repository, Request $request): JsonResponse
+    public function export2(WaypointRepository $repository, MaxFieldGenerator $maxFieldGenerator, Request $request): JsonResponse
     {
         $points = $request->request->get('points');
 
         if ($points) {
             $wayPoints = $repository->findBy(['id' => $points]);
             $data = [
-                'maxfield' => $this->createMaxFields($wayPoints),
+                'maxfield' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
                 'gpx' => $this->createGpx($wayPoints)
             ];
         } else {
@@ -76,59 +73,6 @@ class ExportController extends AbstractController
         return $this->json($data);
     }
 
-    /**
-     * @Route("/export_maxfields", name="export-maxfields")
-     */
-    public function generateMaxFields(WaypointRepository $repository, MaxFieldGenerator $maxFieldGenerator, Request $request): Response
-    {
-        $points = $request->request->get('points');
-
-        if (!$points) {
-            throw new NotFoundHttpException('No waypoints selected.');
-        }
-
-        $wayPoints = $repository->findBy(['id' => $points]);
-        $maxField  = $this->createMaxFields($wayPoints);
-        $buildName = $request->request->get('buildName');
-        $timeStamp = date('Y-m-d');
-        $projectName = $timeStamp.'-'.$buildName;
-
-//        foreach ($wayPoints as $waypoint) {
-//            $maxField[] = $this->getMaxFieldsLink($waypoint);
-//        }
-
-
-        $maxFieldGenerator->generate($projectName, $maxField);
-
-
-//        $a = $this->container->get('kernel')->getRootDir();
-//        echo $a;
-
-
-
-
-        return $this->render(
-            'export/maxfields.html.twig',
-            [
-                'maxFields' => $maxField,
-            ]
-        );
-    }
-
-    /**
-     * @param Waypoint[] $wayPoints
-     */
-    private function createMaxFields(array $wayPoints): string
-    {
-        $maxFields = [];
-
-        foreach ($wayPoints as $wayPoint) {
-            $points = $wayPoint->getLat().','.$wayPoint->getLon();
-            $maxFields[] = $wayPoint->getName().';https://'.getenv('INTEL_URL').'?ll='.$points.'&z=1&pll='.$points;
-        }
-
-        return implode("\n", $maxFields);
-    }
 
     /**
      * @param Waypoint[] $wayPoints

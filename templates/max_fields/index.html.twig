@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - MaxFields{% endblock %}
+
+{% block body %}
+    <h3>MaxFields</h3>
+    <ul>
+        {% for item in list %}
+            <li>
+                <a href="{{ path('max_fields_result', {'item': item}) }}">
+                    {{ item }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
