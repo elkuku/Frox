@@ -141,13 +141,13 @@ class Waypoint
         return $this;
     }
 
-    public function getGpxRaw()
+    public function getGpxRaw():void
     {
 
     }
 
     public function __toString()
     {
-        return $this->getName();
+        return (string)$this->getName();
     }
 }

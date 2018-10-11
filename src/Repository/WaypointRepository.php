@@ -39,6 +39,20 @@ class WaypointRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return Waypoint[] Returns an array of Waypoint objects
+     */
+    public function findLatLon()
+    {
+        $result = $this->createQueryBuilder('w')
+            ->select("CONCAT(w.lat, ',', w.lon) AS lat_lon")
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return array_column($result, 'lat_lon');
+    }
+
 //    /**
 //     * @return Waypoint[] Returns an array of Waypoint objects
 //     */

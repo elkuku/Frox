@@ -8,13 +8,13 @@
 // any CSS you require will output into a single css file (app.css in this case)
 require('../css/app.css');
 
+const $ = require('jquery')
+
 require('bootstrap')
 require('bootstrap/dist/css/bootstrap.css')
 
 require('open-iconic/font/css/open-iconic-bootstrap.css')
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// var $ = require('jquery');
 
 //import leafgreen from '../img/leaf-green.png'
 // require('../img/leaf-shadow.png')

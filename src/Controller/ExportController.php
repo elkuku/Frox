@@ -35,11 +35,36 @@ class ExportController extends AbstractController
             'export/index.html.twig',
             [
                 'waypoints'        => $waypoints,
-                'waypoints_cnt'        => $waypoints->count(),
+                'waypoints_cnt'    => $waypoints->count(),
                 'provinces'        => $provinceRepository->findAll(),
                 'paginatorOptions' => $paginatorOptions,
             ]
         );
+    }
+
+    /**
+     * @Route("/export2", name="export2")
+     */
+    public function export2(WaypointRepository $repository, Request $request)
+    {
+        $points = $request->request->get('points');
+
+        if ($points) {
+            $waypoints = $repository->findBy(['id' => $points]);
+            $maxField  = [];
+            $gpx = [];
+
+            foreach ($waypoints as $waypoint) {
+                $maxField[] = $this->getMaxFieldsLink($waypoint);
+                $gpx[] = $waypoint->getName();
+            }
+            $data = ['maxfield' => implode("\n", $maxField), 'gpx' => implode("\n", $gpx)];
+        } else {
+            $message = 'No WayPoints Selected!';
+            $data = ['maxfield' => $message, 'gpx' => $message];
+        }
+
+        return $this->json($data);
     }
 
     /**
@@ -64,5 +89,12 @@ class ExportController extends AbstractController
                 'maxField' => implode("\n", $maxField),
             ]
         );
+    }
+
+    private function getMaxFieldsLink(Waypoint $waypoint)
+    {
+        $points = $waypoint->getLat().','.$waypoint->getLon();
+
+        return $waypoint->getName().';https://'.getenv('INTEL_URL').'?ll='.$points.'&z=17&pll='.$points;
     }
 }

@@ -9,12 +9,27 @@
 {% block body %}
     <div id="result">
         <span id="result_message">0</span> waypoints selected&nbsp;
-        <button id="result_submit">Export</button>
+        <button id="result_maxFields">MaxFields</button>
+        <button id="result_Gpx">Gpx</button>
     </div>
+
     <div id="map"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="resultModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">MaxFields</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <textarea class="modal-body" rows="15" cols="150"></textarea>
+            </div>
+        </div>
+    </div>
 
     <script src="{{ asset('build/map.js') }}"></script>
 
-    <script>
-    </script>
 {% endblock %}

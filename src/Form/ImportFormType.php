@@ -36,11 +36,12 @@ class ImportFormType extends AbstractType
                     'required' => false,
                 ]
             )
+            ->add('intelLink')
             ->add(
                 'gpxRaw',
                 TextareaType::class,
                 [
-                    'attr'     => ['class' => 'tinymce', 'cols' => '30', 'rows' => '10'],
+                    'attr'     => ['cols' => '30', 'rows' => '10'],
                     'required' => false,
                 ]
             );
