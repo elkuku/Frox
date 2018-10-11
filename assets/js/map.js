@@ -130,7 +130,6 @@ $('#result_maxFields').on('click', function () {
 
 $('#result_Gpx').on('click', function () {
     $.post( "/export2", { points: selectedMarkers }, function( data ) {
-        console.log(data)
         const options = {}
         const modal = $('#resultModal')
         modal.find('.modal-title').text('GPX')
@@ -138,7 +137,10 @@ $('#result_Gpx').on('click', function () {
         modal.modal(options)
     });
 
-    // doPostRequest('/export', {points: selectedMarkers})
+})
+
+$('#build').on('click', function () {
+    doPostRequest('/export_maxfields', {points: selectedMarkers, buildName: $('#build_name').val()})
 })
 
 // $(function () {
