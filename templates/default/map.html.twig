@@ -9,11 +9,11 @@
 {% block body %}
     <div id="result">
         <span id="result_message">0</span> waypoints selected&nbsp;
-        <button id="result_maxFields">MaxFields</button>
-        <button id="result_Gpx">Gpx</button>
-        Build
-        <input type="text" id="build_name">
-        <button id="build">Build</button>
+        <button id="result_maxFields" class="btn btn-default btn-sm">MaxFields</button>
+        <button id="result_Gpx" class="btn btn-default btn-sm">Gpx</button>
+        Create MaxFields for <input type="text" id="players_num" class="col-1"> players
+        <input type="text" id="build_name" placeholder="name">
+        <button id="build" class="btn btn-default btn-sm">Create</button>
     </div>
 
     <div id="map"></div>

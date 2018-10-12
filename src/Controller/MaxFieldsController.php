@@ -49,10 +49,11 @@ class MaxFieldsController extends AbstractController
         $wayPoints = $repository->findBy(['id' => $points]);
         $maxField  = $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints);
         $buildName = $request->request->get('buildName');
+        $playersNum = (int)$request->request->get('players_num')?:1;
         $timeStamp = date('Y-m-d');
-        $projectName = $timeStamp.'-'.$buildName;
+        $projectName = $playersNum.'pl-'.$timeStamp.'-'.$buildName;
 
-        $maxFieldGenerator->generate($projectName, $maxField);
+        $maxFieldGenerator->generate($projectName, $maxField, $playersNum);
 
         return $this->render(
             'max_fields/result.html.twig',

@@ -31,7 +31,7 @@ class MaxFieldGenerator
         $this->executable = getenv('MAXFIELDS_EXEC');
     }
 
-    public function generate(string $projectName, string $wayPointList)
+    public function generate(string $projectName, string $wayPointList, int $playersNum)
     {
         $fileSystem = new Filesystem();
 
@@ -43,10 +43,10 @@ class MaxFieldGenerator
 
             // EXEC
             //  python makePlan.py -n 4 EXAMPLE.waypoints -d out/ -f output.pkl
-//            $players = '-n';
+            $players = ' -n '.$playersNum;
 //            $google = '-g';
 //            $google_api_key = '-a '.$apiKey;
-            $command = 'python '.$this->executable.' '.$fileName.' -d '.$projectRoot.' -f output.pkl';
+            $command = 'python '.$this->executable.' '.$fileName.' -d '.$projectRoot.' -f output.pkl'.$players;
             exec($command);
         } catch (IOExceptionInterface $exception) {
             echo 'An error occurred while creating your directory at '.$exception->getPath();
@@ -72,9 +72,11 @@ class MaxFieldGenerator
     {
         $info = new MaxFieldType();
 
+        $numPlayers = preg_match('#([\d]+)pl-#', $item, $matches) ? $matches[1] : 1;
+
         $info->keyPrep = $this->getTextFileContents($item, 'keyPrep.txt');
         $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
-        $info->agentsInfo = $this->getAgentsInfo($item);
+        $info->agentsInfo = $this->getAgentsInfo($item, $numPlayers);
 
         return $info;
     }

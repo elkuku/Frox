@@ -117,15 +117,12 @@ loadMarkers()
 
 $('#result_maxFields').on('click', function () {
     $.post( "/export2", { points: selectedMarkers }, function( data ) {
-        console.log(data)
         const options = {}
         const modal = $('#resultModal')
         modal.find('.modal-title').text('MaxFields')
         modal.find('.modal-body').text(data.maxfield)
         modal.modal(options)
     });
-
-    // doPostRequest('/export', {points: selectedMarkers})
 })
 
 $('#result_Gpx').on('click', function () {
@@ -136,13 +133,13 @@ $('#result_Gpx').on('click', function () {
         modal.find('.modal-body').text(data.gpx)
         modal.modal(options)
     });
-
 })
 
 $('#build').on('click', function () {
     doPostRequest('/export_maxfields', {
         points: selectedMarkers,
-        buildName: $('#build_name').val()
+        buildName: $('#build_name').val(),
+        players_num: $('#players_num').val()
     })
 })
 
