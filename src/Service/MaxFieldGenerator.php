@@ -10,7 +10,10 @@ namespace App\Service;
 
 use App\Entity\Waypoint;
 use App\Type\AgentInfoType;
-use App\Type\MaxFieldType;
+use App\Type\AgentLinkType;
+use App\Type\InfoKeyPrepType;
+use App\Type\MaxFields\MaxFieldType;
+use App\Type\WayPointPrepType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -74,27 +77,29 @@ class MaxFieldGenerator
 
         $numPlayers = preg_match('#([\d]+)pl-#', $item, $matches) ? $matches[1] : 1;
 
-        $info->keyPrep = $this->getTextFileContents($item, 'keyPrep.txt');
+        $info->keyPrepTxt    = $this->getTextFileContents($item, 'keyPrep.txt');
+        $info->keyPrep       = $this->parseKeyPrepFile($info->keyPrepTxt);
         $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
-        $info->agentsInfo = $this->getAgentsInfo($item, $numPlayers);
+        $info->agentsInfo    = $this->getAgentsInfo($item, $numPlayers);
 
         return $info;
     }
 
     private function getAgentsInfo(string $item, int $numAgents = 1): array
     {
-        $count = 1;
+        $count      = 1;
         $agentsInfo = [];
 
         try {
             start:
-            $info = new AgentInfoType();
+            $info              = new AgentInfoType();
             $info->agentNumber = $count;
-            $fileName = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
-            $info->keysInfo = $this->getTextFileContents($item, $fileName);
-            $fileName = sprintf('links_for_agent_%d_of_%d.txt', $count, $numAgents);
-            $info->linksInfo = $this->getTextFileContents($item, $fileName);
-            $agentsInfo[] = $info;
+            $fileName          = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
+            $info->keysInfo    = $this->getTextFileContents($item, $fileName);
+            $fileName          = sprintf('links_for_agent_%d_of_%d.txt', $count, $numAgents);
+            $info->linksInfo   = $this->getTextFileContents($item, $fileName);
+            $info->links       = $this->parseLinksFile($info->linksInfo);
+            $agentsInfo[]      = $info;
             $count++;
             goto start;
 
@@ -114,7 +119,7 @@ class MaxFieldGenerator
         }
 
         return file_get_contents($path);
-            }
+    }
 
     public function getList(): array
     {
@@ -139,12 +144,87 @@ class MaxFieldGenerator
         $maxFields = [];
 
         foreach ($wayPoints as $wayPoint) {
-            $points = $wayPoint->getLat().','.$wayPoint->getLon();
+            $points      = $wayPoint->getLat().','.$wayPoint->getLon();
             $maxFields[] = $wayPoint->getName().';https://'.getenv('INTEL_URL').'?ll='.$points.'&z=1&pll='.$points;
         }
 
         return implode("\n", $maxFields);
     }
 
+    private function parseKeyPrepFile(string $contents): InfoKeyPrepType
+    {
+        $keyPrep = new InfoKeyPrepType();
 
+        $lines = explode("\n", $contents);
+
+        foreach ($lines as $line) {
+            $l = trim($line);
+
+            if (!$l || strpos($l, 'Keys Needed') === 0 || strpos($l, 'Number of missing') === 0) {
+                continue;
+            }
+
+            $parts = explode('|', $l);
+
+            if (4 !== \count($parts)) {
+                continue;
+            }
+
+            $p = new WayPointPrepType();
+
+            $p->keysNeeded = (int)$parts[0];
+            $p->mapNo      = (int)$parts[2];
+            $p->name       = trim($parts[3]);
+
+            $keyPrep->addWayPoint($p);
+        }
+
+        return $keyPrep;
+    }
+
+    private function parseLinksFile(string $contents)
+    {
+        $lines = explode("\n", $contents);
+        $link = null;
+        $links = [];
+
+        foreach ($lines as $line) {
+            $l = trim($line);
+
+            if (
+                !$l
+                || strpos($l, 'Complete link schedule') === 0
+                || strpos($l, 'Links marked with') === 0
+                || strpos($l, '----------') === 0
+                || strpos($l, 'Minutes') === 0
+                || strpos($l, 'Total') === 0
+                || strpos($l, 'AP') === 0
+                || strpos($l, 'Distance') === 0
+                || strpos($l, 'Link') === 0
+                || strpos($l, 'Fields') === 0
+            ) {
+                continue;
+            }
+
+            if (preg_match('/(\d+)(\*)?\s+____1\s+(\d+)\s+([\w|\s]+)/', $l, $matches)) {
+                $link = new AgentLinkType();
+
+                $link->linkNum = $matches[1];
+                $link->isEarly = '*' === $matches[2];
+                $link->originNum = $matches[3];
+                $link->originName = $matches[4];
+            } elseif (preg_match('/(\d+)\s+([\w|\s]+)/', $l, $matches)) {
+                if (!$link) {
+                    throw new \Exception('Parse error in links file');
+                }
+
+                $link->destinationNum = $matches[1];
+                $link->destinationName = $matches[2];
+
+                $links[] = $link;
+            }
+        }
+
+        return $links;
+    }
 }

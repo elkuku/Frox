@@ -16,7 +16,22 @@
     <div class="row">
         <div class="col">
             <h4>Key Preparation</h4>
-            <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ info.keyPrep }}</textarea>
+            <table>
+                <tr>
+                    <th>Map No</th>
+                    <th>Keys</th>
+                    <th>Name</th>
+                </tr>
+                {% for wayPoint in info.keyPrep.wayPoints %}
+                    <tr>
+                        <th>{{ wayPoint.mapNo }}</th>
+                        <td>{{ wayPoint.keysNeeded }}</td>
+                        <td>{{ wayPoint.name }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
         <div class="col">
             <h4>Ownership Preparation</h4>
@@ -33,6 +48,24 @@
             <div class="col">
                 <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
                 <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.linksInfo }}</textarea>
+                <table class="table table-condensed">
+                    {% set origin='' %}
+                    {% for link in agentInfo.links %}
+
+                    <tr>
+                        <td>{{ link.isEarly ? 'X' : '' }}</td>
+                        <td>{{ link.linkNum }}</td>
+                        <td>
+                            {% if link.originNum != origin %}
+                            {{ link.originNum }} - {{ link.originName }}<br>
+                            {% endif %}
+                            {% set origin = link.originNum %}
+                            L {{ link.destinationNum }} - {{ link.destinationName }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {{ dump(agentInfo.links) }}
             </div>
         </div>
 <div class="row">

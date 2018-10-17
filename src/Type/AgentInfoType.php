@@ -11,6 +11,12 @@ namespace App\Type;
 class AgentInfoType
 {
     public $agentNumber = 0;
+
     public $keysInfo = '';
     public $linksInfo = '';
+
+    /**
+     * @var AgentLinkType[]
+     */
+    public $links = [];
 }

@@ -6,13 +6,23 @@
  * Time: 14:14
  */
 
-namespace App\Type;
+namespace App\Type\MaxFields;
 
+
+use App\Type\AgentInfoType;
+use App\Type\InfoKeyPrepType;
 
 class MaxFieldType
 {
-    public $keyPrep = '';
+    /**
+     * @var InfoKeyPrepType
+     */
+    public $keyPrep;
+
+    public $keyPrepTxt = '';
+
     public $ownershipPrep = '';
+
     /**
      * @var AgentInfoType[]
      */
