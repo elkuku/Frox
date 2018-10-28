@@ -81,6 +81,8 @@ class MaxFieldGenerator
         $info->keyPrep       = $this->parseKeyPrepFile($info->keyPrepTxt);
         $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
         $info->agentsInfo    = $this->getAgentsInfo($item, $numPlayers);
+        $info->frames = $this->findFrames($item);
+        $info->links = $this->parseCsvLinks($item);
 
         return $info;
     }
@@ -231,5 +233,55 @@ class MaxFieldGenerator
     public function getImagePath(string $item, string $image)
     {
         return $this->rootDir."/$item/$image";
+    }
+
+    private function findFrames(string $item)
+    {
+        $path = $this->rootDir.'/'.$item;
+        $frames = 0;
+
+        foreach (new \DirectoryIterator($path) as $file) {
+            if (preg_match('/frame_(\d\d\d)/', $file->getFilename(), $matches)) {
+                $x = (int)$matches[1];
+                $frames = $x > $frames ? $x : $frames;
+            }
+        }
+
+        return $frames;
+    }
+
+    private function parseCsvLinks(string $item)
+    {
+        $links = [];
+
+        $contents = $this->getTextFileContents($item, 'links_for_agents.csv');
+
+        $lines = explode("\n", $contents);
+
+        foreach ($lines as $i => $line) {
+            if (0 === $i || !$line) {
+                continue;
+            }
+
+            $parts = explode(',', $line);
+
+            if (6 !== \count($parts)) {
+                throw new \UnexpectedValueException('Error parsing CSV file');
+            }
+
+            $link = new AgentLinkType();
+
+            $link->linkNum = (int)$parts[0];
+            $link->isEarly = strpos($parts[0], '*') ? true : false;
+            $link->agentNum = (int)$parts[1];
+            $link->originNum = (int)$parts[2];
+            $link->originName = trim($parts[3]);
+            $link->destinationNum = (int)$parts[4];
+            $link->destinationName = trim($parts[5]);
+
+            $links[] = $link;
+        }
+
+        return $links;
     }
 }

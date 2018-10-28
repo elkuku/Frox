@@ -12,6 +12,7 @@ namespace App\Type;
 class AgentLinkType
 {
     public $linkNum = 0;
+    public $agentNum = 0;
 
     public $isEarly = false;
 

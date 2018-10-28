@@ -28,4 +28,7 @@ class MaxFieldType
      */
     public $agentsInfo = [];
 
+    public $frames = 0;
+
+    public $links;
 }

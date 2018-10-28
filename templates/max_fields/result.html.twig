@@ -5,11 +5,27 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('build/maxfields.js') }}"></script>
+    <script>
+        const maxFrames = {{ info.frames }}
+        const item = '{{ item }}'
+        const links = {{ info.links|json_encode|raw }}
+    </script>
 {% endblock %}
 
 {% block body %}
     <h3>MaxFields for <span id="itemId">{{ item }}</span></h3>
 
+    <div class="row">
+        <div class="col">
+            <button id="frameMinus">-</button>
+            <button id="framePlus">+</button>
+            <span id="frameNum">#</span>
+            <div id="frameLinkInfo"></div>
+        </div>
+        <div class="col">
+            <img id="displayFrames" src="/maxfields/{{ item }}/frame_-1.png" alt="Frames">
+        </div>
+    </div>
     <div class="row">
         <div class="col">
             <img src="/maxfields/{{ item }}/portalMap.png" alt="Portal Map">
@@ -56,33 +72,29 @@
                 <table class="table table-condensed">
                     {% set origin='' %}
                     {% for link in agentInfo.links %}
-
                         <tr style="border-bottom: 1px solid silver;{% if link.originNum != origin %}border-top: 2px solid darkblue;{% endif %}">
-                        <td>{{ link.isEarly ? 'X' : '' }}</td>
-                        <td>{{ link.linkNum }}</td>
-                        <td>
-                            {% if link.originNum != origin %}
-                            {{ link.originNum }} - {{ link.originName }}<br>
-                            {% endif %}
-                            {% set origin = link.originNum %}
-                            L {{ link.destinationNum }} - {{ link.destinationName }}
-                        </td>
-                    </tr>
+                            <td>{{ link.isEarly ? 'X' : '' }}</td>
+                            <td>{{ link.linkNum }}</td>
+                            <td>
+                                {% if link.originNum != origin %}
+                                    <b>{{ link.originNum }} - {{ link.originName }}</b><br>
+                                {% endif %}
+                                {% set origin = link.originNum %}
+                                L {{ link.destinationNum }} - {{ link.destinationName }}
+                            </td>
+                        </tr>
                     {% endfor %}
                 </table>
-                {{ dump(agentInfo.links) }}
             </div>
         </div>
-<div class="row">
-    <div class="col">
-        Agent {{ agentInfo.agentNumber }} - Send e-mail to <input type="text">
-        <button class="btn btn-default sendMail" id="{{ agentInfo.agentNumber }}">Send</button>
-        <div id="result-{{ agentInfo.agentNumber }}"></div>
-    </div>
-</div>
+        <div class="row">
+            <div class="col">
+                Agent {{ agentInfo.agentNumber }} - Send e-mail to <input type="text">
+                <button class="btn btn-default sendMail" id="{{ agentInfo.agentNumber }}">Send</button>
+                <div id="result-{{ agentInfo.agentNumber }}"></div>
+            </div>
+        </div>
 
     {% endfor %}
-
-    {{ dump(list) }}
 
 {% endblock %}

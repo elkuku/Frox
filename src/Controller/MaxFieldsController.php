@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\WaypointRepository;
 use App\Service\MaxFieldGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -78,33 +79,38 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/maxfields_send_mail", name="maxfields-send-mail")
      */
-    public function sendMail(MaxFieldGenerator $maxFieldGenerator, \Swift_Mailer $mailer, Request $request)
+    public function sendMail(MaxFieldGenerator $maxFieldGenerator, \Swift_Mailer $mailer, Request $request): JsonResponse
     {
         $agent = $request->get('agent');
         $email = $request->get('email');
         $item  = $request->get('item');
 
-        $info = $maxFieldGenerator->getInfo($item);
+        try {
+            $info = $maxFieldGenerator->getInfo($item);
 
-        $message = (new \Swift_Message('MaxFields Plan '.$item))
-            ->setFrom(getenv('MAILER_FROM_MAIL'))
-            ->setTo($email);
+            $message = (new \Swift_Message('MaxFields Plan '.$item))
+                ->setFrom(getenv('MAILER_FROM_MAIL'))
+                ->setTo($email);
 
-        $data = [
-            'img_portal_map' => $message->embed(\Swift_Image::fromPath($maxFieldGenerator->getImagePath($item, 'portalMap.png'))),
-            'img_link_map' => $message->embed(\Swift_Image::fromPath($maxFieldGenerator->getImagePath($item, 'linkMap.png'))),
-            'item'      => $item,
-            'agent'     => $agent,
-            'info'      => $info,
-        ];
+            $data = [
+                'img_portal_map' => $message->embed(
+                    \Swift_Image::fromPath($maxFieldGenerator->getImagePath($item, 'portalMap.png'))
+                ),
+                'img_link_map'   => $message->embed(
+                    \Swift_Image::fromPath($maxFieldGenerator->getImagePath($item, 'linkMap.png'))
+                ),
+                'item'           => $item,
+                'agent'          => $agent,
+                'info'           => $info,
+            ];
 
-        $message->setBody(
-            $this->renderView(
-                'max_fields/email.html.twig',
-                $data
-            ),
-            'text/html'
-        )/*
+            $message->setBody(
+                $this->renderView(
+                    'max_fields/email.html.twig',
+                    $data
+                ),
+                'text/html'
+            )/*
              * If you also want to include a plaintext version of the message
             ->addPart(
                 $this->renderView(
@@ -114,14 +120,22 @@ class MaxFieldsController extends AbstractController
                 'text/plain'
             )
             */
-        ;
+            ;
 
-        $count = $mailer->send($message);
+            $count = $mailer->send($message);
 
-        $data = ['status'=> 'ok',
-                 'message' => $count.' messages sent.',
-        ];
-
+            $data = [
+                'status'  => 'ok',
+                'message' => $count.' message(s) sent.',
+            ];
+        }
+        catch (\Exception $exception)
+        {
+            $data = [
+                'status'  => 'error',
+                'message' => $exception->getMessage()
+            ];
+        }
 
         return $this->json($data);
     }
