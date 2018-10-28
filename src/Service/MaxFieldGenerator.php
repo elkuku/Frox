@@ -227,4 +227,9 @@ class MaxFieldGenerator
 
         return $links;
     }
+
+    public function getImagePath(string $item, string $image)
+    {
+        return $this->rootDir."/$item/$image";
+    }
 }

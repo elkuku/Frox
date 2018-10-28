@@ -23,6 +23,7 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('map', './assets/js/map.js')
     .addEntry('export', './assets/js/export.js')
+    .addEntry('maxfields', './assets/js/maxfields.js')
     .addEntry('paginator', './assets/js/paginator.js')
 
     /*

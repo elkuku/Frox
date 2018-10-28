@@ -17,10 +17,13 @@ class MaxFieldsController extends AbstractController
      */
     public function index(MaxFieldGenerator $maxFieldGenerator): Response
     {
-        return $this->render('max_fields/index.html.twig', [
-            'controller_name' => 'MaxFieldsController',
-            'list' => $maxFieldGenerator->getList(),
-        ]);
+        return $this->render(
+            'max_fields/index.html.twig',
+            [
+                'controller_name' => 'MaxFieldsController',
+                'list'            => $maxFieldGenerator->getList(),
+            ]
+        );
     }
 
     /**
@@ -28,29 +31,35 @@ class MaxFieldsController extends AbstractController
      */
     public function display(MaxFieldGenerator $maxFieldGenerator, string $item): Response
     {
-        return $this->render('max_fields/result.html.twig', [
-            'item' => $item,
-            'info' => $maxFieldGenerator->getInfo($item),
-            'list' => $maxFieldGenerator->getContentList($item),
-        ]);
+        return $this->render(
+            'max_fields/result.html.twig',
+            [
+                'item' => $item,
+                'info' => $maxFieldGenerator->getInfo($item),
+                'list' => $maxFieldGenerator->getContentList($item),
+            ]
+        );
     }
 
     /**
      * @Route("/export_maxfields", name="export-maxfields")
      */
-    public function generateMaxFields(WaypointRepository $repository, MaxFieldGenerator $maxFieldGenerator, Request $request): Response
-    {
+    public function generateMaxFields(
+        WaypointRepository $repository,
+        MaxFieldGenerator $maxFieldGenerator,
+        Request $request
+    ): Response {
         $points = $request->request->get('points');
 
         if (!$points) {
             throw new NotFoundHttpException('No waypoints selected.');
         }
 
-        $wayPoints = $repository->findBy(['id' => $points]);
-        $maxField  = $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints);
-        $buildName = $request->request->get('buildName');
-        $playersNum = (int)$request->request->get('players_num')?:1;
-        $timeStamp = date('Y-m-d');
+        $wayPoints   = $repository->findBy(['id' => $points]);
+        $maxField    = $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints);
+        $buildName   = $request->request->get('buildName');
+        $playersNum  = (int)$request->request->get('players_num') ?: 1;
+        $timeStamp   = date('Y-m-d');
         $projectName = $playersNum.'pl-'.$timeStamp.'-'.$buildName;
 
         $maxFieldGenerator->generate($projectName, $maxField, $playersNum);
@@ -66,4 +75,54 @@ class MaxFieldsController extends AbstractController
         );
     }
 
+    /**
+     * @Route("/maxfields_send_mail", name="maxfields-send-mail")
+     */
+    public function sendMail(MaxFieldGenerator $maxFieldGenerator, \Swift_Mailer $mailer, Request $request)
+    {
+        $agent = $request->get('agent');
+        $email = $request->get('email');
+        $item  = $request->get('item');
+
+        $info = $maxFieldGenerator->getInfo($item);
+
+        $message = (new \Swift_Message('MaxFields Plan '.$item))
+            ->setFrom(getenv('MAILER_FROM_MAIL'))
+            ->setTo($email);
+
+        $data = [
+            'img_portal_map' => $message->embed(\Swift_Image::fromPath($maxFieldGenerator->getImagePath($item, 'portalMap.png'))),
+            'img_link_map' => $message->embed(\Swift_Image::fromPath($maxFieldGenerator->getImagePath($item, 'linkMap.png'))),
+            'item'      => $item,
+            'agent'     => $agent,
+            'info'      => $info,
+        ];
+
+        $message->setBody(
+            $this->renderView(
+                'max_fields/email.html.twig',
+                $data
+            ),
+            'text/html'
+        )/*
+             * If you also want to include a plaintext version of the message
+            ->addPart(
+                $this->renderView(
+                    'emails/registration.txt.twig',
+                    array('name' => $name)
+                ),
+                'text/plain'
+            )
+            */
+        ;
+
+        $count = $mailer->send($message);
+
+        $data = ['status'=> 'ok',
+                 'message' => $count.' messages sent.',
+        ];
+
+
+        return $this->json($data);
+    }
 }

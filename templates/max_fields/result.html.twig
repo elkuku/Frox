@@ -2,8 +2,13 @@
 
 {% block title %}{{ parent() }} - MaxFields Result{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('build/maxfields.js') }}"></script>
+{% endblock %}
+
 {% block body %}
-    <h3>MaxFields for {{ item }}</h3>
+    <h3>MaxFields for <span id="itemId">{{ item }}</span></h3>
 
     <div class="row">
         <div class="col">
@@ -52,7 +57,7 @@
                     {% set origin='' %}
                     {% for link in agentInfo.links %}
 
-                    <tr>
+                        <tr style="border-bottom: 1px solid silver;{% if link.originNum != origin %}border-top: 2px solid darkblue;{% endif %}">
                         <td>{{ link.isEarly ? 'X' : '' }}</td>
                         <td>{{ link.linkNum }}</td>
                         <td>
@@ -70,7 +75,9 @@
         </div>
 <div class="row">
     <div class="col">
-        Agent {{ agentInfo.agentNumber }} - Send e-mail to <input type="text"><button class="btn btn-default sendMail">Send</button>
+        Agent {{ agentInfo.agentNumber }} - Send e-mail to <input type="text">
+        <button class="btn btn-default sendMail" id="{{ agentInfo.agentNumber }}">Send</button>
+        <div id="result-{{ agentInfo.agentNumber }}"></div>
     </div>
 </div>
 

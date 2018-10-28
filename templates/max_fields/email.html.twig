@@ -1,0 +1,58 @@
+<h3>MaxFields for {{ item }}</h3>
+
+<img src="{{ img_portal_map }}" alt="Portal Map">
+
+<img src="{{ img_link_map }}" alt="Link Map">
+
+<h4>Key Preparation</h4>
+<table>
+    <tr>
+        <th>Map No</th>
+        <th>Keys</th>
+        <th>Name</th>
+    </tr>
+    {% for wayPoint in info.keyPrep.wayPoints %}
+        <tr>
+            <th>{{ wayPoint.mapNo }}</th>
+            <td>{{ wayPoint.keysNeeded }}</td>
+            <td>{{ wayPoint.name }}</td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% for agentInfo in info.agentsInfo %}
+    {% if agentInfo.agentNumber == agent %}
+        <div class="row">
+            <div class="col">
+                <h4>Key for agent {{ agentInfo.agentNumber }}</h4>
+                <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.keysInfo }}</textarea>
+            </div>
+            <div class="col">
+                <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
+                <table>
+                    {% set origin='' %}
+                    {% for link in agentInfo.links %}
+                        {% if link.originNum != origin %}
+                        <tr>
+                            <td colspan="3"><hr></td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ link.isEarly ? 'X' : '' }}</td>
+                            <td>{{ link.linkNum }}</td>
+                            <td>
+                                {% if link.originNum != origin %}
+                                    {{ link.originNum }} - {{ link.originName }}<br>
+                                {% endif %}
+                                {% set origin = link.originNum %}
+                                L {{ link.destinationNum }} - {{ link.destinationName }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
