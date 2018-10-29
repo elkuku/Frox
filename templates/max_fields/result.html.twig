@@ -63,8 +63,19 @@
     {% for agentInfo in info.agentsInfo %}
         <div class="row">
             <div class="col">
-                <h4>Key for agent {{ agentInfo.agentNumber }}</h4>
+                <h4>Keys for agent {{ agentInfo.agentNumber }}</h4>
                 <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.keysInfo }}</textarea>
+                <table class="table table-condensed">
+                    {% for point in agentInfo.keys.wayPoints %}
+                        {% if point.agentNum + 1 == agentInfo.agentNumber %}
+                            <tr>
+                                <td>{{ point.mapNo }}</td>
+                                <td>{{ point.name }}</td>
+                                <td>{{ point.keysNeeded ?: '-' }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
             </div>
             <div class="col">
                 <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
@@ -76,11 +87,14 @@
                             <td>{{ link.isEarly ? 'X' : '' }}</td>
                             <td>{{ link.linkNum }}</td>
                             <td>
-                                {% if link.originNum != origin %}
-                                    <b>{{ link.originNum }} - {{ link.originName }}</b><br>
-                                {% endif %}
-                                {% set origin = link.originNum %}
-                                L {{ link.destinationNum }} - {{ link.destinationName }}
+                                {% if agentInfo.agentNumber != link.agentNum %}
+                                <del>{% endif %}
+                                    {% if link.originNum != origin %}
+                                        <b>{{ link.originNum }} - {{ link.originName }}</b><br>
+                                    {% endif %}
+                                    {% set origin = link.originNum %}
+                                    L {{ link.destinationNum }} - {{ link.destinationName }}
+                                    {% if agentInfo.agentNumber != link.agentNum %}</del>{% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -97,4 +111,5 @@
 
     {% endfor %}
 
+    {{ dump(info) }}
 {% endblock %}

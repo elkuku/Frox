@@ -19,4 +19,5 @@ class AgentInfoType
      * @var AgentLinkType[]
      */
     public $links = [];
+    public $keys = [];
 }

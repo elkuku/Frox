@@ -25,9 +25,20 @@
 
 {% for agentInfo in info.agentsInfo %}
     {% if agentInfo.agentNumber == agent %}
-        <h4>Key for agent {{ agentInfo.agentNumber }}</h4>
-        TBD
-        {#<textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.keysInfo }}</textarea>#}
+
+        <h4>Keys for agent {{ agentInfo.agentNumber }}</h4>
+        <table class="table table-condensed">
+            {% for point in agentInfo.keys.wayPoints %}
+                {% if point.agentNum + 1 == agentInfo.agentNumber %}
+                    <tr>
+                        <td>{{ point.mapNo }}</td>
+                        <td>{{ point.name }}</td>
+                        <td>{{ point.keysNeeded ?: '-' }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+
         <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
         <table style="width: 100%">
             {% set origin='' %}
@@ -43,11 +54,14 @@
                     <td>{{ link.isEarly ? 'X' : '' }}</td>
                     <td align="center">{{ link.linkNum }}</td>
                     <td>
-                        {% if link.originNum != origin %}
-                            <b>_ {{ link.originNum }} - {{ link.originName }}</b><br>
-                        {% endif %}
-                        {% set origin = link.originNum %}
-                        L {{ link.destinationNum }} - {{ link.destinationName }}
+                        {% if agentInfo.agentNumber != link.agentNum %}
+                        <del>{% endif %}
+                            {% if link.originNum != origin %}
+                                <b>{{ link.originNum }} - {{ link.originName }}</b><br>
+                            {% endif %}
+                            {% set origin = link.originNum %}
+                            L {{ link.destinationNum }} - {{ link.destinationName }}
+                            {% if agentInfo.agentNumber != link.agentNum %}</del>{% endif %}
                     </td>
                 </tr>
             {% endfor %}

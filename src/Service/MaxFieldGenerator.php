@@ -81,8 +81,8 @@ class MaxFieldGenerator
         $info->keyPrep       = $this->parseKeyPrepFile($info->keyPrepTxt);
         $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
         $info->agentsInfo    = $this->getAgentsInfo($item, $numPlayers);
-        $info->frames = $this->findFrames($item);
-        $info->links = $this->parseCsvLinks($item);
+        $info->frames        = $this->findFrames($item);
+        $info->links         = $this->parseCsvLinks($item);
 
         return $info;
     }
@@ -100,8 +100,10 @@ class MaxFieldGenerator
             $info->keysInfo    = $this->getTextFileContents($item, $fileName);
             $fileName          = sprintf('links_for_agent_%d_of_%d.txt', $count, $numAgents);
             $info->linksInfo   = $this->getTextFileContents($item, $fileName);
-            $info->links       = $this->parseLinksFile($info->linksInfo);
-            $agentsInfo[]      = $info;
+//            $info->links       = $this->parseLinksFile($info->linksInfo);
+            $info->links  = $this->parseCsvLinks($item);
+            $info->keys   = $this->parseCsvKeys($item);
+            $agentsInfo[] = $info;
             $count++;
             goto start;
 
@@ -187,7 +189,7 @@ class MaxFieldGenerator
     private function parseLinksFile(string $contents)
     {
         $lines = explode("\n", $contents);
-        $link = null;
+        $link  = null;
         $links = [];
 
         foreach ($lines as $line) {
@@ -211,16 +213,16 @@ class MaxFieldGenerator
             if (preg_match('/(\d+)(\*)?\s+____1\s+(\d+)\s+([\w|\s]+)/', $l, $matches)) {
                 $link = new AgentLinkType();
 
-                $link->linkNum = $matches[1];
-                $link->isEarly = '*' === $matches[2];
-                $link->originNum = $matches[3];
+                $link->linkNum    = $matches[1];
+                $link->isEarly    = '*' === $matches[2];
+                $link->originNum  = $matches[3];
                 $link->originName = $matches[4];
             } elseif (preg_match('/(\d+)\s+([\w|\s]+)/', $l, $matches)) {
                 if (!$link) {
                     throw new \Exception('Parse error in links file');
                 }
 
-                $link->destinationNum = $matches[1];
+                $link->destinationNum  = $matches[1];
                 $link->destinationName = $matches[2];
 
                 $links[] = $link;
@@ -237,12 +239,12 @@ class MaxFieldGenerator
 
     private function findFrames(string $item)
     {
-        $path = $this->rootDir.'/'.$item;
+        $path   = $this->rootDir.'/'.$item;
         $frames = 0;
 
         foreach (new \DirectoryIterator($path) as $file) {
             if (preg_match('/frame_(\d\d\d)/', $file->getFilename(), $matches)) {
-                $x = (int)$matches[1];
+                $x      = (int)$matches[1];
                 $frames = $x > $frames ? $x : $frames;
             }
         }
@@ -271,17 +273,56 @@ class MaxFieldGenerator
 
             $link = new AgentLinkType();
 
-            $link->linkNum = (int)$parts[0];
-            $link->isEarly = strpos($parts[0], '*') ? true : false;
-            $link->agentNum = (int)$parts[1];
-            $link->originNum = (int)$parts[2];
-            $link->originName = trim($parts[3]);
-            $link->destinationNum = (int)$parts[4];
+            $link->linkNum         = (int)$parts[0];
+            $link->isEarly         = strpos($parts[0], '*') ? true : false;
+            $link->agentNum        = (int)$parts[1];
+            $link->originNum       = (int)$parts[2];
+            $link->originName      = trim($parts[3]);
+            $link->destinationNum  = (int)$parts[4];
             $link->destinationName = trim($parts[5]);
 
             $links[] = $link;
         }
 
+        usort(
+            $links,
+            function ($a, $b) {
+                return $a->linkNum > $b->linkNum;
+            }
+        );
+
         return $links;
+    }
+
+    private function parseCsvKeys(string $item)
+    {
+        $keyInfo = new InfoKeyPrepType();
+
+        $contents = $this->getTextFileContents($item, 'keys_for_agents.csv');
+
+        $lines = explode("\n", $contents);
+
+        foreach ($lines as $i => $line) {
+            if (0 === $i || !$line) {
+                continue;
+            }
+
+            $parts = explode(',', $line);
+
+            if (4 !== \count($parts)) {
+                throw new \UnexpectedValueException('Error parsing CSV file');
+            }
+
+            $wayPoint = new WayPointPrepType();
+
+            $wayPoint->agentNum = (int)$parts[0];
+            $wayPoint->mapNo = (int)$parts[1];
+            $wayPoint->name = trim($parts[2]);
+            $wayPoint->keysNeeded = (int)$parts[3];
+
+            $keyInfo->addWayPoint($wayPoint);
+        }
+
+        return $keyInfo;
     }
 }
