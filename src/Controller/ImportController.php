@@ -38,6 +38,21 @@ class ImportController extends AbstractController
                 }
             }
 
+            if ($data['csvRaw']) {
+                try {
+                    $count += $this->importCsv($data['csvRaw'], $data['province'], $data['city']);
+                } catch (\UnexpectedValueException $exception) {
+                    $this->addFlash('danger', $exception->getMessage());
+
+                    return $this->render(
+                        'import/index.html.twig',
+                        [
+                            'form' => $form->createView(),
+                        ]
+                    );
+                }
+            }
+
             if ($data['intelLink']) {
                 $count += $this->importIntelLink($data['intelLink'], $data['province'], $data['city']);
             }
@@ -203,5 +218,62 @@ class ImportController extends AbstractController
         $wayPoint->setCity($city);
 
         return $wayPoint;
+    }
+
+    private function importCsv($csvRaw, $province, $city)
+    {
+        $repository = $this->getDoctrine()
+            ->getRepository(Waypoint::class);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findOneBy(['id' => 1]);
+
+        $lines = explode("\n", $csvRaw);
+        $cnt = 0;
+
+        foreach ($lines as $i => $line) {
+            if (0 === $i || !$line) {
+                continue;
+            }
+
+            $parts = explode(',', $line);
+
+            if (4 !== \count($parts)) {
+                throw new \UnexpectedValueException('Error parsing CSV file');
+            }
+
+            $lat = (float)$parts['1'];
+            $lon = (float)$parts['2'];
+
+            $w = $repository->findOneBy(
+                [
+                    'lat' => $lat,
+                    'lon' => $lon,
+                ]
+            );
+
+            if (!$w) {
+                $wayPoint = new Waypoint();
+
+                $wayPoint->setName($parts[0]);
+                $wayPoint->setLat($lat);
+                $wayPoint->setLon($lon);
+                $wayPoint->setCategory($category);
+                $wayPoint->setProvince($province);
+                $wayPoint->setCity($city);
+
+                $entityManager->persist($wayPoint);
+
+                $entityManager->flush();
+
+                $cnt++;
+
+            }
+        }
+
+        return $cnt;
     }
 }
