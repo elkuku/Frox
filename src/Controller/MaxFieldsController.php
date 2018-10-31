@@ -79,8 +79,11 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/maxfields_send_mail", name="maxfields-send-mail")
      */
-    public function sendMail(MaxFieldGenerator $maxFieldGenerator, \Swift_Mailer $mailer, Request $request): JsonResponse
-    {
+    public function sendMail(
+        MaxFieldGenerator $maxFieldGenerator,
+        \Swift_Mailer $mailer,
+        Request $request
+    ): JsonResponse {
         $agent = $request->get('agent');
         $email = $request->get('email');
         $item  = $request->get('item');
@@ -128,12 +131,10 @@ class MaxFieldsController extends AbstractController
                 'status'  => 'ok',
                 'message' => $count.' message(s) sent.',
             ];
-        }
-        catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             $data = [
                 'status'  => 'error',
-                'message' => $exception->getMessage()
+                'message' => $exception->getMessage(),
             ];
         }
 

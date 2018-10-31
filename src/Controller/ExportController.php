@@ -20,12 +20,17 @@ class ExportController extends AbstractController
     /**
      * @Route("/export", name="export")
      */
-    public function index(WaypointRepository $repository, ProvinceRepository $provinceRepository, MaxFieldGenerator $maxFieldGenerator, Request $request): Response
-    {
-        $points    = $request->request->get('points');
+    public function index(
+        WaypointRepository $repository,
+        ProvinceRepository $provinceRepository,
+        MaxFieldGenerator $maxFieldGenerator,
+        Request $request
+    ): Response {
+        $points = $request->request->get('points');
 
         if ($points) {
             $wayPoints = $repository->findBy(['id' => $points]);
+
             return $this->render(
                 'export/result.html.twig',
                 [
@@ -55,15 +60,18 @@ class ExportController extends AbstractController
     /**
      * @Route("/export2", name="export2")
      */
-    public function export2(WaypointRepository $repository, MaxFieldGenerator $maxFieldGenerator, Request $request): JsonResponse
-    {
+    public function export2(
+        WaypointRepository $repository,
+        MaxFieldGenerator $maxFieldGenerator,
+        Request $request
+    ): JsonResponse {
         $points = $request->request->get('points');
 
         if ($points) {
             $wayPoints = $repository->findBy(['id' => $points]);
-            $data = [
+            $data      = [
                 'maxfield' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
-                'gpx' => $this->createGpx($wayPoints)
+                'gpx'      => $this->createGpx($wayPoints),
             ];
         } else {
             $message = 'No WayPoints Selected!';
@@ -86,7 +94,7 @@ class ExportController extends AbstractController
 
         foreach ($wayPoints as $wayPoint) {
             $xml[] = '<wpt lat="'.$wayPoint->getLat().'" lon="'.$wayPoint->getLon().'">';
-            $xml[] = '  <name>' . $wayPoint->getName().'</name>';
+            $xml[] = '  <name>'.$wayPoint->getName().'</name>';
             //     $xml[] = '  <cmt>'.$names[$i].'</cmt>';
             //     $xml[] = '  <desc>'.$names[$i].'</desc>';
             $xml[] = '</wpt>';

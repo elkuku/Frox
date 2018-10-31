@@ -20,7 +20,7 @@ class ImportController extends AbstractController
         $form = $this->createForm(ImportFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+            $data  = $form->getData();
             $count = 0;
 
             if ($data['gpxRaw']) {
@@ -74,7 +74,7 @@ class ImportController extends AbstractController
         );
     }
 
-    private function importIntelLink(string $intelLink, ?Province $province = null, ?string $city = '')
+    private function importIntelLink(string $intelLink, ?Province $province = null, ?string $city = ''): int
     {
         $parts = explode('pls=', $intelLink);
 
@@ -108,7 +108,12 @@ class ImportController extends AbstractController
                     $wayPoint->setName((string)(count($ws) + 1));
 
                     $wayPoints[] = $this->createWayPoint(
-                        (float)$points[0], (float)$points[1], (string)(count($ws) + 1), $category, $province, $city
+                        (float)$points[0],
+                        (float)$points[1],
+                        (string)(count($ws) + 1),
+                        $category,
+                        $province,
+                        $city
                     );
 //                    $wayPoints[] = $wayPoint;
                     $ws[] = $p;
@@ -123,7 +128,12 @@ class ImportController extends AbstractController
 
 //                    $wayPoints[] = $wayPoint;
                     $wayPoints[] = $this->createWayPoint(
-                        (float)$points[2], (float)$points[3], (string)(count($ws) + 1), $category, $province, $city
+                        (float)$points[2],
+                        (float)$points[3],
+                        (string)(count($ws) + 1),
+                        $category,
+                        $province,
+                        $city
                     );
 
                     $ws[] = $p;
@@ -134,7 +144,7 @@ class ImportController extends AbstractController
         return $this->storeWayPoints($wayPoints);
     }
 
-    private function importGpx(string $gpxData, ?Province $province = null, ?string $city = '')
+    private function importGpx(string $gpxData, ?Province $province = null, ?string $city = ''): int
     {
         $repository    = $this->getDoctrine()
             ->getRepository(Waypoint::class);
@@ -180,7 +190,7 @@ class ImportController extends AbstractController
         return $cnt;
     }
 
-    private function storeWayPoints(array $wayPoints)
+    private function storeWayPoints(array $wayPoints): int
     {
         $repository    = $this->getDoctrine()
             ->getRepository(Waypoint::class);
@@ -191,9 +201,7 @@ class ImportController extends AbstractController
         $cnt = 0;
 
         foreach ($wayPoints as $wayPoint) {
-            $test = $wayPoint->getLat().','.$wayPoint->getLon();
-            $x = in_array($test, $currentWayPoints);
-            if (true === in_array($wayPoint->getLat().','.$wayPoint->getLon(), $currentWayPoints)) {
+            if (true === \in_array($wayPoint->getLat().','.$wayPoint->getLon(), $currentWayPoints)) {
                 continue;
             }
 
@@ -206,8 +214,14 @@ class ImportController extends AbstractController
         return $cnt;
     }
 
-    private function createWayPoint(float $lat, float $lon, string $name, Category $category, ?Province $province = null, ?string $city = '')
-    {
+    private function createWayPoint(
+        float $lat,
+        float $lon,
+        string $name,
+        Category $category,
+        ?Province $province = null,
+        ?string $city = ''
+    ): Waypoint {
         $wayPoint = new Waypoint();
 
         $wayPoint->setName($name);
@@ -220,7 +234,7 @@ class ImportController extends AbstractController
         return $wayPoint;
     }
 
-    private function importCsv($csvRaw, $province, $city)
+    private function importCsv($csvRaw, $province, $city): int
     {
         $repository = $this->getDoctrine()
             ->getRepository(Waypoint::class);
@@ -232,9 +246,11 @@ class ImportController extends AbstractController
             ->findOneBy(['id' => 1]);
 
         $lines = explode("\n", $csvRaw);
-        $cnt = 0;
+        $cnt   = 0;
 
         foreach ($lines as $i => $line) {
+            $line = trim($line);
+
             if (0 === $i || !$line) {
                 continue;
             }

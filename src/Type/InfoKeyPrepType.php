@@ -19,9 +19,12 @@ class InfoKeyPrepType
     {
         $this->wayPoints[] = $wayPoint;
 
-        usort($this->wayPoints, function($a, $b) {
-            return $a->mapNo - $b->mapNo;
-        });
+        usort(
+            $this->wayPoints,
+            function ($a, $b) {
+                return $a->mapNo - $b->mapNo;
+            }
+        );
 
         return $this;
     }

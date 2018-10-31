@@ -315,9 +315,9 @@ class MaxFieldGenerator
 
             $wayPoint = new WayPointPrepType();
 
-            $wayPoint->agentNum = (int)$parts[0];
-            $wayPoint->mapNo = (int)$parts[1];
-            $wayPoint->name = trim($parts[2]);
+            $wayPoint->agentNum   = (int)$parts[0];
+            $wayPoint->mapNo      = (int)$parts[1];
+            $wayPoint->name       = trim($parts[2]);
             $wayPoint->keysNeeded = (int)$parts[3];
 
             $keyInfo->addWayPoint($wayPoint);

@@ -141,7 +141,7 @@ class Waypoint
         return $this;
     }
 
-    public function getGpxRaw():void
+    public function getGpxRaw(): void
     {
 
     }

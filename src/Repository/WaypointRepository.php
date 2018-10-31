@@ -35,8 +35,7 @@ class WaypointRepository extends ServiceEntityRepository
             ->orderBy('w.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
@@ -47,8 +46,7 @@ class WaypointRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('w')
             ->select("CONCAT(w.lat, ',', w.lon) AS lat_lon")
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
 
         return array_column($result, 'lat_lon');
     }
@@ -92,34 +90,29 @@ class WaypointRepository extends ServiceEntityRepository
         $criteria = $options->getCriteria();
 
         $query = $this->createQueryBuilder('w')
-            ->orderBy('w.' . $options->getOrder(), $options->getOrderDir());
+            ->orderBy('w.'.$options->getOrder(), $options->getOrderDir());
 
-        if (isset($criteria['province']) && $criteria['province'])
-        {
+        if (isset($criteria['province']) && $criteria['province']) {
             $query->where('w.province = :province')
                 ->setParameter('province', $criteria['province']);
         }
 
-        if ($options->searchCriteria('city'))
-        {
+        if ($options->searchCriteria('city')) {
             $query->andWhere('w.city LIKE :city')
                 ->setParameter('city', '%'.$options->searchCriteria('city').'%');
         }
 
-        if ($options->searchCriteria('store'))
-        {
+        if ($options->searchCriteria('store')) {
             $query->andWhere('t.store = :store')
-                ->setParameter('store', (int) $options->searchCriteria('store'));
+                ->setParameter('store', (int)$options->searchCriteria('store'));
         }
 
-        if ($options->searchCriteria('date_from'))
-        {
+        if ($options->searchCriteria('date_from')) {
             $query->andWhere('t.date >= :date_from')
                 ->setParameter('date_from', $options->searchCriteria('date_from'));
         }
 
-        if ($options->searchCriteria('date_to'))
-        {
+        if ($options->searchCriteria('date_to')) {
             $query->andWhere('t.date <= :date_to')
                 ->setParameter('date_to', $options->searchCriteria('date_to'));
         }

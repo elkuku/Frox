@@ -44,13 +44,12 @@ class AppExtension extends AbstractExtension
      */
     public function objectFilter($classObject): array
     {
-        $array    = (array) $classObject;
+        $array    = (array)$classObject;
         $response = [];
 
         $className = \get_class($classObject);
 
-        foreach ($array as $k => $v)
-        {
+        foreach ($array as $k => $v) {
             $response[trim(str_replace($className, '', $k))] = $v;
         }
 

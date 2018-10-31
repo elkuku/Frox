@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\WaypointRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -10,11 +11,14 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="default")
      */
-    public function index()
+    public function index(WaypointRepository $repository)
     {
-        return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
-        ]);
+        return $this->render(
+            'default/index.html.twig',
+            [
+                'numWayPoints' => \count($repository->findAll()),
+            ]
+        );
     }
 
     /**
@@ -22,8 +26,6 @@ class DefaultController extends AbstractController
      */
     public function map()
     {
-        return $this->render('default/map.html.twig', [
-            'controller_name' => 'DefaultController',
-        ]);
+        return $this->render('default/map.html.twig');
     }
 }
