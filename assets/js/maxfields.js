@@ -19,7 +19,6 @@ $('.sendMail').click(function () {
         },
 
         success: function (result) {
-            console.log(result)
             resultContainer.html(result.message)
         }
     })
@@ -27,7 +26,7 @@ $('.sendMail').click(function () {
 
 $('#framePlus').click(function () {
     if (frameNum < maxFrames) {
-        frameNum ++
+        frameNum++
     }
 
     changeImage()
@@ -35,7 +34,7 @@ $('#framePlus').click(function () {
 
 $('#frameMinus').click(function () {
     if (frameNum > -1) {
-        frameNum --
+        frameNum--
     }
 
     changeImage()
@@ -44,7 +43,8 @@ $('#frameMinus').click(function () {
 function changeImage() {
     $('#frameNum').html(frameNum + ' / ' + maxFrames)
 
-    let num, msg
+    let num
+    let msg = ''
 
     if (frameNum === -1) {
         num = -1
@@ -53,31 +53,39 @@ function changeImage() {
         num = s.substr(s.length - 3)
     }
 
-
     $('#displayFrames').attr('src', '/maxfields/' + item + '/frame_' + num + '.png')
 
     if (-1 === frameNum) {
         msg = 'Initial'
-    }
-    else if (frameNum < maxFrames) {
+    } else if (frameNum < maxFrames) {
 
-    console.log(links[frameNum])
-    console.log(links[frameNum].originName)
+        if (frameNum > 0) {
+            msg += getEventLine(links[frameNum - 1], false)
+        }
 
-        let lNum =  links[frameNum].linkNum + 1
-        msg =
-        'Link No: ' + lNum + '<br>'
-        + 'Agent: ' + links[frameNum].agentNum + '<br>'
-        + 'Origin: ' + links[frameNum].originNum + ' - ' + links[frameNum].originName + '<br>'
-        + 'Destination: '+ links[frameNum].destinationNum + ' - ' + links[frameNum].destinationName + '<br>'
-    }else {
+        msg += getEventLine(links[frameNum], true)
+
+        if (frameNum + 1 < maxFrames) {
+            msg += getEventLine(links[frameNum + 1], false)
+        }
+    } else {
         msg = 'Final'
     }
 
     $('#frameLinkInfo').html(msg)
-
 }
 
-$(function() {
+function getEventLine(link, isCurrent) {
+    let css = isCurrent ? 'linkCurrent' : 'link'
+    let num = link.linkNum + 1
+
+    return '<div class="' + css + '">'
+        + num + ' - ' + link.agentNum
+        + ' - ' + link.originNum + ' ' + link.originName
+        + ' &rArr; ' + link.destinationNum + ' ' + link.destinationName
+        + '</div>'
+}
+
+$(function () {
     changeImage()
-});
+})
