@@ -4,14 +4,16 @@ namespace App\Controller;
 
 use App\Repository\WaypointRepository;
 use App\Service\MaxFieldGenerator;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Swift_Attachment;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MaxFieldsController extends AbstractController
+class MaxFieldsController extends Controller
 {
     /**
      * @Route("/max-fields", name="max_fields")
@@ -91,9 +93,20 @@ class MaxFieldsController extends AbstractController
         try {
             $info = $maxFieldGenerator->getInfo($item);
 
+            $html = $this->renderView('max_fields/link-list.html.twig', [
+                    'item' => $item,
+                    'info' => $maxFieldGenerator->getInfo($item),
+                    'agent' => 1
+                ]
+            );
+
+            $linkList = $this->get('knp_snappy.pdf')->getOutputFromHtml($html);
+
             $message = (new \Swift_Message('MaxFields Plan '.$item))
                 ->setFrom(getenv('MAILER_FROM_MAIL'))
                 ->setTo($email);
+
+            $message->attach(new Swift_Attachment($linkList, 'link-list.pdf', 'application/pdf'));
 
             $data = [
                 'img_portal_map' => $message->embed(
