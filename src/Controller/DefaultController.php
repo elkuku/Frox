@@ -28,4 +28,13 @@ class DefaultController extends AbstractController
     {
         return $this->render('default/map.html.twig');
     }
+
+    /**
+     * @Route("/provinces", name="provinces")
+     */
+    public function provinces()
+    {
+        return $this->render('default/provinces.html.twig');
+
+    }
 }
