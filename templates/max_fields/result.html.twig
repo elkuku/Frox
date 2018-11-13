@@ -81,14 +81,13 @@
                 <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
                 <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.linksInfo }}</textarea>
                 <table class="table table-condensed">
-                    {% set origin='' %}
+                    {% set origin=-1 %}
                     {% for link in agentInfo.links %}
                         <tr style="border-bottom: 1px solid silver;{% if link.originNum != origin %}border-top: 2px solid darkblue;{% endif %}">
                             <td>{{ link.isEarly ? 'X' : '' }}</td>
                             <td>{{ link.linkNum }}</td>
                             <td>
-                                {% if agentInfo.agentNumber != link.agentNum %}
-                                <del>{% endif %}
+                                {% if agentInfo.agentNumber != link.agentNum %}<del>{% endif %}
                                     {% if link.originNum != origin %}
                                         <b>{{ link.originNum }} - {{ link.originName }}</b><br>
                                     {% endif %}

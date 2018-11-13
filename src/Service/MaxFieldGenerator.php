@@ -273,7 +273,8 @@ class MaxFieldGenerator
 
             $link = new AgentLinkType();
 
-            $link->linkNum         = (int)$parts[0];
+            // @todo zero base
+            $link->linkNum         = (int)$parts[0] + 1;
             $link->isEarly         = strpos($parts[0], '*') ? true : false;
             $link->agentNum        = (int)$parts[1];
             $link->originNum       = (int)$parts[2];

@@ -41,7 +41,7 @@
 
         <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
         <table style="width: 100%">
-            {% set origin='' %}
+            {% set origin=-1 %}
             {% for link in agentInfo.links %}
                 {% if link.originNum != origin %}
                     <tr>

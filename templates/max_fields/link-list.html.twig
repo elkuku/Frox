@@ -1,46 +1,93 @@
+{% set itemsPerCell=25 %}
+{% set cellsPerPage=2 %}
+{% set cntItem=0 %}
+{% set cntCell=0 %}
+
 {% for agentInfo in info.agentsInfo %}
     {% if agentInfo.agentNumber == agent %}
 
         {#<h4>Keys for agent {{ agentInfo.agentNumber }}</h4>#}
         {#<table class="table table-condensed">#}
-            {#{% for point in agentInfo.keys.wayPoints %}#}
-                {#{% if point.agentNum + 1 == agentInfo.agentNumber %}#}
-                    {#<tr>#}
-                        {#<td>{{ point.mapNo }}</td>#}
-                        {#<td>{{ point.name }}</td>#}
-                        {#<td>{{ point.keysNeeded ?: '-' }}</td>#}
-                    {#</tr>#}
-                {#{% endif %}#}
-            {#{% endfor %}#}
+        {#{% for point in agentInfo.keys.wayPoints %}#}
+        {#{% if point.agentNum + 1 == agentInfo.agentNumber %}#}
+        {#<tr>#}
+        {#<td>{{ point.mapNo }}</td>#}
+        {#<td>{{ point.name }}</td>#}
+        {#<td>{{ point.keysNeeded ?: '-' }}</td>#}
+        {#</tr>#}
+        {#{% endif %}#}
+        {#{% endfor %}#}
         {#</table>#}
 
         <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
+
+        {# Outer table #}
+        <div style="page-break-after: always; page-break-inside: avoid;">
         <table style="width: 100%">
-            {% set origin='' %}
-            {% for link in agentInfo.links %}
-                {% if link.originNum != origin %}
-                    <tr>
-                        <td colspan="3">
-                            <hr>
-                        </td>
-                    </tr>
-                {% endif %}
+        <tr style="vertical-align: top">
+        <td style="width: 50%">
+
+        {# Inner table #}
+        <table style="width: 100%">
+        {% set origin=-1 %}
+        {% for link in agentInfo.links %}
+            {% if link.originNum != origin %}
                 <tr>
-                    <td>{{ link.isEarly ? 'X' : '' }}</td>
-                    <td align="center">{{ link.linkNum }}</td>
-                    <td>
-                        {% if agentInfo.agentNumber != link.agentNum %}
-                        <del>{% endif %}
-                            {% if link.originNum != origin %}
-                                <b>{{ link.originNum }} - {{ link.originName }}</b><br>
-                            {% endif %}
-                            {% set origin = link.originNum %}
-                            L {{ link.destinationNum }} - {{ link.destinationName }}
-                            {% if agentInfo.agentNumber != link.agentNum %}</del>{% endif %}
+                    <td colspan="3">
+                        <hr>
                     </td>
                 </tr>
-            {% endfor %}
+            {% endif %}
+            <tr>
+                <td>{{ link.isEarly ? 'X' : '' }}</td>
+                <td align="center">{{ link.linkNum }}</td>
+                <td>
+                    {% if agentInfo.agentNumber != link.agentNum %}
+                    <del>{% endif %}
+                        {% if link.originNum != origin %}
+                            <b>{{ link.originNum }} - {{ link.originName }}</b><br>
+                        {% endif %}
+                        {% set origin = link.originNum %}
+                        L {{ link.destinationNum }} - {{ link.destinationName }}
+                        {% if agentInfo.agentNumber != link.agentNum %}</del>{% endif %}
+                </td>
+            </tr>
+
+            {% set cntItem=cntItem+1 %}
+            {% if cntItem==itemsPerCell %}
+                {% set cntItem=0 %}
+                {% set cntCell=cntCell+1 %}
+                {% set origin='' %}
+
+                {% if cntCell==cellsPerPage %}
+                    {% set cntCell=0 %}
+                    </table>
+                    </table>
+                    </div>
+                    {# Outer table #}
+                    <div style="page-break-after: always; page-break-inside: avoid;">
+                    <table style="width: 100%">
+                    <tr>
+                    <td>
+                    {# Inner table #}
+                    <table style="width: 100%">
+                    <tr>
+                    <td>
+                {% else %}
+                    </table>
+                    </td>
+                    <td style="width: 50%">
+                    {# Inner table #}
+                    <table style="width: 100%">
+                {% endif %}
+            {% endif %}
+        {% endfor %}
         </table>
+
+        </td>
+        </tr>
+        </table>
+        </div>
     {% endif %}
 {% endfor %}
 

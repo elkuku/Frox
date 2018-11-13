@@ -34,6 +34,15 @@ class MaxFieldsController extends Controller
      */
     public function display(MaxFieldGenerator $maxFieldGenerator, string $item): Response
     {
+//        return $this->render(
+//            'max_fields/link-list.html.twig',
+//            [
+//                'item' => $item,
+//                'info' => $maxFieldGenerator->getInfo($item),
+//                'list' => $maxFieldGenerator->getContentList($item),
+//                'agent' =>1
+//            ]
+//        );
         return $this->render(
             'max_fields/result.html.twig',
             [
@@ -93,20 +102,33 @@ class MaxFieldsController extends Controller
         try {
             $info = $maxFieldGenerator->getInfo($item);
 
-            $html = $this->renderView('max_fields/link-list.html.twig', [
-                    'item' => $item,
-                    'info' => $maxFieldGenerator->getInfo($item),
-                    'agent' => 1
-                ]
-            );
+            $linkList = $this->get('knp_snappy.pdf')
+                ->getOutputFromHtml(
+                    $this->renderView(
+                        'max_fields/link-list.html.twig',
+                        [
+                            'info'  => $info,
+                            'agent' => $agent,
+                        ]
+                    )
+                );
 
-            $linkList = $this->get('knp_snappy.pdf')->getOutputFromHtml($html);
+            $keyList = $this->get('knp_snappy.pdf')
+                ->getOutputFromHtml(
+                    $this->renderView(
+                        'max_fields/pdf-keys.html.twig',
+                        [
+                            'info'  => $info,
+                            'agent' => $agent,
+                        ]
+                    )
+                );
 
             $message = (new \Swift_Message('MaxFields Plan '.$item))
                 ->setFrom(getenv('MAILER_FROM_MAIL'))
-                ->setTo($email);
-
-            $message->attach(new Swift_Attachment($linkList, 'link-list.pdf', 'application/pdf'));
+                ->setTo($email)
+                ->attach(new Swift_Attachment($linkList, 'link-list.pdf', 'application/pdf'))
+                ->attach(new Swift_Attachment($keyList, 'key-list.pdf', 'application/pdf'));
 
             $data = [
                 'img_portal_map' => $message->embed(

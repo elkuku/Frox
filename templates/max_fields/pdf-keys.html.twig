@@ -1,0 +1,17 @@
+{% for agentInfo in info.agentsInfo %}
+    {% if agentInfo.agentNumber == agent %}
+
+        <h4>Keys for agent {{ agentInfo.agentNumber }}</h4>
+        <table class="table table-condensed">
+            {% for point in agentInfo.keys.wayPoints %}
+                {% if point.agentNum + 1 == agentInfo.agentNumber %}
+                    <tr>
+                        <td>{{ point.mapNo }}</td>
+                        <td>{{ point.name }}</td>
+                        <td>{{ point.keysNeeded ?: '-' }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endfor %}
