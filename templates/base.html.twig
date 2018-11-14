@@ -1,3 +1,5 @@
+{% import "@ElKuKuG11n/_macro/g11n.html.twig" as g11n %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,6 +31,7 @@
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
+        {{ g11n.switcher(getLangs(), getCurrentLang()) }}
     </div>
 </nav>
 
