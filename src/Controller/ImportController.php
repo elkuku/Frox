@@ -105,7 +105,7 @@ class ImportController extends AbstractController
                 if (false === \in_array($p, $ws, false)) {
                     $wayPoint->setLat((float)$points[0]);
                     $wayPoint->setLon((float)$points[1]);
-                    $wayPoint->setName((string)(count($ws) + 1));
+                    $wayPoint->setName((string)(\count($ws) + 1));
 
                     $wayPoints[] = $this->createWayPoint(
                         (float)$points[0],
@@ -115,7 +115,7 @@ class ImportController extends AbstractController
                         $province,
                         $city
                     );
-//                    $wayPoints[] = $wayPoint;
+
                     $ws[] = $p;
                 }
 
@@ -124,13 +124,12 @@ class ImportController extends AbstractController
                 if (false === \in_array($p, $ws, false)) {
                     $wayPoint->setLat((float)$points[2]);
                     $wayPoint->setLon((float)$points[3]);
-                    $wayPoint->setName((string)(count($ws) + 1));
+                    $wayPoint->setName((string)(\count($ws) + 1));
 
-//                    $wayPoints[] = $wayPoint;
                     $wayPoints[] = $this->createWayPoint(
                         (float)$points[2],
                         (float)$points[3],
-                        (string)(count($ws) + 1),
+                        (string)(\count($ws) + 1),
                         $category,
                         $province,
                         $city

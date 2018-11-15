@@ -10,6 +10,7 @@ use App\Repository\WaypointRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class WaypointsController extends AbstractController
@@ -19,8 +20,11 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoints", name="waypoints")
      */
-    public function index(WaypointRepository $repository, ProvinceRepository $provinceRepository, Request $request)
-    {
+    public function index(
+        WaypointRepository $repository,
+        ProvinceRepository $provinceRepository,
+        Request $request
+    ): Response {
         $paginatorOptions = $this->getPaginatorOptions($request);
 
         $waypoints = $repository->getRawList($paginatorOptions);
@@ -30,8 +34,8 @@ class WaypointsController extends AbstractController
         return $this->render(
             'waypoints/index.html.twig',
             [
-                'waypoints'        => $waypoints,
-                'provinces'        => $provinceRepository->findAll(),
+                'waypoints' => $waypoints,
+                'provinces' => $provinceRepository->findAll(),
                 'paginatorOptions' => $paginatorOptions,
             ]
         );
@@ -66,7 +70,7 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoints_run", name="run-waypoints")
      */
-    public function waypoints()
+    public function waypoints(): Response
     {
         $waypoints = $this->getDoctrine()
             ->getRepository(Waypoint::class)

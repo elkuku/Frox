@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\WaypointRepository;
 use App\Service\MaxFieldGenerator;
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Swift_Attachment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
