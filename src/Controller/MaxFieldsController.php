@@ -110,7 +110,8 @@ class MaxFieldsController extends Controller
                             'info'  => $info,
                             'agent' => $agent,
                         ]
-                    )
+                    ),
+                    ['encoding' => 'utf-8']
                 );
 
             $keyList = $this->get('knp_snappy.pdf')
@@ -121,7 +122,8 @@ class MaxFieldsController extends Controller
                             'info'  => $info,
                             'agent' => $agent,
                         ]
-                    )
+                    ),
+                    ['encoding' => 'utf-8']
                 );
 
             $message = (new \Swift_Message('MaxFields Plan '.$item))
