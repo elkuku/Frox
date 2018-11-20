@@ -6,30 +6,35 @@ use App\Repository\WaypointRepository;
 use App\Service\MaxFieldGenerator;
 use Swift_Attachment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class MaxFieldsController
+ *
+ * @Route("max-fields")
+ */
 class MaxFieldsController extends Controller
 {
     /**
-     * @Route("/max-fields", name="max_fields")
+     * @Route("/", name="max_fields")
      */
     public function index(MaxFieldGenerator $maxFieldGenerator): Response
     {
         return $this->render(
             'max_fields/index.html.twig',
             [
-                'controller_name' => 'MaxFieldsController',
-                'list'            => $maxFieldGenerator->getList(),
+                'list' => $maxFieldGenerator->getList(),
             ]
         );
     }
 
     /**
-     * @Route("/max-fields/{item}", name="max_fields_result")
+     * @Route("/show/{item}", name="max_fields_result")
      */
     public function display(MaxFieldGenerator $maxFieldGenerator, string $item): Response
     {
@@ -53,7 +58,7 @@ class MaxFieldsController extends Controller
     }
 
     /**
-     * @Route("/export_maxfields", name="export-maxfields")
+     * @Route("/export", name="export-maxfields")
      */
     public function generateMaxFields(
         WaypointRepository $repository,
@@ -87,7 +92,7 @@ class MaxFieldsController extends Controller
     }
 
     /**
-     * @Route("/maxfields_send_mail", name="maxfields-send-mail")
+     * @Route("/send_mail", name="maxfields-send-mail")
      */
     public function sendMail(
         MaxFieldGenerator $maxFieldGenerator,
@@ -175,5 +180,27 @@ class MaxFieldsController extends Controller
         }
 
         return $this->json($data);
+    }
+
+    /**
+     * @Route("/delete/{item}", name="max_fields_delete")
+     */
+    public function delete(MaxFieldGenerator $maxFieldGenerator, string $item): Response
+    {
+        try {
+            $maxFieldGenerator->remove($item);
+
+            $this->addFlash('success', sprintf(g11n3t('%s has been removed.'), $item));
+        } catch (IOException $exception) {
+
+            $this->addFlash('warning', $exception->getMessage());
+        }
+
+        return $this->render(
+            'max_fields/index.html.twig',
+            [
+                'list' => $maxFieldGenerator->getList(),
+            ]
+        );
     }
 }

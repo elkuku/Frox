@@ -34,7 +34,7 @@ class MaxFieldGenerator
         $this->executable = getenv('MAXFIELDS_EXEC');
     }
 
-    public function generate(string $projectName, string $wayPointList, int $playersNum)
+    public function generate(string $projectName, string $wayPointList, int $playersNum): void
     {
         $fileSystem = new Filesystem();
 
@@ -232,12 +232,19 @@ class MaxFieldGenerator
         return $links;
     }
 
-    public function getImagePath(string $item, string $image)
+    public function getImagePath(string $item, string $image): string
     {
         return $this->rootDir."/$item/$image";
     }
 
-    private function findFrames(string $item)
+    public function remove(string $item): void
+    {
+        $fileSystem = new Filesystem();
+
+        $fileSystem->remove($this->rootDir."/$item");
+    }
+
+    private function findFrames(string $item): int
     {
         $path   = $this->rootDir.'/'.$item;
         $frames = 0;
@@ -252,7 +259,7 @@ class MaxFieldGenerator
         return $frames;
     }
 
-    private function parseCsvLinks(string $item)
+    private function parseCsvLinks(string $item): array
     {
         $links = [];
 
@@ -295,7 +302,7 @@ class MaxFieldGenerator
         return $links;
     }
 
-    private function parseCsvKeys(string $item)
+    private function parseCsvKeys(string $item): InfoKeyPrepType
     {
         $keyInfo = new InfoKeyPrepType();
 
