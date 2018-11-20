@@ -136,7 +136,7 @@ $('#result_Gpx').on('click', function () {
 })
 
 $('#build').on('click', function () {
-    doPostRequest('/export_maxfields', {
+    doPostRequest('/max-fields/export', {
         points: selectedMarkers,
         buildName: $('#build_name').val(),
         players_num: $('#players_num').val()

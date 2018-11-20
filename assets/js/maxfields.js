@@ -11,7 +11,7 @@ $('.sendMail').click(function () {
     resultContainer.html('Sending email...')
 
     $.ajax({
-        url: '/maxfields_send_mail',
+        url: '/max-fields/send_mail',
         data: {
             agent: agent,
             email: email,
