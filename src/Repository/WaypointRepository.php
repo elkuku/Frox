@@ -121,4 +121,21 @@ class WaypointRepository extends ServiceEntityRepository
 
         return $this->paginate($query, $options->getPage(), $options->getLimit());
     }
+
+    public function findCities()
+    {
+        $result = $this->createQueryBuilder('w')
+            ->select('w.city')
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+
+        $cities = array_column($result, 'city');
+
+        $cities = array_filter($cities);
+
+        sort($cities);
+
+        return $cities;
+    }
 }

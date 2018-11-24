@@ -34,6 +34,7 @@ class ImportFormType extends AbstractType
                 null,
                 [
                     'required' => false,
+                    'attr' => ['list' => 'citiesList'],
                 ]
             )
             ->add('intelLink', null, ['required' => false])

@@ -1,0 +1,9 @@
+{% macro switcher(langs, selected) %}
+    <form class="g11n-switcher navbar-search pull-right">
+        <select name="lang" onchange="this.form.submit()" class="g11n-switcher form-control bg-dark" >
+            {% for lang in langs %}
+                <option class="g11n-switcher bg-dark"{% if lang == selected %} selected="selected"{% endif %}>{{ lang }}</option>
+            {% endfor %}
+        </select>
+    </form>
+{% endmacro %}

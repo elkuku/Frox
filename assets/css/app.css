@@ -1,13 +1,17 @@
 body {
-    background-color: lightgray;
     padding-top: 75px;
 }
 
 .agent-info {
     font-family: monospace;
-
 }
 
 .linkCurrent {
     background-color: yellow;
+}
+
+/* Language switcher*/
+.g11n-switcher {
+    background-color: #313131;
+    color: limegreen;
 }

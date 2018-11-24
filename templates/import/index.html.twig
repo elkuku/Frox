@@ -9,12 +9,49 @@
 
     {{ form_errors(form) }}
 
-    {{ form_row(form.province) }}
-    {{ form_row(form.city) }}
-    <hr>
-    {{ form_row(form.gpxRaw) }}
-    {{ form_row(form.csvRaw) }}
-    {{ form_row(form.intelLink) }}
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.province) }}
+        </div>
+        <div class="col-8">
+            {{ form_row(form.city) }}
+        </div>
+    </div>
+
+    <datalist id="citiesList">
+        {% for city in cities %}
+            <option value="{{ city }}"></option>
+        {% endfor %}
+    </datalist>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab">
+                Intel Link
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab">
+                GPX
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab">
+                CSV
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            {{ form_row(form.intelLink) }}
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            {{ form_row(form.gpxRaw) }}
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            {{ form_row(form.csvRaw) }}
+        </div>
+    </div>
 
     <button type="submit" class="btn btn-primary">Import</button>
 

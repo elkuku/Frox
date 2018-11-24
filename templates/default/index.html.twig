@@ -1,6 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>FroX!</h1>
-    {{ _('We have %d WayPoints in our database.')|format(numWayPoints) }}
+    <div class="text-xl-center">
+
+        <h1>
+            <img src="{{ asset('favicon.ico') }}" alt="FroX!">
+            FroX!
+            <img src="{{ asset('favicon.ico') }}" alt="FroX!">
+        </h1>
+        {{ _('We have %d WayPoints in our database.')|format(numWayPoints) }}
+    </div>
 {% endblock %}

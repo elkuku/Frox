@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Province;
 use App\Entity\Waypoint;
 use App\Form\ImportFormType;
+use App\Repository\WaypointRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +16,7 @@ class ImportController extends AbstractController
     /**
      * @Route("/import", name="import")
      */
-    public function index(Request $request)
+    public function index(Request $request, WaypointRepository $waypointRepo)
     {
         $form = $this->createForm(ImportFormType::class);
         $form->handleRequest($request);
@@ -70,6 +71,7 @@ class ImportController extends AbstractController
             'import/index.html.twig',
             [
                 'form' => $form->createView(),
+                'cities' => $waypointRepo->findCities()
             ]
         );
     }
