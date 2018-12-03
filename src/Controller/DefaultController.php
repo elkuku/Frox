@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Repository\WaypointRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="default")
@@ -43,7 +43,7 @@ class DefaultController extends Controller
      *
      * @return Response
      */
-    public function backup(): Response
+    public function backup(\Swift_Mailer $mailer): Response
     {
         $pattern = '#mysql://(.+)\:(.+)@127.0.0.1:3306/(.+)#';
 
@@ -77,7 +77,7 @@ class DefaultController extends Controller
             ->setFrom(getenv('MAILER_FROM_MAIL'))
             ->setTo(getenv('MAILER_FROM_MAIL'));
 
-        $count = $this->get('mailer')->send($message);
+        $count = $mailer->send($message);
 
         if (!$count)
         {

@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use App\Repository\WaypointRepository;
 use App\Service\MaxFieldGenerator;
+use Knp\Snappy\Pdf;
 use Swift_Attachment;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route("max-fields")
  */
-class MaxFieldsController extends Controller
+class MaxFieldsController extends AbstractController
 {
     /**
      * @Route("/", name="max_fields")
@@ -97,7 +98,8 @@ class MaxFieldsController extends Controller
     public function sendMail(
         MaxFieldGenerator $maxFieldGenerator,
         \Swift_Mailer $mailer,
-        Request $request
+        Request $request,
+    Pdf $pdf
     ): JsonResponse {
         $agent = $request->get('agent');
         $email = $request->get('email');
@@ -106,7 +108,7 @@ class MaxFieldsController extends Controller
         try {
             $info = $maxFieldGenerator->getInfo($item);
 
-            $linkList = $this->get('knp_snappy.pdf')
+            $linkList = $pdf
                 ->getOutputFromHtml(
                     $this->renderView(
                         'max_fields/link-list.html.twig',
@@ -118,7 +120,7 @@ class MaxFieldsController extends Controller
                     ['encoding' => 'utf-8']
                 );
 
-            $keyList = $this->get('knp_snappy.pdf')
+            $keyList = $pdf
                 ->getOutputFromHtml(
                     $this->renderView(
                         'max_fields/pdf-keys.html.twig',
