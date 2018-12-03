@@ -70,8 +70,8 @@ class ImportController extends AbstractController
         return $this->render(
             'import/index.html.twig',
             [
-                'form' => $form->createView(),
-                'cities' => $waypointRepo->findCities()
+                'form'   => $form->createView(),
+                'cities' => $waypointRepo->findCities(),
             ]
         );
     }
@@ -259,11 +259,14 @@ class ImportController extends AbstractController
             $parts = explode(',', $line);
 
             if (4 !== \count($parts)) {
-                throw new \UnexpectedValueException('Error parsing CSV file');
+                $parts = $this->parseFishyCsvLine($parts);
+                if (4 !== \count($parts)) {
+                    throw new \UnexpectedValueException('Error parsing CSV file');
+                }
             }
 
-            $lat = (float)$parts['1'];
-            $lon = (float)$parts['2'];
+            $lat = (float)$parts[1];
+            $lon = (float)$parts[2];
 
             $w = $repository->findOneBy(
                 [
@@ -292,5 +295,27 @@ class ImportController extends AbstractController
         }
 
         return $cnt;
+    }
+
+    private function parseFishyCsvLine(array $parts)
+    {
+        $return = [];
+
+        $cnt = \count($parts);
+
+        $return[3] = $parts[$cnt - 1];
+        unset ($parts[$cnt - 1]);
+
+
+        $return[2] = $parts[$cnt - 2];
+        unset ($parts[$cnt - 2]);
+
+        $return[1] = $parts[$cnt - 3];
+        unset ($parts[$cnt - 3]);
+
+        $return[0] = implode('', $parts);
+
+        return $return;
+
     }
 }
