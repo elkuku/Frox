@@ -34,7 +34,7 @@ class ExportController extends AbstractController
             return $this->render(
                 'export/result.html.twig',
                 [
-                    'gpx'      => $this->createGpx($wayPoints),
+                    'gpx'      => $maxFieldGenerator->createGpx($wayPoints),
                     'maxField' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
                 ]
             );
@@ -71,7 +71,7 @@ class ExportController extends AbstractController
             $wayPoints = $repository->findBy(['id' => $points]);
             $data      = [
                 'maxfield' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
-                'gpx'      => $this->createGpx($wayPoints),
+                'gpx'      => $maxFieldGenerator->createGpx($wayPoints),
             ];
         } else {
             $message = 'No WayPoints Selected!';
@@ -79,29 +79,5 @@ class ExportController extends AbstractController
         }
 
         return $this->json($data);
-    }
-
-
-    /**
-     * @param Waypoint[] $wayPoints
-     */
-    private function createGpx(array $wayPoints): string
-    {
-        $xml = [];
-
-        $xml[] = '<?xml version="1.0" encoding="UTF-8"?>';
-        $xml[] = '<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">';
-
-        foreach ($wayPoints as $wayPoint) {
-            $xml[] = '<wpt lat="'.$wayPoint->getLat().'" lon="'.$wayPoint->getLon().'">';
-            $xml[] = '  <name>'.$wayPoint->getName().'</name>';
-            //     $xml[] = '  <cmt>'.$names[$i].'</cmt>';
-            //     $xml[] = '  <desc>'.$names[$i].'</desc>';
-            $xml[] = '</wpt>';
-        }
-
-        $xml[] = '</gpx>';
-
-        return implode("\n", $xml);
     }
 }

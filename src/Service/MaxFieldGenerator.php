@@ -186,6 +186,77 @@ class MaxFieldGenerator
         return $keyPrep;
     }
 
+    public function getGpx(string $item)
+    {
+        return $this->createGpx($this->parseWayPointsFile($item));
+    }
+
+    /**
+     * @param Waypoint[] $wayPoints
+     */
+    public function createGpx(array $wayPoints): string
+    {
+        $xml = [];
+
+        $xml[] = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml[] = '<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">';
+
+        foreach ($wayPoints as $wayPoint) {
+            $xml[] = '<wpt lat="'.$wayPoint->getLat().'" lon="'.$wayPoint->getLon().'">';
+            $xml[] = '  <name>'.$wayPoint->getName().'</name>';
+            //     $xml[] = '  <cmt>'.$names[$i].'</cmt>';
+            //     $xml[] = '  <desc>'.$names[$i].'</desc>';
+            $xml[] = '</wpt>';
+        }
+
+        $xml[] = '</gpx>';
+
+        return implode("\n", $xml);
+    }
+
+    private function parseWayPointsFile(string $item)
+    {
+        $contents  = $this->getTextFileContents($item, $item.'.waypoints');
+        $lines     = explode("\n", $contents);
+        $wayPoints = [];
+
+        foreach ($lines as $line) {
+            $l = trim($line);
+
+            if (!$l) {
+                continue;
+            }
+
+            $parts = explode(';', $l);
+
+            if (2 !== count($parts)) {
+                throw new \UnexpectedValueException('Fishy CSV line');
+            }
+
+            $loc = explode('pll=', $parts[1]);
+
+            if (2 !== count($loc)) {
+                throw new \UnexpectedValueException('Fishy CSV loc line');
+            }
+
+            $coords = explode(',', $loc[1]);
+
+            if (2 !== count($coords)) {
+                throw new \UnexpectedValueException('Fishy CSV coords line');
+            }
+
+            $w = new Waypoint();
+
+            $w->setName($parts[0]);
+            $w->setLat($coords[0]);
+            $w->setLon($coords[1]);
+
+            $wayPoints[] = $w;
+        }
+
+        return $wayPoints;
+    }
+
     private function parseLinksFile(string $contents)
     {
         $lines = explode("\n", $contents);

@@ -7,11 +7,14 @@
     <ul>
         {% for item in list %}
             <li>
-                <a href="{{ path('max_fields_result', {'item': item}) }}">
-                    {{ item }}
+                <a href="{{ path('max_fields_gpx', {'item': item}) }}" class="btn btn-sm btn-success">
+                    {{ _('Generate GPX') }}
                 </a>
                 <a href="{{ path('max_fields_delete', {'item': item}) }}" class="btn btn-sm btn-danger">
                     {{ _('Delete') }}
+                </a>
+                <a href="{{ path('max_fields_result', {'item': item}) }}">
+                    {{ item }}
                 </a>
             </li>
         {% endfor %}

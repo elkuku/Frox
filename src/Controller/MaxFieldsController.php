@@ -39,15 +39,6 @@ class MaxFieldsController extends AbstractController
      */
     public function display(MaxFieldGenerator $maxFieldGenerator, string $item): Response
     {
-//        return $this->render(
-//            'max_fields/link-list.html.twig',
-//            [
-//                'item' => $item,
-//                'info' => $maxFieldGenerator->getInfo($item),
-//                'list' => $maxFieldGenerator->getContentList($item),
-//                'agent' =>1
-//            ]
-//        );
         return $this->render(
             'max_fields/result.html.twig',
             [
@@ -156,17 +147,7 @@ class MaxFieldsController extends AbstractController
                     $data
                 ),
                 'text/html'
-            )/*
-             * If you also want to include a plaintext version of the message
-            ->addPart(
-                $this->renderView(
-                    'emails/registration.txt.twig',
-                    array('name' => $name)
-                ),
-                'text/plain'
-            )
-            */
-            ;
+            );
 
             $count = $mailer->send($message);
 
@@ -182,6 +163,21 @@ class MaxFieldsController extends AbstractController
         }
 
         return $this->json($data);
+    }
+
+    /**
+     * @Route("/gpx/{item}", name="max_fields_gpx")
+     */
+    public function getGpx(MaxFieldGenerator $maxFieldGenerator, string $item): void
+    {
+        $gpx = $maxFieldGenerator->getGpx($item);
+
+        header('Content-type: text/plain');
+        header('Content-Disposition: attachment; filename="'.$item.'.gpx"');
+
+        echo $gpx;
+
+        exit();
     }
 
     /**
