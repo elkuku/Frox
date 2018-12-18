@@ -13,6 +13,9 @@
 {% endblock %}
 
 {% block body %}
+    <a href="{{ path('max_fields_gpx', {'item': item}) }}" class="btn btn-sm btn-success">
+        {{ _('Download GPX') }}
+    </a>
     <h3>MaxFields for <span id="itemId">{{ item }}</span></h3>
 
     <div class="row">
