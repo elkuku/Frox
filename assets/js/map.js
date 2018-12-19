@@ -2,7 +2,7 @@ require('leaflet')
 require('leaflet/dist/leaflet.css')
 require('../css/map.css')
 
-import 'bootstrap/js/dist/modal';
+import 'bootstrap/js/dist/modal'
 
 var map
 var markersLayer = new L.LayerGroup()
@@ -29,12 +29,11 @@ var plotlayers = []
 const selectedMarkers = []
 
 function initmap() {
-    map = new L.Map('map')
-
     var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     var osmAttrib = 'Map data (C) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
     var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib})
 
+    map = new L.Map('map')
     map.setView(new L.LatLng(0.990275, -79.659482), 9)
     map.addLayer(osm)
 }
@@ -53,8 +52,6 @@ function loadMarkers() {
                     new L.LatLng(this.lat, this.lng),
                     {icon: orangeIcon, wp_id: this.id, wp_selected: false, title: this.name}
                 )
-
-            // marker.bindPopup(this.name)
 
             marker.on('click', function (e) {
                 var enabled = e.target.options.wp_selected
@@ -116,23 +113,23 @@ initmap()
 loadMarkers()
 
 $('#result_maxFields').on('click', function () {
-    $.post( "/export2", { points: selectedMarkers }, function( data ) {
+    $.post('/export2', {points: selectedMarkers}, function (data) {
         const options = {}
         const modal = $('#resultModal')
         modal.find('.modal-title').text('MaxFields')
         modal.find('.modal-body').text(data.maxfield)
         modal.modal(options)
-    });
+    })
 })
 
 $('#result_Gpx').on('click', function () {
-    $.post( "/export2", { points: selectedMarkers }, function( data ) {
+    $.post('/export2', {points: selectedMarkers}, function (data) {
         const options = {}
         const modal = $('#resultModal')
         modal.find('.modal-title').text('GPX')
         modal.find('.modal-body').text(data.gpx)
         modal.modal(options)
-    });
+    })
 })
 
 $('#build').on('click', function () {

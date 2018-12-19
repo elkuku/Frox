@@ -22,6 +22,7 @@ Encore
     // .createSharedEntry('js/common', ['jquery'])
     .addEntry('app', './assets/js/app.js')
     .addEntry('map', './assets/js/map.js')
+    .addEntry('map2', './assets/js/map2.js')
     .addEntry('export', './assets/js/export.js')
     .addEntry('maxfields', './assets/js/maxfields.js')
     .addEntry('paginator', './assets/js/paginator.js')

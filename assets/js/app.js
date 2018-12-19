@@ -13,8 +13,4 @@ require('bootstrap/dist/css/bootstrap.css')
 require('open-iconic/font/css/open-iconic-bootstrap.css')
 
 // any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.css');
-
-
-//import leafgreen from '../img/leaf-green.png'
-// require('../img/leaf-shadow.png')
+require('../css/app.css')

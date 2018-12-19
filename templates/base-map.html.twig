@@ -31,13 +31,10 @@
     </div>
 </nav>
 
-<main role="main" class="container-fluid">
-    <noscript><h1 class="alert alert-danger">Please activate Javascript</h1></noscript>
-    {% include ('_flash-messages.html.twig') %}
+<noscript><h1 class="alert alert-danger">Please activate Javascript</h1></noscript>
+{% include ('_flash-messages.html.twig') %}
 
-    {% block body %}{% endblock %}
-
-</main>
+{% block body %}{% endblock %}
 
 <script src="{{ asset('build/app.js') }}"></script>
 
