@@ -7,6 +7,7 @@ use App\Entity\Province;
 use App\Entity\Waypoint;
 use App\Form\ImportFormType;
 use App\Repository\WaypointRepository;
+use App\Service\WayPointHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +17,7 @@ class ImportController extends AbstractController
     /**
      * @Route("/import", name="import")
      */
-    public function index(Request $request, WaypointRepository $waypointRepo)
+    public function index(Request $request, WaypointRepository $waypointRepo, WayPointHelper $wayPointHelper)
     {
         $form = $this->createForm(ImportFormType::class);
         $form->handleRequest($request);
@@ -41,7 +42,7 @@ class ImportController extends AbstractController
 
             if ($data['csvRaw']) {
                 try {
-                    $count += $this->importCsv($data['csvRaw'], $data['province'], $data['city']);
+                    $count += $this->importCsv($data['csvRaw'], $data['province'], $data['city'], $wayPointHelper);
                 } catch (\UnexpectedValueException $exception) {
                     $this->addFlash('danger', $exception->getMessage());
 
@@ -235,7 +236,7 @@ class ImportController extends AbstractController
         return $wayPoint;
     }
 
-    private function importCsv($csvRaw, $province, $city): int
+    private function importCsv($csvRaw, $province, $city, WayPointHelper $wayPointHelper): int
     {
         $repository = $this->getDoctrine()
             ->getRepository(Waypoint::class);
@@ -268,14 +269,14 @@ class ImportController extends AbstractController
             $lat = (float)$parts[1];
             $lon = (float)$parts[2];
 
-            $w = $repository->findOneBy(
+            $wayPoint = $repository->findOneBy(
                 [
                     'lat' => $lat,
                     'lon' => $lon,
                 ]
             );
 
-            if (!$w) {
+            if (!$wayPoint) {
                 $wayPoint = new Waypoint();
 
                 $wayPoint->setName($parts[0]);
@@ -290,8 +291,10 @@ class ImportController extends AbstractController
                 $entityManager->flush();
 
                 $cnt++;
-
             }
+
+            // Check image
+            $wayPointHelper->checkImage($wayPoint->getId(), trim($parts[3]));
         }
 
         return $cnt;
@@ -299,23 +302,21 @@ class ImportController extends AbstractController
 
     private function parseFishyCsvLine(array $parts)
     {
-        $return = [];
+        $returnValues = [];
 
         $cnt = \count($parts);
 
-        $return[3] = $parts[$cnt - 1];
+        $returnValues[3] = $parts[$cnt - 1];
         unset ($parts[$cnt - 1]);
 
-
-        $return[2] = $parts[$cnt - 2];
+        $returnValues[2] = $parts[$cnt - 2];
         unset ($parts[$cnt - 2]);
 
-        $return[1] = $parts[$cnt - 3];
+        $returnValues[1] = $parts[$cnt - 3];
         unset ($parts[$cnt - 3]);
 
-        $return[0] = implode('', $parts);
+        $returnValues[0] = implode('', $parts);
 
-        return $return;
-
+        return $returnValues;
     }
 }

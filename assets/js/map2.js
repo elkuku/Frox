@@ -114,6 +114,18 @@ function loadMarkers() {
                     }
                 )
 
+            marker.bindPopup("Loading...")
+
+            marker.on('click', function(e) {
+                console.log(e)
+                console.log(e.target.options.wp_id)
+                var popup = e.target.getPopup();
+                $.get('/waypoints_info/' + e.target.options.wp_id).done(function (data) {
+                    popup.setContent(data);
+                    popup.update();
+                });
+            })
+
             /*
             marker.on('click', function (e) {
                 let enabled = e.target.options.wp_selected

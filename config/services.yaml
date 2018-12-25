@@ -33,3 +33,7 @@ services:
     App\Service\MaxFieldGenerator:
         arguments:
           ['%kernel.project_dir%']
+
+    App\Service\WayPointHelper:
+        arguments:
+          ['%kernel.project_dir%']

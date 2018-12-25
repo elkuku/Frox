@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-simplexml": "*",
+        "ext-curl": "*",
         "easycorp/easyadmin-bundle": "^1.17",
         "elkuku/g11n-bundle": "^0.1.2",
         "knplabs/knp-snappy-bundle": "^1.5",
@@ -27,7 +28,7 @@
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/webpack-encore-pack": "^1.0",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
     },
     "require-dev": {
         "symfony/debug-pack": "*",

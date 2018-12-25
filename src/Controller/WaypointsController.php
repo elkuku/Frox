@@ -34,8 +34,8 @@ class WaypointsController extends AbstractController
         return $this->render(
             'waypoints/index.html.twig',
             [
-                'waypoints' => $waypoints,
-                'provinces' => $provinceRepository->findAll(),
+                'waypoints'        => $waypoints,
+                'provinces'        => $provinceRepository->findAll(),
                 'paginatorOptions' => $paginatorOptions,
             ]
         );
@@ -107,5 +107,23 @@ class WaypointsController extends AbstractController
         }
 
         return $this->json($wps);
+    }
+
+    /**
+     * @Route("/waypoints_info/{id}", name="waypoints-info")
+     */
+    public function info(Waypoint $waypoint): Response
+    {
+
+        $waypoints = $this->getDoctrine()
+            ->getRepository(Waypoint::class)
+            ->findAll();
+
+        return $this->render(
+            'waypoints/info.html.twig',
+            [
+                'waypoint' => $waypoint,
+            ]
+        );
     }
 }

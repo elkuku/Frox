@@ -1,0 +1,9 @@
+<h6>{{ waypoint.name }}</h6>
+<img src="{{ asset('wp_images/'~ waypoint.id ~ '.jpg') }}" alt="" width="150" height="100">
+<ul>
+    <li>{{ waypoint.province.name }} / {{ waypoint.city }}</li>
+    <li>Lat: {{ waypoint.lat }}</li>
+    <li>Lon: {{ waypoint.lon }}</li>
+</ul>
+
+<a href="{{ path('waypoints_edit', {'id': waypoint.id}) }}">Edit</a>
