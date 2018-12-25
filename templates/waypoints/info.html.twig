@@ -1,5 +1,8 @@
 <h6>{{ waypoint.name }}</h6>
-<img src="{{ asset('wp_images/'~ waypoint.id ~ '.jpg') }}" alt="" width="150" height="100">
+
+<a href="{{ asset('wp_images/'~ waypoint.id ~ '.jpg') }}">
+<img src="{{ asset('wp_images/'~ waypoint.id ~ '.jpg') | imagine_filter('squared_thumbnail')}}" alt="Image">
+</a>
 <ul>
     <li>{{ waypoint.province.name }} / {{ waypoint.city }}</li>
     <li>Lat: {{ waypoint.lat }}</li>

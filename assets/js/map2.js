@@ -67,25 +67,6 @@ function initmap() {
 
 const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
 
-/*
-const LeafIcon = L.Icon.extend({
-    options: {
-        shadowUrl: 'build/img/leaf-shadow.png',
-        iconSize: [38, 95],
-        shadowSize: [50, 64],
-        iconAnchor: [22, 94],
-        shadowAnchor: [4, 62],
-        popupAnchor: [-3, -76]
-    }
-})
-
-const greenIcon = new LeafIcon({iconUrl: 'build/img/leaf-green.png'}),
-    redIcon = new LeafIcon({iconUrl: 'build/img/leaf-red.png'}),
-    orangeIcon = new LeafIcon({iconUrl: 'build/img/leaf-orange.png'})
-
-const selectedMarkers = []
-*/
-
 function loadMarkers() {
 
     markers.clearLayers()
@@ -125,26 +106,6 @@ function loadMarkers() {
                     popup.update();
                 });
             })
-
-            /*
-            marker.on('click', function (e) {
-                let enabled = e.target.options.wp_selected
-                if (enabled) {
-                    e.target.setIcon(orangeIcon)
-                    e.target.options.wp_selected = false
-                    let index = selectedMarkers.indexOf(e.target.options.wp_id)
-                    if (index > -1) {
-                        selectedMarkers.splice(index, 1)
-                    }
-                } else {
-                    e.target.setIcon(redIcon)
-                    e.target.options.wp_selected = true
-                    selectedMarkers.push(e.target.options.wp_id)
-                }
-
-                $('#result_message').html(selectedMarkers.length)
-            })
-            */
 
             markers.addLayer(marker)
             map.addLayer(markers)

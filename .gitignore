@@ -26,3 +26,7 @@ yarn-error.log
 /fakewebpack.config.js
 /public/maxfields/
 /public/wp_images/
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
