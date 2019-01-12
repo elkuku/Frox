@@ -24,8 +24,9 @@ class ImportFormType extends AbstractType
                 'province',
                 EntityType::class,
                 [
+                    'label' => g11n3t('Province'),
                     'class'       => Province::class,
-                    'placeholder' => 'Select a Province...',
+                    'placeholder' => g11n3t('Select a Province...'),
                     'required'    => false,
                 ]
             )
@@ -33,6 +34,7 @@ class ImportFormType extends AbstractType
                 'city',
                 null,
                 [
+                    'label' => g11n3t('City'),
                     'required' => false,
                     'attr' => ['list' => 'citiesList'],
                 ]
@@ -48,6 +50,14 @@ class ImportFormType extends AbstractType
             )
             ->add(
                 'csvRaw',
+                TextareaType::class,
+                [
+                    'attr'     => ['cols' => '30', 'rows' => '5'],
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'idmcsvRaw',
                 TextareaType::class,
                 [
                     'attr'     => ['cols' => '30', 'rows' => '5'],
