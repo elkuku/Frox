@@ -73,7 +73,10 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+"lang":[
+"bin/console g11n:templates && bin/console g11n:langfiles es-ES"
+]
     },
     "conflict": {
         "symfony/symfony": "*"

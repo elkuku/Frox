@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: G11nTest \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 12:14-0500\n"
+"POT-Creation-Date: 2018-12-25 15:59-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,82 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /templates/default/index.html.twig:5
+#: /src/Controller/MaxFieldsController.php:191
+#, php-format
+msgid "%s has been removed."
+msgstr ""
+
+#: /src/Form/ImportFormType.php:27
+msgid "Province"
+msgstr ""
+
+#: /src/Form/ImportFormType.php:29
+msgid "Select a Province..."
+msgstr ""
+
+#: /src/Form/ImportFormType.php:37
+msgid "City"
+msgstr ""
+
+#: /templates/default/map2.html.twig:3
+#: /templates/_menu.twig:6
+msgid "Map 2"
+msgstr ""
+
+#: /templates/max_fields/result.html.twig:17
+#: /templates/max_fields/index.html.twig:11
+msgid "Download GPX"
+msgstr ""
+
+#: /templates/default/provinces.html.twig:4
+#: /templates/default/provinces.html.twig:8
+#: /templates/_menu.twig:9
+msgid "Provinces"
+msgstr ""
+
+#: /templates/import/index.html.twig:3
+#: /templates/import/index.html.twig:6
+#: /templates/import/index.html.twig:56
+msgid "Import"
+msgstr ""
+
+#: /templates/_menu.twig:3
+msgid "Map"
+msgstr ""
+
+#: /templates/_menu.twig:12
+msgid "MaxFields"
+msgstr ""
+
+#: /templates/default/map.html.twig:11
+msgid "waypoints selected"
+msgstr ""
+
+#: /templates/default/map.html.twig:14
+msgid "Create MaxFields for"
+msgstr ""
+
+#: /templates/default/map.html.twig:14
+msgid "players"
+msgstr ""
+
+#: /templates/default/map.html.twig:15
+msgid "name"
+msgstr ""
+
+#: /templates/default/map.html.twig:16
+msgid "Create"
+msgstr ""
+
+#: /templates/waypoints/info.html.twig:12
+msgid "Edit"
+msgstr ""
+
+#: /templates/max_fields/index.html.twig:14
+msgid "Delete"
+msgstr ""
+
+#: /templates/default/index.html.twig:11
 #, php-format
 msgid "We have %d WayPoints in our database."
 msgstr ""

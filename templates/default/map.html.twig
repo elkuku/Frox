@@ -8,12 +8,12 @@
 
 {% block body %}
     <div id="result">
-        <span id="result_message">0</span> waypoints selected&nbsp;
+        <span id="result_message">0</span> {{ _('waypoints selected') }}&nbsp;
         <button id="result_maxFields" class="btn btn-default btn-sm">MaxFields</button>
         <button id="result_Gpx" class="btn btn-default btn-sm">Gpx</button>
-        Create MaxFields for <input type="text" id="players_num" class="col-1"> players
-        <input type="text" id="build_name" placeholder="name">
-        <button id="build" class="btn btn-default btn-sm">Create</button>
+        {{ _('Create MaxFields for') }} <input type="text" id="players_num" class="col-1"> {{ _('players') }}
+        <input type="text" id="build_name" placeholder="{{ _('name') }}">
+        <button id="build" class="btn btn-default btn-sm">{{ _('Create') }}</button>
     </div>
 
     <div id="map"></div>
