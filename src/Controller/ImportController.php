@@ -57,7 +57,11 @@ class ImportController extends AbstractController
 
             if ($data['idmcsvRaw']) {
                 try {
-                    $count += $this->importIdmCsv($data['idmcsvRaw'], $data['province'], $data['city'], $wayPointHelper);
+                    $count += $this->importIdmCsv(
+                        $data['idmcsvRaw'],
+                        $data['province'],
+                        $data['city'],
+                    );
                 } catch (\UnexpectedValueException $exception) {
                     $this->addFlash('danger', $exception->getMessage());
 
@@ -315,7 +319,7 @@ class ImportController extends AbstractController
         return $cnt;
     }
 
-    private function parseFishyCsvLine(array $parts)
+    private function parseFishyCsvLine(array $parts): array
     {
         $returnValues = [];
 
@@ -335,7 +339,7 @@ class ImportController extends AbstractController
         return $returnValues;
     }
 
-    private function importIdmCsv($csvRaw, $province, $city, WayPointHelper $wayPointHelper): int
+    private function importIdmCsv($csvRaw, $province, $city): int
     {
         $repository = $this->getDoctrine()
             ->getRepository(Waypoint::class);
@@ -352,28 +356,20 @@ class ImportController extends AbstractController
         foreach ($lines as $i => $line) {
             $line = trim($line);
 
-            if (0 === $i || !$line) {
+            if (!$line) {
                 continue;
             }
 
             $parts = explode(',', $line);
 
             if (3 !== \count($parts)) {
-                $parts = $this->parseFishyCsvLine($parts);
-                if (4 !== \count($parts)) {
-                    throw new \UnexpectedValueException('Error parsing Idm CSV file');
-                }
+                throw new \UnexpectedValueException('Error parsing Idm CSV file');
             }
 
             $lat = (float)$parts[1];
             $lon = (float)$parts[2];
 
-            $wayPoint = $repository->findOneBy(
-                [
-                    'lat' => $lat,
-                    'lon' => $lon,
-                ]
-            );
+            $wayPoint = $repository->findOneBy(['lat' => $lat, 'lon' => $lon,]);
 
             if (!$wayPoint) {
                 $wayPoint = new Waypoint();
