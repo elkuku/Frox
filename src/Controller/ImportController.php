@@ -60,7 +60,7 @@ class ImportController extends AbstractController
                     $count += $this->importIdmCsv(
                         $data['idmcsvRaw'],
                         $data['province'],
-                        $data['city'],
+                        $data['city']
                     );
                 } catch (\UnexpectedValueException $exception) {
                     $this->addFlash('danger', $exception->getMessage());
