@@ -1,0 +1,15 @@
+{% extends 'base-map.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ _('Map 3') }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/map2.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <div id="map"></div>
+
+    <script src="{{ asset('build/map3.js') }}"></script>
+
+{% endblock %}

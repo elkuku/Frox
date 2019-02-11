@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Agent;
 use App\Entity\Category;
 use App\Entity\Province;
 use App\Entity\Waypoint;
 use App\Form\ImportFormType;
+use App\Repository\AgentRepository;
 use App\Repository\WaypointRepository;
 use App\Service\WayPointHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +16,52 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportController extends AbstractController
 {
+    /**
+     * @Route("/tempimport", name="tempimport")
+     */
+    public function tempImport(AgentRepository $agentRepository)
+    {
+        $agents = $agentRepository->findAll();
+
+        $arr = [];
+
+        foreach ($agents as $agent) {
+            $arr[] = $agent->getName();
+        }
+
+        echo implode(', ', $arr);
+
+
+        var_dump($arr);
+
+        echo json_encode($agents);
+
+        die();
+
+        $contents = file_get_contents($wayPointHelper->getRootDir().'/../../tempagents.json');
+
+        $agents = json_decode($contents);
+
+        $repository    = $this->getDoctrine()
+            ->getRepository(Agent::class);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($agents as $newAgent){
+
+            $agent = new Agent();
+
+            $agent->setName($newAgent->name);
+            $agent->setLat($newAgent->lat);
+            $agent->setLon($newAgent->lng);
+
+            $entityManager->persist($agent);
+
+            $entityManager->flush();
+        }
+
+        die();
+    }
+
     /**
      * @Route("/import", name="import")
      */

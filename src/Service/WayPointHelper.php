@@ -45,4 +45,9 @@ class WayPointHelper
         curl_close($ch);
         fclose($fp);
     }
+
+    public function getRootDir()
+    {
+        return $this->rootDir;
+    }
 }

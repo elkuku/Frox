@@ -23,6 +23,7 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('map', './assets/js/map.js')
     .addEntry('map2', './assets/js/map2.js')
+    .addEntry('map3', './assets/js/map3.js')
     .addEntry('export', './assets/js/export.js')
     .addEntry('maxfields', './assets/js/maxfields.js')
     .addEntry('paginator', './assets/js/paginator.js')
@@ -40,21 +41,12 @@ Encore
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(false)//Encore.isProduction())
 
-    // enables Sass/SCSS support
-    //.enableSassLoader()
-
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
-
-    // uncomment if you're having problems with a jQuery plugin
     .autoProvidejQuery()
 
     .addPlugin(new CopyWebpackPlugin([
         { from: './assets/img', to: 'img' }
     ]))
 ;
-
-//module.exports = Encore.getWebpackConfig();
 
 let config = Encore.getWebpackConfig()
 

@@ -85,7 +85,7 @@ function loadMarkers() {
     })
     //Workaround for marker icons <-
 
-    $.get('/waypoints_map?bounds=' + bounds, {some_var: ''}, function (data) {
+    $.get('/agent_data?bounds=' + bounds, {some_var: ''}, function (data) {
 
         $(data).each(function () {
             let marker =

@@ -8,6 +8,21 @@
             FroX!
             <img src="{{ asset('favicon.ico') }}" alt="FroX!">
         </h1>
-        {{ _('We have %d WayPoints in our database.')|format(numWayPoints) }}
+
+        <h4>
+            {{ _('We have %d WayPoints in our database.')|format(numWayPoints) }}
+        </h4>
+
     </div>
+
+    <dl class="row">
+        {% for province in provinces %}
+            <dt class="col-sm-3">
+                {{ province.name }}
+            </dt>
+            <dd class="col-sm-9">
+                {{ province.waypoints|length }}
+            </dd>
+        {% endfor %}
+    </dl>
 {% endblock %}

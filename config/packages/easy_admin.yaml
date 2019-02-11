@@ -1,7 +1,7 @@
 easy_admin:
     entities:
 #        # List the entity class name you want to manage
+        - App\Entity\Agent
         - App\Entity\Waypoint
         - App\Entity\Category
         - App\Entity\Province
-#        - App\Entity\User
