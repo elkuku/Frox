@@ -2,10 +2,13 @@ require('leaflet')
 require('leaflet/dist/leaflet.css')
 require('../css/map.css')
 
+require('leaflet.markercluster')
+require('leaflet.markercluster/dist/MarkerCluster.css')
+require('leaflet.markercluster/dist/MarkerCluster.Default.css')
+
 import 'bootstrap/js/dist/modal'
 
 var map
-var markersLayer = new L.LayerGroup()
 
 var LeafIcon = L.Icon.extend({
     options: {
@@ -18,15 +21,11 @@ var LeafIcon = L.Icon.extend({
     }
 })
 
-var greenIcon = new LeafIcon({iconUrl: 'build/img/leaf-green.png'}),
-    redIcon = new LeafIcon({iconUrl: 'build/img/leaf-red.png'}),
+var redIcon = new LeafIcon({iconUrl: 'build/img/leaf-red.png'}),
     orangeIcon = new LeafIcon({iconUrl: 'build/img/leaf-orange.png'})
 
-var ajaxRequest
-var plotlist
-var plotlayers = []
-
 const selectedMarkers = []
+const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
 
 function initmap() {
     var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -40,7 +39,7 @@ function initmap() {
 
 function loadMarkers() {
 
-    markersLayer.clearLayers()
+    markers.clearLayers()
     var bounds = map.getBounds()
     bounds = bounds._northEast.lat + ',' + bounds._northEast.lng + ',' + bounds._southWest.lat + ',' + bounds._southWest.lng
 
@@ -73,13 +72,10 @@ function loadMarkers() {
                 $('#result_message').html(selectedMarkers.length)
             })
 
-            markersLayer.addLayer(marker)
-            map.addLayer(markersLayer)
-
+            markers.addLayer(marker)
+            map.addLayer(markers)
         })
-
     }, 'json')
-
 }
 
 function doPostRequest(path, parameters) {
@@ -139,16 +135,3 @@ $('#build').on('click', function () {
         players_num: $('#players_num').val()
     })
 })
-
-// $(function () {
-//
-//     loadMarkers()
-//
-//     map.on('drag', function (e) {
-//         markersLayer.clearLayers()
-//     })
-//
-//     map.on('dragend', function (e) {
-//         loadMarkers()
-//     })
-// })
