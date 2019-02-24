@@ -9,6 +9,7 @@ use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,9 +63,26 @@ class WaypointsController extends AbstractController
         return $this->render(
             'waypoints/edit.html.twig',
             [
-                'form' => $form->createView(),
+                'form'     => $form->createView(),
+                'waypoint' => $waypoint,
             ]
         );
+    }
+
+    /**
+     * @Route("/waypoint-remove/{id}", name="waypoints_remove")
+     */
+    public function remove(Waypoint $waypoint): RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($waypoint);
+
+        $em->flush();
+
+        $this->addFlash('success', 'Waypoint removed!');
+
+        return $this->redirectToRoute('waypoints');
     }
 
     /**
@@ -114,11 +132,6 @@ class WaypointsController extends AbstractController
      */
     public function info(Waypoint $waypoint): Response
     {
-
-        $waypoints = $this->getDoctrine()
-            ->getRepository(Waypoint::class)
-            ->findAll();
-
         return $this->render(
             'waypoints/info.html.twig',
             [
