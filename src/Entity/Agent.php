@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +36,11 @@ class Agent implements \JsonSerializable
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Chat")
+     */
+    private $chats;
 
     public function getId(): ?int
     {
@@ -106,5 +112,18 @@ class Agent implements \JsonSerializable
             'lat' => $this->getLat(),
             'lon' => $this->getLon(),
         ];
+    }
+
+    public function __construct()
+    {
+        $this->chats = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChats()
+    {
+        return $this->chats;
     }
 }
