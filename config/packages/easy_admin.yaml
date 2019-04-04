@@ -5,3 +5,4 @@ easy_admin:
         - App\Entity\Waypoint
         - App\Entity\Category
         - App\Entity\Province
+        - App\Entity\Chat
