@@ -38,7 +38,6 @@ class Waypoint
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="waypoints")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
