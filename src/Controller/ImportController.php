@@ -83,6 +83,7 @@ class ImportController extends AbstractController
                         'import/index.html.twig',
                         [
                             'form' => $form->createView(),
+                            'cities' => $waypointRepo->findCities(),
                         ]
                     );
                 }
@@ -98,6 +99,7 @@ class ImportController extends AbstractController
                         'import/index.html.twig',
                         [
                             'form' => $form->createView(),
+                            'cities' => $waypointRepo->findCities(),
                         ]
                     );
                 }
@@ -117,6 +119,7 @@ class ImportController extends AbstractController
                         'import/index.html.twig',
                         [
                             'form' => $form->createView(),
+                            'cities' => $waypointRepo->findCities(),
                         ]
                     );
                 }
