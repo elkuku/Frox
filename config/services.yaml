@@ -37,3 +37,9 @@ services:
     App\Service\WayPointHelper:
         arguments:
           ['%kernel.project_dir%']
+
+    Circle\RestClientBundle\Services\RestClient: '@circle.restclient'
+
+    App\Service\VAPI:
+        arguments:
+           $apiKey: '%env(V_API_KEY)%'
