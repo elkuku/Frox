@@ -1,4 +1,7 @@
 {
+    "ci/restclientbundle": {
+        "version": "2.0.3"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -77,15 +80,6 @@
     "egulias/email-validator": {
         "version": "2.1.5"
     },
-    "elkuku/g11n": {
-        "version": "5.0.2"
-    },
-    "elkuku/g11n-bundle": {
-        "version": "0.1.2"
-    },
-    "elkuku/g11n-util": {
-        "version": "1.1.1"
-    },
     "facebook/webdriver": {
         "version": "1.6.0"
     },
@@ -109,9 +103,6 @@
             "version": "1.5",
             "ref": "c81bdcf4a9d4e7b1959071457f9608631865d381"
         }
-    },
-    "league/flysystem": {
-        "version": "1.0.48"
     },
     "liip/imagine-bundle": {
         "version": "1.8",
