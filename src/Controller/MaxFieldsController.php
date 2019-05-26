@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\WaypointRepository;
+use App\Service\MaxField2Strike;
 use App\Service\MaxFieldGenerator;
 use Knp\Snappy\Pdf;
 use Swift_Attachment;
@@ -90,7 +91,7 @@ class MaxFieldsController extends AbstractController
         MaxFieldGenerator $maxFieldGenerator,
         \Swift_Mailer $mailer,
         Request $request,
-    Pdf $pdf
+        Pdf $pdf
     ): JsonResponse {
         $agent = $request->get('agent');
         $email = $request->get('email');
@@ -188,7 +189,7 @@ class MaxFieldsController extends AbstractController
         try {
             $maxFieldGenerator->remove($item);
 
-            $this->addFlash('success', sprintf(g11n3t('%s has been removed.'), $item));
+            $this->addFlash('success', sprintf('%s has been removed.', $item));
         } catch (IOException $exception) {
 
             $this->addFlash('warning', $exception->getMessage());
@@ -200,5 +201,25 @@ class MaxFieldsController extends AbstractController
                 'list' => $maxFieldGenerator->getList(),
             ]
         );
+    }
+
+    /**
+     * @Route("/maxfield2strike", name="maxfields-maxfield2strike")
+     */
+    public function maxfield2strike(MaxField2Strike $maxField2Strike, Request $request)
+    {
+        $opName = $request->query->get('opName');
+        $maxfieldName = $request->query->get('maxfieldName');
+
+//        $restClient = $this->container->get('circle.restclient');
+
+
+        $result = $maxField2Strike->generateOp($opName, $maxfieldName);
+        $data = [
+            'status'  => 'ok',
+            'message' => $result,
+        ];
+
+        return $this->json($data);
     }
 }

@@ -40,6 +40,61 @@ $('#frameMinus').click(function () {
     changeImage()
 })
 
+$('#maxfield2strike_btn').click(function () {
+    $('#maxfield2strike_form').toggle()
+})
+
+$('#maxfield2strike_createvv').click(function () {
+    const resultContainer = $('#maxfield2strike_result')
+
+    const opName = $('#maxfield2strike_op_name').val()
+
+    resultContainer.html('Creating OP "' + opName + '"...')
+
+    $.ajax({
+        url: '/max-fields/maxfield2strike',
+        data: {
+            opName: opName
+        },
+
+        success: function (result) {
+            resultContainer.html(result.message)
+        },
+
+        error: function (xhr, status, error) {
+            resultContainer.html(error)
+        }
+    })
+
+    return false
+})
+
+$('#maxfield2strike_form').on('submit', function (event) {
+    const statusContainer = $('#maxfield2strike_status')
+    const resultContainer = $('#maxfield2strike_result')
+
+    const opName = $('input[name=opName]').val()
+
+    statusContainer.html('Creating OP "' + opName + '"...')
+
+    $.ajax({
+        url: '/max-fields/maxfield2strike?'+$(this).serialize(),
+
+        success: function (result) {
+            statusContainer.html('The OP "' + opName + '" has been created')
+            resultContainer.html(result.message)
+        },
+
+        error: function (xhr, status, error) {
+            statusContainer.html('THERE WAS AN ERROR!')
+            resultContainer.html(error)
+        }
+    })
+
+    event.preventDefault()
+    console.log($(this).serialize())
+})
+
 function changeImage() {
     $('#frameNum').html(frameNum + ' / ' + maxFrames)
 

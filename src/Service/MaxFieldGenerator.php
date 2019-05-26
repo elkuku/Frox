@@ -14,6 +14,7 @@ use App\Type\AgentLinkType;
 use App\Type\InfoKeyPrepType;
 use App\Type\MaxFields\MaxFieldType;
 use App\Type\WayPointPrepType;
+use DirectoryIterator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -23,7 +24,8 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class MaxFieldGenerator
 {
-    private $rootDir;
+    protected $rootDir;
+
     private $executable;
 
     public function __construct(string $rootDir)
@@ -60,7 +62,7 @@ class MaxFieldGenerator
     {
         $list = [];
 
-        foreach (new \DirectoryIterator($this->rootDir.'/'.$item) as $fileInfo) {
+        foreach (new DirectoryIterator($this->rootDir.'/'.$item) as $fileInfo) {
             if ($fileInfo->isFile()) {
                 $list[] = $fileInfo->getFilename();
             }
@@ -87,6 +89,9 @@ class MaxFieldGenerator
         return $info;
     }
 
+    /**
+     * @return AgentInfoType[]
+     */
     private function getAgentsInfo(string $item, int $numAgents = 1): array
     {
         $count      = 1;
@@ -129,7 +134,7 @@ class MaxFieldGenerator
     {
         $list = [];
 
-        foreach (new \DirectoryIterator($this->rootDir) as $fileInfo) {
+        foreach (new DirectoryIterator($this->rootDir) as $fileInfo) {
             if ($fileInfo->isDir() && !$fileInfo->isDot()) {
                 $list[] = $fileInfo->getFilename();
             }
@@ -214,7 +219,12 @@ class MaxFieldGenerator
         return implode("\n", $xml);
     }
 
-    private function parseWayPointsFile(string $item)
+    /**
+     * @param string $item
+     *
+     * @return Waypoint[]
+     */
+    public function parseWayPointsFile(string $item)
     {
         $contents  = $this->getTextFileContents($item, $item.'.waypoints');
         $lines     = explode("\n", $contents);
@@ -247,7 +257,7 @@ class MaxFieldGenerator
 
             $w = new Waypoint();
 
-            $w->setName($parts[0]);
+            $w->setName(trim($parts[0]));
             $w->setLat($coords[0]);
             $w->setLon($coords[1]);
 

@@ -11,7 +11,29 @@ body {
 }
 
 /* Language switcher*/
-.g11n-switcher {
-    background-color: #313131;
-    color: limegreen;
+/*.g11n-switcher {*/
+/*    background-color: #313131;*/
+/*    color: limegreen;*/
+/*}*/
+
+#maxfield2strike_form {
+    display: none;
+    border: 3px dashed red;
+    background-color: #ffe9ee;
+    padding: 10px;
+}
+
+#maxfield2strike_status {
+    background-color: #5d5f61;
+    color: #7ca1ff;
+    border: 1px solid #1b1e21;
+    padding: 5px;
+    font-family: monospace;
+}
+
+#maxfield2strike_result {
+    border: 3px solid #5d5f61;
+    background-color: #1b1e21;
+    color: lime;
+    font-family: monospace;
 }

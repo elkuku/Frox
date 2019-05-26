@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
 
-    <title>{% block title %}FroX{% endblock %}</title>
+    <title>{% block title %}4E-Toolz{% endblock %}</title>
 
     <link rel="stylesheet" href="{{ asset('build/app.css') }}">
     {% block stylesheets %}{% endblock %}
@@ -18,7 +18,7 @@
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="{{ path('default') }}">FroX</a>
+    <a class="navbar-brand" href="{{ path('default') }}">4E-Toolz</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         {% include '_menu.twig' %}
-        {{ g11n.switcher(getLangs(), getCurrentLang()) }}
+{#        {{ g11n.switcher(getLangs(), getCurrentLang()) }}#}
     </div>
 </nav>
 
@@ -39,7 +39,7 @@
 
 </main>
 
-<span id="g11n-setup" data-g11n-setup='{{ getG11nJavascriptJson() }}'></span>
+{#<span id="g11n-setup" data-g11n-setup='{{ getG11nJavascriptJson() }}'></span>#}
 
 <script src="{{ asset('build/app.js') }}"></script>
 

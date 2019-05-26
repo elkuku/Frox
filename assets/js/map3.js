@@ -10,7 +10,7 @@ require('leaflet-draw/dist/leaflet.draw.css')
 
 require('../css/map2.css')
 
-const g11n3t = require('g11n-js').g11n3t
+// const g11n3t = require('g11n-js').g11n3t
 
 function initmap() {
     map = new L.Map('map')
@@ -97,7 +97,7 @@ function loadMarkers() {
                     }
                 )
 
-            marker.bindPopup(g11n3t("Loading..."))
+            marker.bindPopup('Loading...')
 
             // var now = new Date().getTime();
             // while(new Date().getTime() < now + 2000){ /* do nothing */ }

@@ -16,6 +16,18 @@
     <a href="{{ path('max_fields_gpx', {'item': item}) }}" class="btn btn-sm btn-success">
         {{ _('Download GPX') }}
     </a>
+    <a href="#" class="btn btn-sm btn-info" id="maxfield2strike_btn">
+        {{ _('Create STRIKE OP') }}
+    </a>
+
+    <form action="" id="maxfield2strike_form">
+        <h3>Create a S.T.R.I.K.E OP</h3>
+        Name: <input type="text" name="opName" value="{{ item }}">
+        <input type="hidden" name="maxfieldName" value="{{ item }}">
+        <button id="maxfield2strike_create" class="btn btn-success">Create OP</button>
+        <span id="maxfield2strike_status"></span>
+        <div id="maxfield2strike_result"></div>
+    </form>
     <h3>MaxFields for <span id="itemId">{{ item }}</span></h3>
 
     <div class="row">
@@ -107,7 +119,7 @@
             <div class="col">
                 Agent {{ agentInfo.agentNumber }} - Send e-mail to <input type="text">
                 <button class="btn btn-default sendMail" id="{{ agentInfo.agentNumber }}">Send</button>
-                <div id="result-{{ agentInfo.agentNumber }}"></div>
+                <span id="result-{{ agentInfo.agentNumber }}"></span>
             </div>
         </div>
 

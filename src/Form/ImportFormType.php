@@ -24,9 +24,9 @@ class ImportFormType extends AbstractType
                 'province',
                 EntityType::class,
                 [
-                    'label' => g11n3t('Province'),
+                    'label' => 'Province',
                     'class'       => Province::class,
-                    'placeholder' => g11n3t('Select a Province...'),
+                    'placeholder' => 'Select a Province...',
                     'required'    => false,
                 ]
             )
@@ -34,7 +34,7 @@ class ImportFormType extends AbstractType
                 'city',
                 null,
                 [
-                    'label' => g11n3t('City'),
+                    'label' => 'City',
                     'required' => false,
                     'attr' => ['list' => 'citiesList'],
                 ]
