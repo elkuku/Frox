@@ -27,6 +27,7 @@ Encore
     .addEntry('export', './assets/js/export.js')
     .addEntry('maxfields', './assets/js/maxfields.js')
     .addEntry('paginator', './assets/js/paginator.js')
+    .addEntry('background', './assets/js/background.js')
 
     /*
      * FEATURE CONFIG

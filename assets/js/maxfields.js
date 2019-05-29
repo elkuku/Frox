@@ -1,5 +1,5 @@
 let frameNum = -1
-// let maxFrames = 0
+let intervalId = 0
 
 $('.sendMail').click(function () {
     const agent = this.id
@@ -44,31 +44,6 @@ $('#maxfield2strike_btn').click(function () {
     $('#maxfield2strike_form').toggle()
 })
 
-$('#maxfield2strike_createvv').click(function () {
-    const resultContainer = $('#maxfield2strike_result')
-
-    const opName = $('#maxfield2strike_op_name').val()
-
-    resultContainer.html('Creating OP "' + opName + '"...')
-
-    $.ajax({
-        url: '/max-fields/maxfield2strike',
-        data: {
-            opName: opName
-        },
-
-        success: function (result) {
-            resultContainer.html(result.message)
-        },
-
-        error: function (xhr, status, error) {
-            resultContainer.html(error)
-        }
-    })
-
-    return false
-})
-
 $('#maxfield2strike_form').on('submit', function (event) {
     const statusContainer = $('#maxfield2strike_status')
     const resultContainer = $('#maxfield2strike_result')
@@ -77,23 +52,44 @@ $('#maxfield2strike_form').on('submit', function (event) {
 
     statusContainer.html('Creating OP "' + opName + '"...')
 
+    intervalId = setInterval(updateMaxfieldLog, 1000)
+
     $.ajax({
         url: '/max-fields/maxfield2strike?'+$(this).serialize(),
 
         success: function (result) {
-            statusContainer.html('The OP "' + opName + '" has been created')
-            resultContainer.html(result.message)
+            statusContainer.html(result.message)
         },
 
         error: function (xhr, status, error) {
             statusContainer.html('THERE WAS AN ERROR!')
             resultContainer.html(error)
+        },
+        complete: function() {
+            setTimeout(function() {
+                clearInterval(intervalId)
+            }, (3000));
         }
     })
 
     event.preventDefault()
-    console.log($(this).serialize())
 })
+
+function updateMaxfieldLog() {
+    const resultContainer = $('#maxfield2strike_result')
+
+    $.ajax({
+        url: '/max-fields/log',
+
+        success: function (result) {
+            resultContainer.html(result)
+        },
+
+        error: function (xhr, status, error) {
+            resultContainer.html(error)
+        }
+    })
+}
 
 function changeImage() {
     $('#frameNum').html(frameNum + ' / ' + maxFrames)

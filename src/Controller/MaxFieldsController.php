@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\WaypointRepository;
 use App\Service\MaxField2Strike;
 use App\Service\MaxFieldGenerator;
+use App\Service\StrikeLogger;
 use Knp\Snappy\Pdf;
 use Swift_Attachment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -221,5 +222,19 @@ class MaxFieldsController extends AbstractController
         ];
 
         return $this->json($data);
+    }
+
+    /**
+     * @Route("/log", name="maxfields-log")
+     */
+    public function getLog(StrikeLogger $logger)
+    {
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/plain');
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->setContent($logger->getLog());
+
+        return $response;
+
     }
 }

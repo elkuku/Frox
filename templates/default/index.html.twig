@@ -1,28 +1,32 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-map.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('build/background.js') }}"></script>
+{% endblock %}
 
 {% block body %}
     <div class="text-xl-center">
 
         <h1>
             <img src="{{ asset('favicon.ico') }}" alt="FroX!">
-            FroX!
+            <span class="frox-title">FroX!</span>
             <img src="{{ asset('favicon.ico') }}" alt="FroX!">
         </h1>
 
         <h4>
+            <span class="frox-title">
             {{ 'We have %d WayPoints in our database.'|format(numWayPoints) }}
+            </span>
         </h4>
 
-    </div>
 
-    <dl class="row">
-        {% for province in provinces %}
-            <dt class="col-sm-3">
-                {{ province.name }}
-            </dt>
-            <dd class="col-sm-9">
+            {% for province in provinces %}
+        <span class="frox-title">
+                {{ province.name }}: <strong>
                 {{ province.waypoints|length }}
-            </dd>
-        {% endfor %}
-    </dl>
+            </strong><br/>
+        </span>
+            {% endfor %}
+    </div>
 {% endblock %}

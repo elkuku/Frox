@@ -32,23 +32,33 @@ class MaxField2Strike
      */
     private $agentInfos;
 
-    public function __construct(MaxFieldGenerator $maxFieldGenerator, VAPI $VAPI)
+    /**
+     * @var StrikeLogger
+     */
+    private $logger;
+
+    public function __construct(MaxFieldGenerator $maxFieldGenerator, VAPI $VAPI, StrikeLogger $logger)
     {
         $this->maxFieldGenerator = $maxFieldGenerator;
         $this->VAPI              = $VAPI;
+        $this->logger            = $logger;
     }
 
     public function generateOp(string $OpName, string $maxfieldName)
     {
+        $this->logger->add('Start creating OP '.$OpName);
+
         $this->collectData($maxfieldName)
             ->createOp($OpName)
             ->createKeyfarmingTasks()
             ->createLinkTasks();
 
-        return sprintf('Op "%s" with ID #%d has been created.', $OpName, $this->opId);
+        $this->logger->add('OP created successfully!!');
+
+        return sprintf('OP "%s" with ID #%d has been created.', $OpName, $this->opId);
     }
 
-    private function collectData(string $maxfieldName)
+    private function collectData(string $maxfieldName): self
     {
         $mfInfo = $this->maxFieldGenerator->getInfo($maxfieldName);
 
@@ -86,6 +96,8 @@ class MaxField2Strike
 
     private function createOp(string $opName): self
     {
+        $this->logger->add('Creating STRIKE OP...', false);
+
         // @todo check OP name >2 <100
         $newOp       = new \stdClass();
         $newOp->name = $opName;
@@ -97,19 +109,29 @@ class MaxField2Strike
 
         $this->opId = $content->id;
 
+        $this->logger->add('OK - ID: '.$content->id);
+
         return $this;
     }
 
     private function createKeyfarmingTasks(): self
     {
+        $total = count($this->portals);
+        $count = 1;
         foreach ($this->portals as $portal) {
+            $this->logger->add(sprintf('Creating Keyfarming task %d of %d...', $count, $total), false);
+            $count++;
+
             if (0 === $portal->missingKeys) {
+                $this->logger->add('No keys required.');
                 continue;
             }
 
             $response = $this->VAPI->newTask($this->opId, $this->createKeyFarmingTask($portal));
 
             $a = $response->getContent();
+
+            $this->logger->add('OK');
         }
 
         return $this;
@@ -118,9 +140,16 @@ class MaxField2Strike
     private function createLinkTasks(): self
     {
         foreach ($this->agentInfos as $agentInfo) {
-            // log
+            $this->logger->add('Creating Tasks for agent '.$agentInfo->agentNumber);
+
+            $total = count($agentInfo->links);
+            $count = 1;
+
             foreach ($agentInfo->links as $link) {
-                $origin = $this->findPortalByNumber($link->originNum);
+                $this->logger->add(sprintf('Creating Link task %d of %d...', $count, $total), false);
+                $count++;
+
+                $origin      = $this->findPortalByNumber($link->originNum);
                 $destination = $this->findPortalByNumber($link->destinationNum);
 
                 $link = new StrikeLink(
@@ -136,6 +165,7 @@ class MaxField2Strike
 
                 $a = $response->getContent();
 
+                $this->logger->add('OK');
             }
         }
 
