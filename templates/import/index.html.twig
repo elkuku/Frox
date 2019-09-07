@@ -47,6 +47,11 @@
                 IDM CSV
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="json-tab" data-toggle="tab" href="#json" role="tab">
+                JSON
+            </a>
+        </li>
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel">
@@ -60,6 +65,9 @@
         </div>
         <div class="tab-pane fade" id="idmcsv" role="tabpanel">
             {{ form_row(form.idmcsvRaw) }}
+        </div>
+        <div class="tab-pane fade" id="json" role="tabpanel">
+            {{ form_row(form.JsonRaw) }}
         </div>
     </div>
     <button type="submit" class="btn btn-primary">{{ _('Import') }}</button>
