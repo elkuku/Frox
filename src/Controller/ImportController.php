@@ -17,52 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ImportController extends AbstractController
 {
     /**
-     * @Route("/tempimport", name="tempimport")
-     */
-    public function tempImport(AgentRepository $agentRepository)
-    {
-        $agents = $agentRepository->findAll();
-
-        $arr = [];
-
-        foreach ($agents as $agent) {
-            $arr[] = $agent->getName();
-        }
-
-        echo implode(', ', $arr);
-
-
-        var_dump($arr);
-
-        echo json_encode($agents);
-
-        die();
-
-        $contents = file_get_contents($wayPointHelper->getRootDir().'/../../tempagents.json');
-
-        $agents = json_decode($contents);
-
-        $repository    = $this->getDoctrine()
-            ->getRepository(Agent::class);
-        $entityManager = $this->getDoctrine()->getManager();
-
-        foreach ($agents as $newAgent){
-
-            $agent = new Agent();
-
-            $agent->setName($newAgent->name);
-            $agent->setLat($newAgent->lat);
-            $agent->setLon($newAgent->lng);
-
-            $entityManager->persist($agent);
-
-            $entityManager->flush();
-        }
-
-        die();
-    }
-
-    /**
      * @Route("/import", name="import")
      */
     public function index(Request $request, WaypointRepository $waypointRepo, WayPointHelper $wayPointHelper)
@@ -82,7 +36,7 @@ class ImportController extends AbstractController
                     return $this->render(
                         'import/index.html.twig',
                         [
-                            'form' => $form->createView(),
+                            'form'   => $form->createView(),
                             'cities' => $waypointRepo->findCities(),
                         ]
                     );
@@ -98,7 +52,7 @@ class ImportController extends AbstractController
                     return $this->render(
                         'import/index.html.twig',
                         [
-                            'form' => $form->createView(),
+                            'form'   => $form->createView(),
                             'cities' => $waypointRepo->findCities(),
                         ]
                     );
@@ -118,7 +72,27 @@ class ImportController extends AbstractController
                     return $this->render(
                         'import/index.html.twig',
                         [
-                            'form' => $form->createView(),
+                            'form'   => $form->createView(),
+                            'cities' => $waypointRepo->findCities(),
+                        ]
+                    );
+                }
+            }
+
+            if ($data['JsonRaw']) {
+                try {
+                    $count += $this->importJson(
+                        $data['JsonRaw'],
+                        $data['province'],
+                        $data['city']
+                    );
+                } catch (\UnexpectedValueException $exception) {
+                    $this->addFlash('danger', $exception->getMessage());
+
+                    return $this->render(
+                        'import/index.html.twig',
+                        [
+                            'form'   => $form->createView(),
                             'cities' => $waypointRepo->findCities(),
                         ]
                     );
@@ -284,6 +258,40 @@ class ImportController extends AbstractController
         }
 
         return $cnt;
+    }
+
+    private function importJson($JsonRaw, $province, $city)
+    {
+        $waypoints = [];
+        $jsonData  = json_decode($JsonRaw, false);
+
+        if (!$jsonData) {
+            throw new \UnexpectedValueException('Invalid JSON data received');
+        }
+
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findOneBy(['id' => 1]);
+
+        foreach ($jsonData as $item) {
+            $latlng = explode(',', $item->latlng);
+
+            if (2 != count($latlng)) {
+                throw new \UnexpectedValueException('Invalid latlng JSON data');
+            }
+
+            $waypoints[] = $this->createWayPoint(
+                $latlng[0],
+                $latlng[1],
+                $item->title,
+                $category,
+                $province,
+                $city
+            );
+
+        }
+
+        return $this->storeWayPoints($waypoints);
     }
 
     private function createWayPoint(
