@@ -24,7 +24,7 @@ class ImportController extends AbstractController
         $form = $this->createForm(ImportFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data  = $form->getData();
+            $data = $form->getData();
             $count = 0;
 
             if ($data['gpxRaw']) {
@@ -46,6 +46,22 @@ class ImportController extends AbstractController
             if ($data['csvRaw']) {
                 try {
                     $count += $this->importCsv($data['csvRaw'], $data['province'], $data['city'], $wayPointHelper);
+                } catch (\UnexpectedValueException $exception) {
+                    $this->addFlash('danger', $exception->getMessage());
+
+                    return $this->render(
+                        'import/index.html.twig',
+                        [
+                            'form'   => $form->createView(),
+                            'cities' => $waypointRepo->findCities(),
+                        ]
+                    );
+                }
+            }
+
+            if ($data['multiexportcsv']) {
+                try {
+                    $count += $this->importMultiExportCsv($data['multiexportcsv'], $data['province'], $data['city'], $wayPointHelper);
                 } catch (\UnexpectedValueException $exception) {
                     $this->addFlash('danger', $exception->getMessage());
 
@@ -136,7 +152,7 @@ class ImportController extends AbstractController
         $pairs = explode('_', $parts[1]);
 
         $wayPoints = [];
-        $ws        = [];
+        $ws = [];
 
         $wayPoint = new Waypoint();
 
@@ -192,10 +208,10 @@ class ImportController extends AbstractController
 
     private function importGpx(string $gpxData, ?Province $province = null, ?string $city = ''): int
     {
-        $repository    = $this->getDoctrine()
+        $repository = $this->getDoctrine()
             ->getRepository(Waypoint::class);
         $entityManager = $this->getDoctrine()->getManager();
-        $category      = $this->getDoctrine()
+        $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findOneBy(['id' => 1]);
 
@@ -238,7 +254,7 @@ class ImportController extends AbstractController
 
     private function storeWayPoints(array $wayPoints): int
     {
-        $repository    = $this->getDoctrine()
+        $repository = $this->getDoctrine()
             ->getRepository(Waypoint::class);
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -247,7 +263,11 @@ class ImportController extends AbstractController
         $cnt = 0;
 
         foreach ($wayPoints as $wayPoint) {
-            if (true === \in_array($wayPoint->getLat().','.$wayPoint->getLon(), $currentWayPoints)) {
+            if (true === \in_array(
+                    $wayPoint->getLat().','
+                    .$wayPoint->getLon(), $currentWayPoints
+                )
+            ) {
                 continue;
             }
 
@@ -263,7 +283,7 @@ class ImportController extends AbstractController
     private function importJson($JsonRaw, $province, $city)
     {
         $waypoints = [];
-        $jsonData  = json_decode($JsonRaw, false);
+        $jsonData = json_decode($JsonRaw, false);
 
         if (!$jsonData) {
             throw new \UnexpectedValueException('Invalid JSON data received');
@@ -288,7 +308,6 @@ class ImportController extends AbstractController
                 $province,
                 $city
             );
-
         }
 
         return $this->storeWayPoints($waypoints);
@@ -326,7 +345,7 @@ class ImportController extends AbstractController
             ->findOneBy(['id' => 1]);
 
         $lines = explode("\n", $csvRaw);
-        $cnt   = 0;
+        $cnt = 0;
 
         foreach ($lines as $i => $line) {
             $line = trim($line);
@@ -378,6 +397,66 @@ class ImportController extends AbstractController
         return $cnt;
     }
 
+    private function importMultiExportCsv($csvRaw, $province, $city, WayPointHelper $wayPointHelper): int
+    {
+        $repository = $this->getDoctrine()
+            ->getRepository(Waypoint::class);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findOneBy(['id' => 1]);
+
+        $lines = explode("\n", $csvRaw);
+        $cnt = 0;
+
+        foreach ($lines as $i => $line) {
+            $line = trim($line);
+
+            $parts = explode(',', $line);
+
+            if (3 !== \count($parts)) {
+                $parts = $this->parseFishyCsvLine2($line);
+                if (3 !== \count($parts)) {
+                    throw new \UnexpectedValueException('Error parsing CSV file');
+                }
+            }
+
+            $lat = (float)$parts[1];
+            $lon = (float)$parts[2];
+
+            $wayPoint = $repository->findOneBy(
+                [
+                    'lat' => $lat,
+                    'lon' => $lon,
+                ]
+            );
+
+            if (!$wayPoint) {
+                $wayPoint = new Waypoint();
+
+                $wayPoint->setName(trim($parts[0], '""'));
+                $wayPoint->setLat($lat);
+                $wayPoint->setLon($lon);
+                $wayPoint->setCategory($category);
+                $wayPoint->setProvince($province);
+                $wayPoint->setCity($city);
+
+                $entityManager->persist($wayPoint);
+
+                $entityManager->flush();
+
+                $cnt++;
+            }
+
+            // Check image
+            // $wayPointHelper->checkImage($wayPoint->getId(), trim($parts[3]));
+        }
+
+        return $cnt;
+    }
+
     private function parseFishyCsvLine(array $parts): array
     {
         $returnValues = [];
@@ -410,7 +489,7 @@ class ImportController extends AbstractController
             ->findOneBy(['id' => 1]);
 
         $lines = explode("\n", $csvRaw);
-        $cnt   = 0;
+        $cnt = 0;
 
         foreach ($lines as $i => $line) {
             $line = trim($line);
@@ -449,5 +528,18 @@ class ImportController extends AbstractController
         }
 
         return $cnt;
+    }
+
+    private function parseFishyCsvLine2(string $line)
+    {
+        $parts = explode(',', $line);
+
+        $newParts = [];
+
+        $newParts[2] = array_pop($parts);
+        $newParts[1] = array_pop($parts);
+        $newParts[0] = implode(',', $parts);
+
+        return $newParts;
     }
 }

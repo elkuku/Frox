@@ -33,7 +33,10 @@ function initmap() {
     var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib})
 
     map = new L.Map('map')
+    // ec
     map.setView(new L.LatLng(0.990275, -79.659482), 9)
+    // de
+    // map.setView(new L.LatLng(50.085314, 8.240779), 9)
     map.addLayer(osm)
 }
 
