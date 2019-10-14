@@ -50,4 +50,12 @@ class WayPointHelper
     {
         return $this->rootDir;
     }
+
+    public function cleanName(string $name): string
+    {
+        $name = trim($name);
+        $name = str_replace(['.', ',', ';', ':', '"', '\''], '', $name);
+
+        return $name;
+    }
 }
