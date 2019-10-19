@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} - {{ _('Import') }}{% endblock %}
+{% block title %}{{ parent() }} - {{ 'Import'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ _('Import') }}</h1>
+    <h1>{{ 'Import'|trans }}</h1>
 
     {{ form_start(form) }}
 
@@ -78,7 +78,7 @@
             {{ form_row(form.multiexportcsv) }}
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">{{ _('Import') }}</button>
+    <button type="submit" class="btn btn-primary">{{ 'Import'|trans }}</button>
 
     {{ form_end(form) }}
 {% endblock %}

@@ -140,24 +140,54 @@ $('#result_Gpx').on('click', function () {
     })
 })
 
+$('#maxfieldModal').on('show.bs.modal', function (event) {
+    const modal = $(this)
+
+    if (!selectedMarkers.length) {
+        modal.find('.status').text('No Waypoints selected!')
+        modal.find('.controls').hide()
+        $('#build').hide()
+    } else {
+        modal.find('.status').text('Waypoints selected: ' + selectedMarkers.length)
+        modal.find('.controls').show()
+        $('#build').show()
+    }
+})
+
 $('#build').on('click', function () {
+    let buildName = $('#build_name').val()
+    if (!buildName) {
+        alert('Please provide a name')
+        $('#build_name').focus()
+        return
+    }
+
+    $(this).html(
+        '<span class="spinner-border spinner-border-sm" role="status"></span>' +
+        '  Working...')
+
     doPostRequest('/max-fields/export', {
         points: selectedMarkers,
-        buildName: $('#build_name').val(),
+        buildName: buildName,
         players_num: $('#players_num').val()
     })
 })
 
-$('#drawSelection').on('click', function () {
-    const rect = new L.Draw.Rectangle(map)
+$('#selectRect').on('click', function () {
+    let rect = new L.Draw.Rectangle(map)
     rect.enable()
+})
 
-    map.on('draw:created', (e) => {
-        let bounds = e.layer.getBounds()
-        markers.eachLayer(function(layer){
-            if (bounds.contains(layer.getLatLng())) {
-                toggleMarker(layer)
-            }
-        });
-    })
+$('#selectPoly').on('click', function () {
+    let poly = new L.Draw.Polygon(map)
+    poly.enable()
+})
+
+map.on('draw:created', (e) => {
+    let bounds = e.layer.getBounds()
+    markers.eachLayer(function(layer){
+        if (bounds.contains(layer.getLatLng())) {
+            toggleMarker(layer)
+        }
+    });
 })

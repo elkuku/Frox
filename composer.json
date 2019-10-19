@@ -75,8 +75,8 @@
     "post-update-cmd": [
       "@auto-scripts"
     ],
-    "lang": [
-      "bin/console g11n:templates && bin/console g11n:langfiles es-ES"
+    "trans": [
+      "./bin/console translation:update es --output-format=yaml --force"
     ]
   },
   "conflict": {

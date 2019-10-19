@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ _('Cells') }}
+    {{ parent() }} - {{ 'Cells'|trans }}
 {% endblock %}
 
 {% block body %}
-    <img src="{{ asset('build/img/ecuador-cells.png') }}" alt="{{ _('Cells') }}">
+    <img src="{{ asset('build/img/ecuador-cells.png') }}" alt="{{ 'Cells'|trans }}">
 {% endblock %}

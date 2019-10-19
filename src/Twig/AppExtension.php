@@ -21,9 +21,6 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('get_url', [$this, 'getUrl']),
-
-            // @todo temporary
-            new TwigFunction('_', [$this, 'translate']),
         ];
     }
 
@@ -57,10 +54,5 @@ class AppExtension extends AbstractExtension
         }
 
         return $response;
-    }
-
-    public function translate($string)
-    {
-        return $string;
     }
 }
