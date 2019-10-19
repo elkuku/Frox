@@ -6,11 +6,14 @@ require('leaflet.markercluster')
 require('leaflet.markercluster/dist/MarkerCluster.css')
 require('leaflet.markercluster/dist/MarkerCluster.Default.css')
 
+require('leaflet-draw')
+require('leaflet-draw/dist/leaflet.draw.css')
+
 import 'bootstrap/js/dist/modal'
 
-var map
+let map
 
-var LeafIcon = L.Icon.extend({
+const LeafIcon = L.Icon.extend({
     options: {
         shadowUrl: 'build/img/leaf-shadow.png',
         iconSize: [38, 95],
@@ -21,58 +24,47 @@ var LeafIcon = L.Icon.extend({
     }
 })
 
-var redIcon = new LeafIcon({iconUrl: 'build/img/leaf-red.png'}),
+const redIcon = new LeafIcon({iconUrl: 'build/img/leaf-red.png'}),
     orangeIcon = new LeafIcon({iconUrl: 'build/img/leaf-orange.png'})
 
 const selectedMarkers = []
 const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
 
 function initmap() {
-    var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    var osmAttrib = 'Map data (C) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-    var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib})
+    const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    const osmAttrib = 'Map data (C) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+    const osm = new L.TileLayer(osmUrl, {attribution: osmAttrib})
 
-    map = new L.Map('map')
+    map = new L.Map('map', {
+        editable: true,
+        editOptions: {}
+    })
+
     // ec
     map.setView(new L.LatLng(0.990275, -79.659482), 9)
+
     // de
     // map.setView(new L.LatLng(50.085314, 8.240779), 9)
+
     map.addLayer(osm)
 }
 
 function loadMarkers() {
-
     markers.clearLayers()
-    var bounds = map.getBounds()
+    let bounds = map.getBounds()
     bounds = bounds._northEast.lat + ',' + bounds._northEast.lng + ',' + bounds._southWest.lat + ',' + bounds._southWest.lng
 
     $.get('/waypoints_map?bounds=' + bounds, {some_var: ''}, function (data) {
 
         $(data).each(function () {
-            var marker =
+            const marker =
                 new L.Marker(
                     new L.LatLng(this.lat, this.lng),
                     {icon: orangeIcon, wp_id: this.id, wp_selected: false, title: this.name}
                 )
 
             marker.on('click', function (e) {
-                var enabled = e.target.options.wp_selected
-                if (enabled) {
-                    e.target.setIcon(orangeIcon)
-                    e.target.options.wp_selected = false
-                    var index = selectedMarkers.indexOf(e.target.options.wp_id)
-                    if (index > -1) {
-                        selectedMarkers.splice(index, 1)
-                    }
-                } else {
-                    e.target.setIcon(redIcon)
-                    e.target.options.wp_selected = true
-                    selectedMarkers.push(e.target.options.wp_id)
-                }
-
-                console.log(selectedMarkers)
-
-                $('#result_message').html(selectedMarkers.length)
+                toggleMarker(e.target)
             })
 
             markers.addLayer(marker)
@@ -81,8 +73,25 @@ function loadMarkers() {
     }, 'json')
 }
 
+function toggleMarker(marker) {
+    if (marker.options.wp_selected) {
+        marker.setIcon(orangeIcon)
+        marker.options.wp_selected = false
+        let index = selectedMarkers.indexOf(marker.options.wp_id)
+        if (index > -1) {
+            selectedMarkers.splice(index, 1)
+        }
+    } else {
+        marker.setIcon(redIcon)
+        marker.options.wp_selected = true
+        selectedMarkers.push(marker.options.wp_id)
+    }
+
+    $('#result_message').html(selectedMarkers.length)
+}
+
 function doPostRequest(path, parameters) {
-    var form = $('<form></form>')
+    const form = $('<form></form>')
 
     form.attr('method', 'post')
     form.attr('action', path)
@@ -136,5 +145,19 @@ $('#build').on('click', function () {
         points: selectedMarkers,
         buildName: $('#build_name').val(),
         players_num: $('#players_num').val()
+    })
+})
+
+$('#drawSelection').on('click', function () {
+    const rect = new L.Draw.Rectangle(map)
+    rect.enable()
+
+    map.on('draw:created', (e) => {
+        let bounds = e.layer.getBounds()
+        markers.eachLayer(function(layer){
+            if (bounds.contains(layer.getLatLng())) {
+                toggleMarker(layer)
+            }
+        });
     })
 })
