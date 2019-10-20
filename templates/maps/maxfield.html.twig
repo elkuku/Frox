@@ -3,11 +3,14 @@
 {% block title %}{{ parent() }} - Map{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/map.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/map-maxfield.css') }}">
 {% endblock %}
 
 {% block body %}
     <div id="result">
+        <button id="selectToggle" title="Toggle select mode" class="btn btn-outline-success btn-sm">
+            <span class="oi oi-plus"></span>
+        </button>
         <button id="selectRect" title="Select Rectangle" class="btn btn-outline-secondary btn-sm">
             <span class="oi oi-media-stop"></span>
         </button>
@@ -62,6 +65,6 @@
         </div>
     </div>
 
-    <script src="{{ asset('build/map.js') }}"></script>
+    <script src="{{ asset('build/map-maxfield.js') }}"></script>
 
 {% endblock %}

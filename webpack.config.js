@@ -21,7 +21,7 @@ Encore
      */
     // .createSharedEntry('js/common', ['jquery'])
     .addEntry('app', './assets/js/app.js')
-    .addEntry('map', './assets/js/map.js')
+    .addEntry('map-maxfield', './assets/js/map/maxfield.js')
     .addEntry('map2', './assets/js/map2.js')
     .addEntry('map3', './assets/js/map3.js')
     .addEntry('export', './assets/js/export.js')

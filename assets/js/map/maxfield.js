@@ -1,6 +1,6 @@
 require('leaflet')
 require('leaflet/dist/leaflet.css')
-require('../css/map.css')
+require('../../css/map/maxfield.css')
 
 require('leaflet.markercluster')
 require('leaflet.markercluster/dist/MarkerCluster.css')
@@ -11,11 +11,11 @@ require('leaflet-draw/dist/leaflet.draw.css')
 
 import 'bootstrap/js/dist/modal'
 
-let map
+let map, selectionMode
 
 const LeafIcon = L.Icon.extend({
     options: {
-        shadowUrl: 'build/img/leaf-shadow.png',
+        shadowUrl: '/build/img/leaf-shadow.png',
         iconSize: [38, 95],
         shadowSize: [50, 64],
         iconAnchor: [22, 94],
@@ -24,8 +24,8 @@ const LeafIcon = L.Icon.extend({
     }
 })
 
-const redIcon = new LeafIcon({iconUrl: 'build/img/leaf-red.png'}),
-    orangeIcon = new LeafIcon({iconUrl: 'build/img/leaf-orange.png'})
+const redIcon = new LeafIcon({iconUrl: '/build/img/leaf-red.png'}),
+    orangeIcon = new LeafIcon({iconUrl: '/build/img/leaf-orange.png'})
 
 const selectedMarkers = []
 const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
@@ -75,19 +75,30 @@ function loadMarkers() {
 
 function toggleMarker(marker) {
     if (marker.options.wp_selected) {
-        marker.setIcon(orangeIcon)
-        marker.options.wp_selected = false
-        let index = selectedMarkers.indexOf(marker.options.wp_id)
-        if (index > -1) {
-            selectedMarkers.splice(index, 1)
-        }
+        removeMarker(marker)
     } else {
+        addMarker(marker)
+    }
+}
+
+function addMarker(marker) {
+    let index = selectedMarkers.indexOf(marker.options.wp_id)
+    if (index === -1) {
         marker.setIcon(redIcon)
         marker.options.wp_selected = true
         selectedMarkers.push(marker.options.wp_id)
+        $('#result_message').html(selectedMarkers.length)
     }
+}
 
-    $('#result_message').html(selectedMarkers.length)
+function removeMarker(marker) {
+    let index = selectedMarkers.indexOf(marker.options.wp_id)
+    if (index > -1) {
+        marker.setIcon(orangeIcon)
+        marker.options.wp_selected = false
+        selectedMarkers.splice(index, 1)
+        $('#result_message').html(selectedMarkers.length)
+    }
 }
 
 function doPostRequest(path, parameters) {
@@ -183,11 +194,31 @@ $('#selectPoly').on('click', function () {
     poly.enable()
 })
 
+$('#selectToggle').on('click', function () {
+    if ('remove' === selectionMode) {
+        selectionMode = 'add'
+        $(this).addClass('btn-outline-success')
+        $(this).removeClass('btn-outline-danger')
+        $(this).find('span').addClass('oi-plus')
+        $(this).find('span').removeClass('oi-minus')
+    } else {
+        selectionMode = 'remove'
+        $(this).addClass('btn-outline-danger')
+        $(this).removeClass('btn-outline-success')
+        $(this).find('span').addClass('oi-minus')
+        $(this).find('span').removeClass('oi-plus')
+    }
+})
+
 map.on('draw:created', (e) => {
     let bounds = e.layer.getBounds()
     markers.eachLayer(function(layer){
         if (bounds.contains(layer.getLatLng())) {
-            toggleMarker(layer)
+            if ('remove' === selectionMode) {
+                removeMarker(layer)
+            } else {
+                addMarker(layer)
+            }
         }
     });
 })
