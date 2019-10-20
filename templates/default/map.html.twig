@@ -8,10 +8,12 @@
 
 {% block body %}
     <div id="result">
-        <button id="selectRect" title="Select Rectangle" class="btn btn-outline-secondary btn-sm"><span
-                    class="oi oi-media-stop"></span></button>
-        <button id="selectPoly" title="Select Polygon" class="btn btn-outline-secondary btn-sm"><span
-                    class="oi oi-medical-cross"></span></button>
+        <button id="selectRect" title="Select Rectangle" class="btn btn-outline-secondary btn-sm">
+            <span class="oi oi-media-stop"></span>
+        </button>
+        <button id="selectPoly" title="Select Polygon" class="btn btn-outline-secondary btn-sm">
+            <span class="oi oi-medical-cross"></span>
+        </button>
         {{ 'Waypoints:'|trans }}&nbsp;<code id="result_message">0</code>
         <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#maxfieldModal">
             {{ 'Create MaxField'|trans }}
@@ -21,8 +23,6 @@
     </div>
 
     <div id="map"></div>
-
-    <!-- Modal -->
 
     <!-- Modal -->
     <div class="modal fade" id="maxfieldModal" tabindex="-1" role="dialog">
@@ -61,7 +61,6 @@
             </div>
         </div>
     </div>
-
 
     <script src="{{ asset('build/map.js') }}"></script>
 
