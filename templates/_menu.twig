@@ -1,7 +1,4 @@
 <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('max_fields') }}">{{ 'MaxFields'|trans }}</a>
-    </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
            aria-expanded="false">{{ 'Maps'|trans }}</a>
@@ -10,6 +7,9 @@
             <a class="dropdown-item" href="{{ path('map-maxfield') }}">{{ 'MaxField planner'|trans }}</a>
             <a class="dropdown-item" href="{{ path('map3') }}">{{ 'Agents'|trans }}</a>
         </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('max_fields') }}">{{ 'MaxFields'|trans }}</a>
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
