@@ -26,6 +26,7 @@ class CleandbCommand extends Command
      * @var WaypointRepository
      */
     private $waypointRepository;
+
     /**
      * @var WayPointHelper
      */
@@ -68,7 +69,6 @@ class CleandbCommand extends Command
 
         $progressBar = new ProgressBar($output, count($waypoints));
 
-
         foreach ($waypoints as $waypoint) {
             if (!$waypoint->getLat() || !$waypoint->getLon()) {
                 $io->error(sprintf('"%s" missing location', $waypoint->getName()));
@@ -109,7 +109,6 @@ class CleandbCommand extends Command
 
         if (!$errorCount && !$warningCount) {
             $io->success('Database is clean.');
-
         }
     }
 }

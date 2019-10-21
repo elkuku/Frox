@@ -102,20 +102,11 @@ class WaypointRepository extends ServiceEntityRepository
                 ->setParameter('city', '%'.$options->searchCriteria('city').'%');
         }
 
-        if ($options->searchCriteria('store')) {
-            $query->andWhere('t.store = :store')
-                ->setParameter('store', (int)$options->searchCriteria('store'));
+        if ($options->searchCriteria('name')) {
+            $query->andWhere('LOWER(w.name) LIKE :name')
+                ->setParameter('name', '%'.strtolower($options->searchCriteria('name')).'%');
         }
 
-        if ($options->searchCriteria('date_from')) {
-            $query->andWhere('t.date >= :date_from')
-                ->setParameter('date_from', $options->searchCriteria('date_from'));
-        }
-
-        if ($options->searchCriteria('date_to')) {
-            $query->andWhere('t.date <= :date_to')
-                ->setParameter('date_to', $options->searchCriteria('date_to'));
-        }
 
         $query = $query->getQuery();
 
