@@ -87,10 +87,12 @@ class CleandbCommand extends Command
                 $errorCount++;
             }
 
-            if ($waypoint->getName() !== $this->wayPointHelper->cleanName($waypoint->getName())) {
-                // $io->warning(sprintf('"%s" dirty title', $waypoint->getName()));
+            $cleanName = $this->wayPointHelper->cleanName($waypoint->getName());
+
+            if ($waypoint->getName() !== $cleanName) {
+                $io->warning(sprintf('"%s" dirty title "%s" clean title', $waypoint->getName(), $cleanName));
                 $warningCount++;
-                $waypoint->setName($this->wayPointHelper->cleanName($waypoint->getName()));
+                $waypoint->setName($cleanName);
                 $this->entityManager->persist($waypoint);
                 $this->entityManager->flush();
             }

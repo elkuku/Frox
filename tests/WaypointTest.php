@@ -16,9 +16,20 @@ class WaypointTest extends TestCase
             $helper->cleanName(' test ')
         );
 
+        // á, é, í, ó, ú, ñ, ü
+        $this->assertEquals(
+            'test',
+            $helper->cleanName('tést')
+        );
+
+        $this->assertEquals(
+            'hola nianio',
+            $helper->cleanName('hola ñaño')
+        );
+
         $this->assertEquals(
             '',
-            $helper->cleanName(',.;:"\'')
+            $helper->cleanName(',.;:"\'\\')
         );
 
     }

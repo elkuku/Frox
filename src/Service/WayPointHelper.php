@@ -53,8 +53,20 @@ class WayPointHelper
 
     public function cleanName(string $name): string
     {
+        $replacements = [
+            'á' => 'a',
+            'é'  => 'e',
+            'í' => 'i',
+            'ó' => 'o',
+            'ú' => 'u',
+            'ñ' => 'ni',
+            'ü' => 'u'
+        ];
+
         $name = trim($name);
-        $name = str_replace(['.', ',', ';', ':', '"', '\''], '', $name);
+        $name = str_replace(['.', ',', ';', ':', '"', '\'', '\\'], '', $name);
+
+        $name = str_replace(array_keys($replacements), $replacements, $name);
 
         return $name;
     }
