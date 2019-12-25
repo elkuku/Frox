@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
@@ -13,7 +14,7 @@ class AppExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new \Twig_SimpleFilter('cast_to_array', [$this, 'objectFilter']),
+            new TwigFilter('cast_to_array', [$this, 'objectFilter']),
         ];
     }
 
