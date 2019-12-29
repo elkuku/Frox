@@ -4,20 +4,14 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: 'en'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
-                            # fetching services directly from the container via $container->get() won't work.
-                            # The best practice is to be explicit about your dependencies anyway.
 
         bind:
-            # pass this value to any $adminEmail argument for any service
-            # that's defined in this file (including controller arguments)
             $adminEmail: 'manager@example.com'
             $rootDir: '%kernel.project_dir%'
 
@@ -36,16 +30,8 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-#    App\Service\MaxFieldGenerator:
-#        arguments:
-#          ['%kernel.project_dir%']
-#
-#    App\Service\WayPointHelper:
-#        arguments:
-#          ['%kernel.project_dir%']
-
     Circle\RestClientBundle\Services\RestClient: '@circle.restclient'
 
     App\Service\VAPI:
         arguments:
-           $apiKey: '%env(V_API_KEY)%'
+            $apiKey: '%env(V_API_KEY)%'
