@@ -65,11 +65,11 @@ class MaxFieldsController extends AbstractController
             throw new NotFoundHttpException('No waypoints selected.');
         }
 
-        $wayPoints   = $repository->findBy(['id' => $points]);
-        $maxField    = $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints);
-        $buildName   = $request->request->get('buildName');
-        $playersNum  = (int)$request->request->get('players_num') ?: 1;
-        $timeStamp   = date('Y-m-d');
+        $wayPoints = $repository->findBy(['id' => $points]);
+        $maxField = $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints);
+        $buildName = $request->request->get('buildName');
+        $playersNum = (int)$request->request->get('players_num') ?: 1;
+        $timeStamp = date('Y-m-d');
         $projectName = $playersNum.'pl-'.$timeStamp.'-'.$buildName;
 
         $maxFieldGenerator->generate($projectName, $maxField, $playersNum);
@@ -96,7 +96,7 @@ class MaxFieldsController extends AbstractController
     ): JsonResponse {
         $agent = $request->get('agent');
         $email = $request->get('email');
-        $item  = $request->get('item');
+        $item = $request->get('item');
 
         try {
             $info = $maxFieldGenerator->getInfo($item);
@@ -192,7 +192,6 @@ class MaxFieldsController extends AbstractController
 
             $this->addFlash('success', sprintf('%s has been removed.', $item));
         } catch (IOException $exception) {
-
             $this->addFlash('warning', $exception->getMessage());
         }
 
@@ -212,8 +211,7 @@ class MaxFieldsController extends AbstractController
         $opName = $request->query->get('opName');
         $maxfieldName = $request->query->get('maxfieldName');
 
-//        $restClient = $this->container->get('circle.restclient');
-
+        //        $restClient = $this->container->get('circle.restclient');
 
         $result = $maxField2Strike->generateOp($opName, $maxfieldName);
         $data = [
@@ -235,6 +233,5 @@ class MaxFieldsController extends AbstractController
         $response->setContent($logger->getLog());
 
         return $response;
-
     }
 }

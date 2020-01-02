@@ -51,9 +51,9 @@ class WaypointRepository extends ServiceEntityRepository
         return array_column($result, 'lat_lon');
     }
 
-//    /**
-//     * @return Waypoint[] Returns an array of Waypoint objects
-//     */
+    //    /**
+    //     * @return Waypoint[] Returns an array of Waypoint objects
+    //     */
     /*
     public function findByExampleField($value)
     {
@@ -99,14 +99,17 @@ class WaypointRepository extends ServiceEntityRepository
 
         if ($options->searchCriteria('city')) {
             $query->andWhere('w.city LIKE :city')
-                ->setParameter('city', '%'.$options->searchCriteria('city').'%');
+                ->setParameter(
+                    'city', '%'.$options->searchCriteria('city').'%'
+                );
         }
 
         if ($options->searchCriteria('name')) {
             $query->andWhere('LOWER(w.name) LIKE :name')
-                ->setParameter('name', '%'.strtolower($options->searchCriteria('name')).'%');
+                ->setParameter(
+                    'name', '%'.strtolower($options->searchCriteria('name')).'%'
+                );
         }
-
 
         $query = $query->getQuery();
 

@@ -24,7 +24,7 @@ class ImportFormType extends AbstractType
                 'province',
                 EntityType::class,
                 [
-                    'label' => 'Province',
+                    'label'       => 'Province',
                     'class'       => Province::class,
                     'placeholder' => 'Select a Province...',
                     'required'    => false,
@@ -34,9 +34,9 @@ class ImportFormType extends AbstractType
                 'city',
                 null,
                 [
-                    'label' => 'City',
+                    'label'    => 'City',
                     'required' => false,
-                    'attr' => ['list' => 'citiesList'],
+                    'attr'     => ['list' => 'citiesList'],
                 ]
             )
             ->add('intelLink', null, ['required' => false])

@@ -20,8 +20,7 @@ class Admin extends AbstractController
         preg_match($pattern, $_ENV['DATABASE_URL'], $matches);
         $mailAddress = $_ENV['MAILER_FROM_MAIL'];
 
-        if (4 !== \count($matches))
-        {
+        if (4 !== \count($matches)) {
             throw new \UnexpectedValueException('Error parsing the database URL.');
         }
 
@@ -35,27 +34,25 @@ class Admin extends AbstractController
         passthru($cmd, $retVal);
         $gzip = ob_get_clean();
 
-        if ($retVal)
-        {
-            throw new \RuntimeException('Error creating DB backup: ' . $gzip);
+        if ($retVal) {
+            throw new \RuntimeException('Error creating DB backup: '.$gzip);
         }
 
-        $fileName = date('Y-m-d') . '_backup.gz';
-        $mime     = 'application/x-gzip';
+        $fileName = date('Y-m-d').'_backup.gz';
+        $mime = 'application/x-gzip';
 
-        $message = (new \Swift_Message('Frox! Backup', '<h3>Backup</h3>Date: ' . date('Y-m-d'), 'text/html'))
+        $message = (new \Swift_Message(
+            'Frox! Backup', '<h3>Backup</h3>Date: '.date('Y-m-d'), 'text/html'
+        ))
             ->attach(new \Swift_Attachment($gzip, $fileName, $mime))
             ->setFrom($mailAddress)
             ->setTo($mailAddress);
 
         $count = $mailer->send($message);
 
-        if (!$count)
-        {
+        if (!$count) {
             $this->addFlash('danger', 'There was an error sending the message...');
-        }
-        else
-        {
+        } else {
             $this->addFlash('success', 'Backup has been sent to your inbox.');
         }
 

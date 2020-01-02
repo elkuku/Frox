@@ -8,7 +8,6 @@
 
 namespace App\Type;
 
-
 class AgentLinkType
 {
     public $linkNum = 0;

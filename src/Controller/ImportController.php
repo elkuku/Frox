@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Agent;
 use App\Entity\Category;
 use App\Entity\Province;
 use App\Entity\Waypoint;
 use App\Form\ImportFormType;
-use App\Repository\AgentRepository;
 use App\Repository\WaypointRepository;
 use App\Service\WayPointHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

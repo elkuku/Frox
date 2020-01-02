@@ -8,7 +8,6 @@
 
 namespace App\Type;
 
-
 class WayPointPrepType
 {
     public $agentNum = 0;

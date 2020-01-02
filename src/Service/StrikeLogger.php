@@ -18,7 +18,7 @@ class StrikeLogger
     public function __construct($rootDir)
     {
         $this->fileSystem = new Filesystem();
-        $this->logFile    = $rootDir.'/var/log/strikelog.txt';
+        $this->logFile = $rootDir.'/var/log/strikelog.txt';
     }
 
     public function start(): self
@@ -43,7 +43,6 @@ class StrikeLogger
         $nl = $newLine ? "\n" : '';
 
         $this->fileSystem->appendToFile($this->logFile, $string.$nl);
-
 
         return $this;
     }

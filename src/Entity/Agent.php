@@ -109,8 +109,8 @@ class Agent implements \JsonSerializable
     {
         return [
             'name' => $this->getName(),
-            'lat' => $this->getLat(),
-            'lon' => $this->getLon(),
+            'lat'  => $this->getLat(),
+            'lon'  => $this->getLon(),
         ];
     }
 

@@ -57,7 +57,9 @@ class AgentRepository extends ServiceEntityRepository
 
         if ($options->searchCriteria('city')) {
             $query->andWhere('w.city LIKE :city')
-                ->setParameter('city', '%'.$options->searchCriteria('city').'%');
+                ->setParameter(
+                    'city', '%'.$options->searchCriteria('city').'%'
+                );
         }
 
         if ($options->searchCriteria('store')) {

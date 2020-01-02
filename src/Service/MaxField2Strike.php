@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service;
 
 use App\Type\AgentInfoType;
@@ -40,8 +39,8 @@ class MaxField2Strike
     public function __construct(MaxFieldGenerator $maxFieldGenerator, VAPI $VAPI, StrikeLogger $logger)
     {
         $this->maxFieldGenerator = $maxFieldGenerator;
-        $this->VAPI              = $VAPI;
-        $this->logger            = $logger;
+        $this->VAPI = $VAPI;
+        $this->logger = $logger;
     }
 
     public function generateOp(string $OpName, string $maxfieldName)
@@ -71,8 +70,8 @@ class MaxField2Strike
             $p = new StrikePortal();
 
             $p->name = $portal->getName();
-            $p->lat  = $portal->getLat();
-            $p->lon  = $portal->getLon();
+            $p->lat = $portal->getLat();
+            $p->lon = $portal->getLon();
 
             $this->portals[] = $p;
         }
@@ -83,7 +82,7 @@ class MaxField2Strike
         foreach ($wp as $waypoint) {
             foreach ($this->portals as $i => $portal) {
                 if ($portal->name === $waypoint->name) {
-                    $this->portals[$i]->num         = $waypoint->mapNo;
+                    $this->portals[$i]->num = $waypoint->mapNo;
                     $this->portals[$i]->missingKeys = $waypoint->keysNeeded;
 
                     continue 2;
@@ -99,7 +98,7 @@ class MaxField2Strike
         $this->logger->add('Creating STRIKE OP...', false);
 
         // @todo check OP name >2 <100
-        $newOp       = new \stdClass();
+        $newOp = new \stdClass();
         $newOp->name = $opName;
         $newOp->type = 'linkart';
 
@@ -140,7 +139,9 @@ class MaxField2Strike
     private function createLinkTasks(): self
     {
         foreach ($this->agentInfos as $agentInfo) {
-            $this->logger->add('Creating Tasks for agent '.$agentInfo->agentNumber);
+            $this->logger->add(
+                'Creating Tasks for agent '.$agentInfo->agentNumber
+            );
 
             $total = count($agentInfo->links);
             $count = 1;
@@ -149,7 +150,7 @@ class MaxField2Strike
                 $this->logger->add(sprintf('Creating Link task %d of %d...', $count, $total), false);
                 $count++;
 
-                $origin      = $this->findPortalByNumber($link->originNum);
+                $origin = $this->findPortalByNumber($link->originNum);
                 $destination = $this->findPortalByNumber($link->destinationNum);
 
                 $link = new StrikeLink(
@@ -172,17 +173,16 @@ class MaxField2Strike
         return $this;
     }
 
-
     private function createKeyFarmingTask(StrikePortal $portal): StrikeTask
     {
         $task = new StrikeTask();
 
-        $task->todo   = StrikeTask::TASK_KEYFARM;
-        $task->lat    = $portal->lat;
-        $task->lon    = $portal->lon;
+        $task->todo = StrikeTask::TASK_KEYFARM;
+        $task->lat = $portal->lat;
+        $task->lon = $portal->lon;
         $task->portal = $portal->name;
         $task->repeat = $portal->missingKeys;
-        $task->name   = sprintf('FARM KEYS: %s (total: %d)', $portal->name, $portal->missingKeys);
+        $task->name = sprintf('FARM KEYS: %s (total: %d)', $portal->name, $portal->missingKeys);
 
         return $task;
     }
@@ -193,8 +193,8 @@ class MaxField2Strike
 
         $destination = new \stdClass();
 
-        $destination->lat  = $link->destinationLat;
-        $destination->lon  = $link->destinationLon;
+        $destination->lat = $link->destinationLat;
+        $destination->lon = $link->destinationLon;
         $destination->name = $link->destinationName;
 
         $task->todo = StrikeTask::TASK_LINK;
@@ -204,9 +204,9 @@ class MaxField2Strike
             mb_substr($link->destinationName, 0, 40)
         );
 
-        $task->lat        = $link->originLat;
-        $task->lon        = $link->originLon;
-        $task->portal     = $link->originName;
+        $task->lat = $link->originLat;
+        $task->lon = $link->originLon;
+        $task->portal = $link->originName;
         $task->linkTarget = [$destination];
 
         // @todo assigned to

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Waypoint;
 use App\Helper\Paginator\PaginatorTrait;
 use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
@@ -44,7 +43,11 @@ class ExportController extends AbstractController
 
         $waypoints = $repository->getRawList($paginatorOptions);
 
-        $paginatorOptions->setMaxPages((int)ceil($waypoints->count() / $paginatorOptions->getLimit()));
+        $paginatorOptions->setMaxPages(
+            (int)ceil(
+                $waypoints->count() / $paginatorOptions->getLimit()
+            )
+        );
 
         return $this->render(
             'export/index.html.twig',
@@ -69,13 +72,13 @@ class ExportController extends AbstractController
 
         if ($points) {
             $wayPoints = $repository->findBy(['id' => $points]);
-            $data      = [
+            $data = [
                 'maxfield' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
                 'gpx'      => $maxFieldGenerator->createGpx($wayPoints),
             ];
         } else {
             $message = 'No WayPoints Selected!';
-            $data    = ['maxfield' => $message, 'gpx' => $message];
+            $data = ['maxfield' => $message, 'gpx' => $message];
         }
 
         return $this->json($data);

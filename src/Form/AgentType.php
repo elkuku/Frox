@@ -15,32 +15,36 @@ class AgentType extends AbstractType
         $builder
             ->add('name')
             ->add('city')
-            ->add('lat', NumberType::class, array (
-                'required' => true,
-                'scale' => 7,
-                'attr' => array(
-                    'min' => -90,
-                    'max' => 90,
-                    'step' => 0.0000001,
-                ),
-            ))
-            ->add('lon', NumberType::class, array (
-                'required' => true,
-                'scale' => 7,
-                'attr' => array(
-                    'min' => -90,
-                    'max' => 90,
-                    'step' => 0.0000001,
-                ),
-            ))
-
-        ;
+            ->add(
+                'lat', NumberType::class, array(
+                    'required' => true,
+                    'scale'    => 7,
+                    'attr'     => array(
+                        'min'  => -90,
+                        'max'  => 90,
+                        'step' => 0.0000001,
+                    ),
+                )
+            )
+            ->add(
+                'lon', NumberType::class, array(
+                    'required' => true,
+                    'scale'    => 7,
+                    'attr'     => array(
+                        'min'  => -90,
+                        'max'  => 90,
+                        'step' => 0.0000001,
+                    ),
+                )
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Agent::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => Agent::class,
+            ]
+        );
     }
 }

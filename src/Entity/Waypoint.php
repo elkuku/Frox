@@ -142,7 +142,6 @@ class Waypoint
 
     public function getGpxRaw(): void
     {
-
     }
 
     public function __toString()

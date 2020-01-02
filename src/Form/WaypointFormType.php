@@ -8,7 +8,6 @@
 
 namespace App\Form;
 
-use App\Entity\Province;
 use App\Entity\Waypoint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -15,53 +15,53 @@ class StrikeTask
     public const TASK_OTHER = 99;
 
     /**
-     * Id of that task. Unique inside of an operation.	int	Set by the backend	X
+     * Id of that task. Unique inside of an operation.    int    Set by the backend    X
      **/
     public $id = 0;
 
-     /**
-    op	ID of the Operation this task belongs to	int	Set by the backend	X
-      **/
+    /**
+     * op    ID of the Operation this task belongs to    int    Set by the backend    X
+     **/
 
     /**
-    name	Name of that task	char	-	X
+     * name    Name of that task    char    -    X
      **/
     public $name = '';
 
     /**
-    owner	GID	int	Set by the backend	X
+     * owner    GID    int    Set by the backend    X
      **/
 
     /**
-    lat	Latitude	float	-	X
+     * lat    Latitude    float    -    X
      **/
     public $lat = 0.0;
 
     /**
-    lon	Longitude	float	-	X
+     * lon    Longitude    float    -    X
      **/
     public $lon = 0.0;
 
     /**
-    portal	Name of the Portal targeted in the task	char	-
+     * portal    Name of the Portal targeted in the task    char    -
      **/
     public $portal = '';
 
     /**
-    portalID	ID (guid) of the Portal targeted in the task	char	-
+     * portalID    ID (guid) of the Portal targeted in the task    char    -
      **/
 
     /**
-    * start	The date and Time when it starts (number of milliseconds since midnight Jan 1, 1970)	datetime	Defaults to now() if not set by client	X
-    * end	The date and Time when it ends (number of milliseconds since midnight Jan 1, 1970)	datetime    -
+     * start    The date and Time when it starts (number of milliseconds since midnight Jan 1, 1970)    datetime    Defaults to now() if not set by client    X
+     * end    The date and Time when it ends (number of milliseconds since midnight Jan 1, 1970)    datetime    -
      * comment    A comment for the agent to read    char    -
-     * previous	If this task needs another task to be completed before	int	Valid task-id
-    * alternative	If this task is an alternative to another task	int	Valid task-id
-    * priority	How important this task is (1 is most important)	int	1 to 5
+     * previous    If this task needs another task to be completed before    int    Valid task-id
+     * alternative    If this task is an alternative to another task    int    Valid task-id
+     * priority    How important this task is (1 is most important)    int    1 to 5
      */
 
-     /**
-    * repeat	How often should this task be done?	int	-
+    /**
+     * repeat    How often should this task be done?    int    -
      **/
     public $repeat = 1;
 
@@ -70,7 +70,6 @@ class StrikeTask
      * 9: 'KEYFARM', 10: 'MEET', 11: 'RECHARGE', 12: 'UPGRADE', 99: 'OTHER'    X
      **/
     public $todo = 0;
-
 
     /**
      * linkTarget    If this is a task to link somewhere, give the name and coordinates of the

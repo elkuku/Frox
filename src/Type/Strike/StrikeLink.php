@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Type\Strike;
-
 
 class StrikeLink
 {

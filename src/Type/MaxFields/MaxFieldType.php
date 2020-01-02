@@ -8,7 +8,6 @@
 
 namespace App\Type\MaxFields;
 
-
 use App\Type\AgentInfoType;
 use App\Type\InfoKeyPrepType;
 

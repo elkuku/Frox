@@ -20,9 +20,11 @@ class ChatController extends AbstractController
      */
     public function index(ChatRepository $chatRepository): Response
     {
-        return $this->render('chat/index.html.twig', [
-            'chats' => $chatRepository->findAll(),
-        ]);
+        return $this->render(
+            'chat/index.html.twig', [
+                'chats' => $chatRepository->findAll(),
+            ]
+        );
     }
 
     /**
@@ -42,10 +44,12 @@ class ChatController extends AbstractController
             return $this->redirectToRoute('chat_index');
         }
 
-        return $this->render('chat/new.html.twig', [
-            'chat' => $chat,
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'chat/new.html.twig', [
+                'chat' => $chat,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -53,9 +57,11 @@ class ChatController extends AbstractController
      */
     public function show(Chat $chat): Response
     {
-        return $this->render('chat/show.html.twig', [
-            'chat' => $chat,
-        ]);
+        return $this->render(
+            'chat/show.html.twig', [
+                'chat' => $chat,
+            ]
+        );
     }
 
     /**
@@ -69,15 +75,19 @@ class ChatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('chat_index', [
-                'id' => $chat->getId(),
-            ]);
+            return $this->redirectToRoute(
+                'chat_index', [
+                    'id' => $chat->getId(),
+                ]
+            );
         }
 
-        return $this->render('chat/edit.html.twig', [
-            'chat' => $chat,
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'chat/edit.html.twig', [
+                'chat' => $chat,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -85,7 +95,10 @@ class ChatController extends AbstractController
      */
     public function delete(Request $request, Chat $chat): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$chat->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete'.$chat->getId(), $request->request->get('_token')
+        )
+        ) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($chat);
             $entityManager->flush();

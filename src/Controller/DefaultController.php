@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
             'default/index.html.twig',
             [
                 'numWayPoints' => \count($repository->findAll()),
-                'provinces' => $provinces,
+                'provinces'    => $provinces,
             ]
         );
     }

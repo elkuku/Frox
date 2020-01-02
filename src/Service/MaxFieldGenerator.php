@@ -49,12 +49,14 @@ class MaxFieldGenerator
             // EXEC
             //  python makePlan.py -n 4 EXAMPLE.waypoints -d out/ -f output.pkl
             $players = ' -n '.$playersNum;
-//            $google = '-g';
-//            $google_api_key = '-a '.$apiKey;
-            $command = 'python '.$this->executable.' '.$fileName.' -d '.$projectRoot.' -f output.pkl'.$players;
+            //            $google = '-g';
+            //            $google_api_key = '-a '.$apiKey;
+            $command = 'python '.$this->executable.' '.$fileName.' -d '
+                .$projectRoot.' -f output.pkl'.$players;
             exec($command);
         } catch (IOExceptionInterface $exception) {
-            echo 'An error occurred while creating your directory at '.$exception->getPath();
+            echo 'An error occurred while creating your directory at '
+                .$exception->getPath();
         }
     }
 
@@ -77,14 +79,15 @@ class MaxFieldGenerator
     {
         $info = new MaxFieldType();
 
-        $numPlayers = preg_match('#([\d]+)pl-#', $item, $matches) ? $matches[1] : 1;
+        $numPlayers = preg_match('#([\d]+)pl-#', $item, $matches) ? $matches[1]
+            : 1;
 
-        $info->keyPrepTxt    = $this->getTextFileContents($item, 'keyPrep.txt');
-        $info->keyPrep       = $this->parseKeyPrepFile($info->keyPrepTxt);
+        $info->keyPrepTxt = $this->getTextFileContents($item, 'keyPrep.txt');
+        $info->keyPrep = $this->parseKeyPrepFile($info->keyPrepTxt);
         $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
-        $info->agentsInfo    = $this->getAgentsInfo($item, $numPlayers);
-        $info->frames        = $this->findFrames($item);
-        $info->links         = $this->parseCsvLinks($item);
+        $info->agentsInfo = $this->getAgentsInfo($item, $numPlayers);
+        $info->frames = $this->findFrames($item);
+        $info->links = $this->parseCsvLinks($item);
 
         return $info;
     }
@@ -94,24 +97,23 @@ class MaxFieldGenerator
      */
     private function getAgentsInfo(string $item, int $numAgents = 1): array
     {
-        $count      = 1;
+        $count = 1;
         $agentsInfo = [];
 
         try {
             start:
-            $info              = new AgentInfoType();
+            $info = new AgentInfoType();
             $info->agentNumber = $count;
-            $fileName          = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
-            $info->keysInfo    = $this->getTextFileContents($item, $fileName);
-            $fileName          = sprintf('links_for_agent_%d_of_%d.txt', $count, $numAgents);
-            $info->linksInfo   = $this->getTextFileContents($item, $fileName);
-//            $info->links       = $this->parseLinksFile($info->linksInfo);
-            $info->links  = $this->parseCsvLinks($item);
-            $info->keys   = $this->parseCsvKeys($item);
+            $fileName = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
+            $info->keysInfo = $this->getTextFileContents($item, $fileName);
+            $fileName = sprintf('links_for_agent_%d_of_%d.txt', $count, $numAgents);
+            $info->linksInfo = $this->getTextFileContents($item, $fileName);
+            //            $info->links       = $this->parseLinksFile($info->linksInfo);
+            $info->links = $this->parseCsvLinks($item);
+            $info->keys = $this->parseCsvKeys($item);
             $agentsInfo[] = $info;
             $count++;
             goto start;
-
         } catch (FileNotFoundException $e) {
             // Finished.
         }
@@ -153,8 +155,9 @@ class MaxFieldGenerator
         $maxFields = [];
 
         foreach ($wayPoints as $wayPoint) {
-            $points      = $wayPoint->getLat().','.$wayPoint->getLon();
-            $maxFields[] = $wayPoint->getName().';https://'.$_ENV['INTEL_URL'].'?ll='.$points.'&z=1&pll='.$points;
+            $points = $wayPoint->getLat().','.$wayPoint->getLon();
+            $maxFields[] = $wayPoint->getName().';https://'.$_ENV['INTEL_URL']
+                .'?ll='.$points.'&z=1&pll='.$points;
         }
 
         return implode("\n", $maxFields);
@@ -169,7 +172,9 @@ class MaxFieldGenerator
         foreach ($lines as $line) {
             $l = trim($line);
 
-            if (!$l || strpos($l, 'Keys Needed') === 0 || strpos($l, 'Number of missing') === 0) {
+            if (!$l || strpos($l, 'Keys Needed') === 0
+                || strpos($l, 'Number of missing') === 0
+            ) {
                 continue;
             }
 
@@ -182,8 +187,8 @@ class MaxFieldGenerator
             $p = new WayPointPrepType();
 
             $p->keysNeeded = (int)$parts[0];
-            $p->mapNo      = (int)$parts[2];
-            $p->name       = trim($parts[3]);
+            $p->mapNo = (int)$parts[2];
+            $p->name = trim($parts[3]);
 
             $keyPrep->addWayPoint($p);
         }
@@ -207,7 +212,8 @@ class MaxFieldGenerator
         $xml[] = '<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">';
 
         foreach ($wayPoints as $wayPoint) {
-            $xml[] = '<wpt lat="'.$wayPoint->getLat().'" lon="'.$wayPoint->getLon().'">';
+            $xml[] = '<wpt lat="'.$wayPoint->getLat().'" lon="'
+                .$wayPoint->getLon().'">';
             $xml[] = '  <name>'.$wayPoint->getName().'</name>';
             //     $xml[] = '  <cmt>'.$names[$i].'</cmt>';
             //     $xml[] = '  <desc>'.$names[$i].'</desc>';
@@ -226,8 +232,8 @@ class MaxFieldGenerator
      */
     public function parseWayPointsFile(string $item)
     {
-        $contents  = $this->getTextFileContents($item, $item.'.waypoints');
-        $lines     = explode("\n", $contents);
+        $contents = $this->getTextFileContents($item, $item.'.waypoints');
+        $lines = explode("\n", $contents);
         $wayPoints = [];
 
         foreach ($lines as $line) {
@@ -270,7 +276,7 @@ class MaxFieldGenerator
     private function parseLinksFile(string $contents)
     {
         $lines = explode("\n", $contents);
-        $link  = null;
+        $link = null;
         $links = [];
 
         foreach ($lines as $line) {
@@ -294,16 +300,16 @@ class MaxFieldGenerator
             if (preg_match('/(\d+)(\*)?\s+____1\s+(\d+)\s+([\w|\s]+)/', $l, $matches)) {
                 $link = new AgentLinkType();
 
-                $link->linkNum    = $matches[1];
-                $link->isEarly    = '*' === $matches[2];
-                $link->originNum  = $matches[3];
+                $link->linkNum = $matches[1];
+                $link->isEarly = '*' === $matches[2];
+                $link->originNum = $matches[3];
                 $link->originName = $matches[4];
             } elseif (preg_match('/(\d+)\s+([\w|\s]+)/', $l, $matches)) {
                 if (!$link) {
                     throw new \Exception('Parse error in links file');
                 }
 
-                $link->destinationNum  = $matches[1];
+                $link->destinationNum = $matches[1];
                 $link->destinationName = $matches[2];
 
                 $links[] = $link;
@@ -327,12 +333,12 @@ class MaxFieldGenerator
 
     private function findFrames(string $item): int
     {
-        $path   = $this->rootDir.'/'.$item;
+        $path = $this->rootDir.'/'.$item;
         $frames = 0;
 
         foreach (new \DirectoryIterator($path) as $file) {
             if (preg_match('/frame_(\d\d\d)/', $file->getFilename(), $matches)) {
-                $x      = (int)$matches[1];
+                $x = (int)$matches[1];
                 $frames = $x > $frames ? $x : $frames;
             }
         }
@@ -362,12 +368,12 @@ class MaxFieldGenerator
             $link = new AgentLinkType();
 
             // @todo zero base
-            $link->linkNum         = (int)$parts[0] + 1;
-            $link->isEarly         = strpos($parts[0], '*') ? true : false;
-            $link->agentNum        = (int)$parts[1];
-            $link->originNum       = (int)$parts[2];
-            $link->originName      = trim($parts[3]);
-            $link->destinationNum  = (int)$parts[4];
+            $link->linkNum = (int)$parts[0] + 1;
+            $link->isEarly = strpos($parts[0], '*') ? true : false;
+            $link->agentNum = (int)$parts[1];
+            $link->originNum = (int)$parts[2];
+            $link->originName = trim($parts[3]);
+            $link->destinationNum = (int)$parts[4];
             $link->destinationName = trim($parts[5]);
 
             $links[] = $link;
@@ -404,9 +410,9 @@ class MaxFieldGenerator
 
             $wayPoint = new WayPointPrepType();
 
-            $wayPoint->agentNum   = (int)$parts[0];
-            $wayPoint->mapNo      = (int)$parts[1];
-            $wayPoint->name       = trim($parts[2]);
+            $wayPoint->agentNum = (int)$parts[0];
+            $wayPoint->mapNo = (int)$parts[1];
+            $wayPoint->name = trim($parts[2]);
             $wayPoint->keysNeeded = (int)$parts[3];
 
             $keyInfo->addWayPoint($wayPoint);

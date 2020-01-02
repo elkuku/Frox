@@ -30,7 +30,11 @@ class WaypointsController extends AbstractController
 
         $waypoints = $repository->getRawList($paginatorOptions);
 
-        $paginatorOptions->setMaxPages((int)ceil($waypoints->count() / $paginatorOptions->getLimit()));
+        $paginatorOptions->setMaxPages(
+            (int)ceil(
+                $waypoints->count() / $paginatorOptions->getLimit()
+            )
+        );
 
         return $this->render(
             'waypoints/index.html.twig',
@@ -52,7 +56,7 @@ class WaypointsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $waypoint = $form->getData();
-            $em       = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($waypoint);
             $em->flush();
             $this->addFlash('success', 'Waypoint updated!');
@@ -117,9 +121,9 @@ class WaypointsController extends AbstractController
             $w = [];
 
             $w['name'] = $waypoint->getName();
-            $w['lat']  = $waypoint->getLat();
-            $w['lng']  = $waypoint->getLon();
-            $w['id']   = $waypoint->getId();
+            $w['lat'] = $waypoint->getLat();
+            $w['lng'] = $waypoint->getLon();
+            $w['id'] = $waypoint->getId();
 
             $wps[] = $w;
         }

@@ -29,7 +29,9 @@ class WayPointHelper
 
         $imagePath = $this->rootDir.'/'.$wpId.'.jpg';
 
-        if (true === $fileSystem->exists($imagePath) && false === $forceUpdate) {
+        if (true === $fileSystem->exists($imagePath)
+            && false === $forceUpdate
+        ) {
             return;
         }
 
@@ -55,12 +57,12 @@ class WayPointHelper
     {
         $replacements = [
             'á' => 'a',
-            'é'  => 'e',
+            'é' => 'e',
             'í' => 'i',
             'ó' => 'o',
             'ú' => 'u',
             'ñ' => 'ni',
-            'ü' => 'u'
+            'ü' => 'u',
         ];
 
         $name = trim($name);

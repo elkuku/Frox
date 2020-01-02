@@ -91,7 +91,7 @@ class PaginatorOptions
     public function setOrderDir(string $orderDir): PaginatorOptions
     {
         $dirs = ['ASC', 'DESC'];
-        $dir  = strtoupper($orderDir);
+        $dir = strtoupper($orderDir);
 
         if (false === \in_array($dir, $dirs, true)) {
             throw new \UnexpectedValueException(sprintf('Order dir must be %s', implode(', ', $dirs)));
@@ -177,6 +177,7 @@ class PaginatorOptions
      */
     public function searchCriteria(string $name): string
     {
-        return array_key_exists($name, $this->criteria) ? $this->criteria[$name] : '';
+        return array_key_exists($name, $this->criteria) ? $this->criteria[$name]
+            : '';
     }
 }
