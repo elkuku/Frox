@@ -126,7 +126,7 @@ class MaxFieldsController extends AbstractController
                 );
 
             $message = (new \Swift_Message('MaxFields Plan '.$item))
-                ->setFrom(getenv('MAILER_FROM_MAIL'))
+                ->setFrom($_ENV['MAILER_FROM_MAIL'])
                 ->setTo($email)
                 ->attach(new Swift_Attachment($linkList, 'link-list.pdf', 'application/pdf'))
                 ->attach(new Swift_Attachment($keyList, 'key-list.pdf', 'application/pdf'));

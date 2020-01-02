@@ -1,8 +1,9 @@
 {% extends 'base-map.html.twig' %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript" src="{{ asset('build/background.js') }}"></script>
+        {{ parent() }}
+    {{ encore_entry_script_tags('background') }}
+{#    <script type="text/javascript" src="{{ asset('build/background.js') }}"></script>#}
 {% endblock %}
 
 {% block body %}

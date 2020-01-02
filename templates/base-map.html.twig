@@ -11,7 +11,7 @@
 
     <title>{% block title %}FroX{% endblock %}</title>
 
-    <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+    {{ encore_entry_link_tags('app') }}
     {% block stylesheets %}{% endblock %}
 </head>
 
@@ -36,10 +36,7 @@
 
 {% block body %}{% endblock %}
 
-<script src="{{ asset('build/app.js') }}"></script>
-
-{#<span id="g11n-setup" data-g11n-setup='{{ getG11nJavascriptJson()|raw }}'></span>#}
-
+{{ encore_entry_script_tags('app') }}
 {% block javascripts %}{% endblock %}
 </body>
 </html>

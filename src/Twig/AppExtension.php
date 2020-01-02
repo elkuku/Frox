@@ -29,7 +29,7 @@ class AppExtension extends AbstractExtension
     {
         switch ($type) {
             case 'intel':
-                return getenv('INTEL_URL');
+                return $_ENV['INTEL_URL'];
                 break;
             default:
                 throw new \UnexpectedValueException('Unknown URL type: '.$type);

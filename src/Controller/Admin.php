@@ -17,7 +17,8 @@ class Admin extends AbstractController
     {
         $pattern = '#mysql://(.+)\:(.+)@127.0.0.1:3306/(.+)#';
 
-        preg_match($pattern, getenv('DATABASE_URL'), $matches);
+        preg_match($pattern, $_ENV['DATABASE_URL'], $matches);
+        $mailAddress = $_ENV['MAILER_FROM_MAIL'];
 
         if (4 !== \count($matches))
         {
@@ -44,8 +45,8 @@ class Admin extends AbstractController
 
         $message = (new \Swift_Message('Frox! Backup', '<h3>Backup</h3>Date: ' . date('Y-m-d'), 'text/html'))
             ->attach(new \Swift_Attachment($gzip, $fileName, $mime))
-            ->setFrom(getenv('MAILER_FROM_MAIL'))
-            ->setTo(getenv('MAILER_FROM_MAIL'));
+            ->setFrom($mailAddress)
+            ->setTo($mailAddress);
 
         $count = $mailer->send($message);
 

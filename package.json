@@ -1,7 +1,18 @@
 {
     "devDependencies": {
-        "@symfony/webpack-encore": "^0.20.0",
-        "webpack-notifier": "^1.7.0"
+        "@symfony/webpack-encore": "^0.28.2",
+        "bootstrap": "^4.3.1",
+        "core-js": "^3.0.0",
+        "jquery": "^3.3.1",
+        "leaflet": "^1.4.0",
+        "leaflet-draw": "^1.0.4",
+        "leaflet.markercluster": "^1.4.1",
+        "node-sass": "^4.13.0",
+        "open-iconic": "^1.1.1",
+        "popper.js": "^1.14.7",
+        "regenerator-runtime": "^0.13.2",
+        "sass-loader": "^7.3.1",
+        "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
     "private": true,
@@ -9,17 +20,6 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production"
-    },
-    "dependencies": {
-        "bootstrap": "^4.3.1",
-        "copy-webpack-plugin": "^4.6.0",
-        "g11n-js": "^1.5.3",
-        "jquery": "^3.3.1",
-        "leaflet": "^1.4.0",
-        "leaflet-draw": "^1.0.4",
-        "leaflet.markercluster": "^1.4.1",
-        "open-iconic": "^1.1.1",
-        "popper.js": "^1.14.7"
+        "build": "encore production --progress"
     }
 }

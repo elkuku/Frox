@@ -1,6 +1,10 @@
-const fs = require('fs')
-const Encore = require('@symfony/webpack-encore')
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+var Encore = require('@symfony/webpack-encore');
+
+// Manually configure the runtime environment if not already configured yet by the "encore" command.
+// It's useful when you use tools that rely on webpack.config.js file.
+if (!Encore.isRuntimeEnvironmentConfigured()) {
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+}
 
 Encore
     // directory where compiled assets will be stored
@@ -17,9 +21,8 @@ Encore
      * (including one that's included on every page - e.g. "app")
      *
      * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
+     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    // .createSharedEntry('js/common', ['jquery'])
     .addEntry('app', './assets/js/app.js')
     .addEntry('map-maxfield', './assets/js/map/maxfield.js')
     .addEntry('map2', './assets/js/map2.js')
@@ -29,6 +32,13 @@ Encore
     .addEntry('paginator', './assets/js/paginator.js')
     .addEntry('background', './assets/js/background.js')
 
+    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
+    .splitEntryChunks()
+
+    // will require an extra script tag for runtime.js
+    // but, you probably want this, unless you're building a single-page app
+    .enableSingleRuntimeChunk()
+
     /*
      * FEATURE CONFIG
      *
@@ -37,27 +47,38 @@ Encore
      * https://symfony.com/doc/current/frontend.html#adding-more-features
      */
     .cleanupOutputBeforeBuild()
-    // .enableBuildNotifications()
+    .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(false)//Encore.isProduction())
+    .enableVersioning(Encore.isProduction())
 
+    // enables @babel/preset-env polyfills
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'usage';
+        config.corejs = 3;
+    })
+
+    // enables Sass/SCSS support
+    .enableSassLoader()
+
+    // uncomment if you use TypeScript
+    //.enableTypeScriptLoader()
+
+    // uncomment to get integrity="..." attributes on your script & link tags
+    // requires WebpackEncoreBundle 1.4 or higher
+    //.enableIntegrityHashes(Encore.isProduction())
+
+    // uncomment if you're having problems with a jQuery plugin
     .autoProvidejQuery()
 
-    .addPlugin(new CopyWebpackPlugin([
-        { from: './assets/img', to: 'img' }
-    ]))
+    // uncomment if you use API Platform Admin (composer req api-admin)
+    //.enableReactPreset()
+    //.addEntry('admin', './assets/js/admin.js')
+
+    .copyFiles({
+        from: './assets/img',
+        to: 'img/[path][name].[ext]',
+    })
 ;
 
-let config = Encore.getWebpackConfig()
-
-if (!Encore.isProduction()) {
-    fs.writeFile('fakewebpack.config.js', 'module.exports = ' + JSON.stringify(config), function (err) {
-        if (err) {
-            return console.log(err)
-        }
-        console.log('fakewebpack.config.js written')
-    })
-}
-
-module.exports = config
+module.exports = Encore.getWebpackConfig();

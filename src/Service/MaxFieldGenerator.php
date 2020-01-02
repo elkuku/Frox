@@ -33,7 +33,7 @@ class MaxFieldGenerator
         $this->rootDir = $rootDir.'/public/maxfields';
 
         // Path to makePlan.py
-        $this->executable = getenv('MAXFIELDS_EXEC');
+        $this->executable = $_ENV['MAXFIELDS_EXEC'];
     }
 
     public function generate(string $projectName, string $wayPointList, int $playersNum): void
@@ -154,7 +154,7 @@ class MaxFieldGenerator
 
         foreach ($wayPoints as $wayPoint) {
             $points      = $wayPoint->getLat().','.$wayPoint->getLon();
-            $maxFields[] = $wayPoint->getName().';https://'.getenv('INTEL_URL').'?ll='.$points.'&z=1&pll='.$points;
+            $maxFields[] = $wayPoint->getName().';https://'.$_ENV['INTEL_URL'].'?ll='.$points.'&z=1&pll='.$points;
         }
 
         return implode("\n", $maxFields);

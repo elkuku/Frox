@@ -3,7 +3,13 @@
 {% block title %}{{ parent() }} - Map{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/map-maxfield.css') }}">
+    {{ encore_entry_link_tags('map-maxfield') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('map-maxfield') }}
+    {#    <script type="text/javascript" src="{{ asset('build/background.js') }}"></script>#}
 {% endblock %}
 
 {% block body %}
@@ -64,7 +70,4 @@
             </div>
         </div>
     </div>
-
-    <script src="{{ asset('build/map-maxfield.js') }}"></script>
-
 {% endblock %}

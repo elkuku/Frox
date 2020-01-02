@@ -26,7 +26,7 @@ trait PaginatorTrait
     {
         $options = $request->get('paginatorOptions');
 
-        $limit = (int)getenv('list_limit') ?: 10;
+        $limit = (int)$_ENV['list_limit'] ?: 10;
 
         return (new PaginatorOptions)
             ->setPage(isset($options['page']) && $options['page'] ? (int)$options['page'] : 1)
