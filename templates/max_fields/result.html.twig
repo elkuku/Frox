@@ -4,19 +4,19 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('build/maxfields.js') }}"></script>
-    <script>
-        const maxFrames = {{ info.frames }}
-        const item = '{{ item }}'
-        const links = {{ info.links|json_encode|raw }}
-    </script>
+    {{ encore_entry_script_tags('maxfields') }}
 {% endblock %}
 
 {% block body %}
-    <a href="{{ path('max_fields_gpx', {'item': item}) }}" class="btn btn-sm btn-success">
+    <span id="js-data"
+          data-max-frames="{{ info.frames }}"
+          data-item="{{ item }}"
+          data-links="{{ info.links|json_encode }}"
+    ></span>
+    <a href="{{ path('max_fields_gpx', {'item': item}) }}" class="btn btn-sm btn-outline-success">
         {{ 'Download GPX'|trans }}
     </a>
-    <a href="#" class="btn btn-sm btn-info" id="maxfield2strike_btn">
+    <a href="#" class="btn btn-sm btn-outline-info" id="maxfield2strike_btn">
         {{ 'Create STRIKE OP'|trans }}
     </a>
 
@@ -32,12 +32,12 @@
 
     <div class="row">
         <div class="col">
-            <button id="frameMinus">-</button>
-            <button id="framePlus">+</button>
+            <button id="frameMinus" class="btn btn-outline-secondary">-</button>
+            <button id="framePlus" class="btn btn-outline-secondary">+</button>
             <span id="frameNum">#</span>
             <div id="frameLinkInfo"></div>
         </div>
-        <div class="col">
+        <div class="col border">
             <img id="displayFrames" src="/maxfields/{{ item }}/frame_-1.png" alt="Frames">
         </div>
     </div>
@@ -118,7 +118,7 @@
         <div class="row">
             <div class="col">
                 Agent {{ agentInfo.agentNumber }} - Send e-mail to <input type="text">
-                <button class="btn btn-default sendMail" id="{{ agentInfo.agentNumber }}">Send</button>
+                <button class="btn btn-outline-success sendMail" id="{{ agentInfo.agentNumber }}">Send</button>
                 <span id="result-{{ agentInfo.agentNumber }}"></span>
             </div>
         </div>

@@ -1,6 +1,12 @@
 let frameNum = -1
 let intervalId = 0
 
+const jsData = $('#js-data')
+
+const maxFrames = jsData.data('maxFrames')
+const item = jsData.data('item')
+const links = jsData.data('links')
+
 $('.sendMail').click(function () {
     const agent = this.id
     const email = $(this).prevAll('input[type=text]').val()
