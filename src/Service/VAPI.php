@@ -17,9 +17,10 @@ class VAPI
 
     private $apiKey;
 
-    public function __construct(RestClient $restClient, $apiKey)
+    // public function __construct(RestClient $restClient, $apiKey)
+    public function __construct($apiKey)
     {
-        $this->restClient = $restClient;
+        // $this->restClient = $restClient;
         $this->apiKey = $apiKey;
     }
 
