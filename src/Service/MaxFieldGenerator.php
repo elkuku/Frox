@@ -67,7 +67,8 @@ class MaxFieldGenerator
                     ." -d $projectRoot -f output.pkl -n $playersNum";
             } else {
                 $command = "{$this->maxfieldExec} $fileName"
-                    ." --outdir $projectRoot --num_agents $playersNum --output_csv";
+                    ." --outdir $projectRoot --num_agents $playersNum --output_csv"
+                    ." --num_cpus 0 --num_field_iterations 100 --max_route_solutions 100 > log.txt";
             }
 
             exec($command);
@@ -212,7 +213,7 @@ class MaxFieldGenerator
 
         foreach ($wayPoints as $wayPoint) {
             $points = $wayPoint->getLat().','.$wayPoint->getLon();
-            $maxFields[] = $wayPoint->getName().'; https://'.$_ENV['INTEL_URL']
+            $maxFields[] = $wayPoint->getName().'; '.$_ENV['INTEL_URL']
                 .'?ll='.$points.'&z=1&pll='.$points;
         }
 
