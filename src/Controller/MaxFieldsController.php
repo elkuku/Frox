@@ -32,6 +32,7 @@ class MaxFieldsController extends AbstractController
             'max_fields/index.html.twig',
             [
                 'list' => $maxFieldGenerator->getList(),
+                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion()
             ]
         );
     }
@@ -47,6 +48,7 @@ class MaxFieldsController extends AbstractController
                 'item' => $item,
                 'info' => $maxFieldGenerator->getInfo($item),
                 'list' => $maxFieldGenerator->getContentList($item),
+                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion()
             ]
         );
     }
@@ -80,6 +82,7 @@ class MaxFieldsController extends AbstractController
                 'item' => $projectName,
                 'info' => $maxFieldGenerator->getInfo($projectName),
                 'list' => $maxFieldGenerator->getContentList($projectName),
+                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion()
 
             ]
         );

@@ -35,3 +35,8 @@ services:
     App\Service\VAPI:
         arguments:
             $apiKey: '%env(V_API_KEY)%'
+
+    App\Service\MaxFieldGenerator:
+        arguments:
+            $maxfieldVersion: '%env(MAXFIELD_VERSION)%'
+            $maxfieldExec: '%env(MAXFIELDS_EXEC)%'

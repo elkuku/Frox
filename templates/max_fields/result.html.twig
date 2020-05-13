@@ -43,11 +43,25 @@
     </div>
     <div class="row">
         <div class="col">
-            <img src="/maxfields/{{ item }}/portalMap.png" alt="Portal Map">
+            {% if maxfieldVersion < 4 %}
+                <img src="/maxfields/{{ item }}/portalMap.png" alt="Portal Map">
+            {% else %}
+                <img src="/maxfields/{{ item }}/portal_map.png" width="350px" alt="Portal Map">
+            {% endif %}
         </div>
         <div class="col">
-            <img src="/maxfields/{{ item }}/linkMap.png" alt="Link Map">
+            {% if maxfieldVersion < 4 %}
+                <img src="/maxfields/{{ item }}/linkMap.png" alt="Link Map">
+            {% else %}
+                <img src="/maxfields/{{ item }}/link_map.png" width="350px" alt="Link Map">
+            {% endif %}
         </div>
+        {% if maxfieldVersion >= 4 %}
+        <div class="col">
+            <img src="/maxfields/{{ item }}/plan_movie.gif" width="350px" alt="Link movie">
+        </div>
+        {% endif %}
+
     </div>
     <div class="row">
         <div class="col">
@@ -80,7 +94,7 @@
             <div class="col">
                 <h4>Keys for agent {{ agentInfo.agentNumber }}</h4>
                 <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.keysInfo }}</textarea>
-                <table class="table table-condensed">
+                <table class="table table-sm">
                     {% for point in agentInfo.keys.wayPoints %}
                         {% if point.agentNum + 1 == agentInfo.agentNumber %}
                             <tr>
@@ -95,14 +109,15 @@
             <div class="col">
                 <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
                 <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.linksInfo }}</textarea>
-                <table class="table table-condensed">
+                <table class="table table-sm">
                     {% set origin=-1 %}
                     {% for link in agentInfo.links %}
                         <tr style="border-bottom: 1px solid silver;{% if link.originNum != origin %}border-top: 2px solid darkblue;{% endif %}">
                             <td>{{ link.isEarly ? 'X' : '' }}</td>
                             <td>{{ link.linkNum }}</td>
                             <td>
-                                {% if agentInfo.agentNumber != link.agentNum %}<del>{% endif %}
+                                {% if agentInfo.agentNumber != link.agentNum %}
+                                <del>{% endif %}
                                     {% if link.originNum != origin %}
                                         <b>{{ link.originNum }} - {{ link.originName }}</b><br>
                                     {% endif %}
@@ -124,4 +139,6 @@
         </div>
 
     {% endfor %}
+
+    {{ dump(info) }}
 {% endblock %}

@@ -24,16 +24,28 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class MaxFieldGenerator
 {
+    /**
+     * @var string
+     */
     protected $rootDir;
 
-    private $executable;
+    /**
+     * @var int
+     */
+    private $maxfieldVersion;
 
-    public function __construct(string $rootDir)
+    /**
+     * @var string
+     */
+    private $maxfieldExec;
+
+    public function __construct(string $rootDir, string $maxfieldExec, int $maxfieldVersion)
     {
         $this->rootDir = $rootDir.'/public/maxfields';
 
         // Path to makePlan.py
-        $this->executable = $_ENV['MAXFIELDS_EXEC'];
+        $this->maxfieldExec = $maxfieldExec;
+        $this->maxfieldVersion = $maxfieldVersion;
     }
 
     public function generate(string $projectName, string $wayPointList, int $playersNum): void
@@ -48,15 +60,22 @@ class MaxFieldGenerator
 
             // EXEC
             //  python makePlan.py -n 4 EXAMPLE.waypoints -d out/ -f output.pkl
-            $players = ' -n '.$playersNum;
             //            $google = '-g';
             //            $google_api_key = '-a '.$apiKey;
-            $command = 'python '.$this->executable.' '.$fileName.' -d '
-                .$projectRoot.' -f output.pkl'.$players;
+            if ($this->maxfieldVersion < 4) {
+                $command = "python {$this->maxfieldExec} $fileName"
+                    ." -d $projectRoot -f output.pkl -n $playersNum";
+            } else {
+                $command = "{$this->maxfieldExec} $fileName"
+                    ." --outdir $projectRoot --num_agents $playersNum --output_csv";
+            }
+
             exec($command);
         } catch (IOExceptionInterface $exception) {
             echo 'An error occurred while creating your directory at '
                 .$exception->getPath();
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
         }
     }
 
@@ -82,10 +101,18 @@ class MaxFieldGenerator
         $numPlayers = preg_match('#([\d]+)pl-#', $item, $matches) ? $matches[1]
             : 1;
 
-        $info->keyPrepTxt = $this->getTextFileContents($item, 'keyPrep.txt');
-        $info->keyPrep = $this->parseKeyPrepFile($info->keyPrepTxt);
-        $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
-        $info->agentsInfo = $this->getAgentsInfo($item, $numPlayers);
+        if ($this->maxfieldVersion < 4) {
+            $info->keyPrepTxt = $this->getTextFileContents($item, 'keyPrep.txt');
+            $info->keyPrep = $this->parseKeyPrepFile($info->keyPrepTxt);
+            $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
+            $info->agentsInfo = $this->getAgentsInfo($item, $numPlayers);
+        } else {
+            $info->keyPrepTxt = $this->getTextFileContents($item, 'key_preparation.csv');
+            $info->keyPrep = $this->parseKeyPrepFileCsv($info->keyPrepTxt);
+            $info->ownershipPrep = $this->getTextFileContents($item, 'ownership_preparation.txt');
+            $info->agentsInfo = $this->getAgentsInfo2($item, $numPlayers);
+        }
+
         $info->frames = $this->findFrames($item);
         $info->links = $this->parseCsvLinks($item);
 
@@ -107,6 +134,35 @@ class MaxFieldGenerator
             $fileName = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
             $info->keysInfo = $this->getTextFileContents($item, $fileName);
             $fileName = sprintf('links_for_agent_%d_of_%d.txt', $count, $numAgents);
+            $info->linksInfo = $this->getTextFileContents($item, $fileName);
+            //            $info->links       = $this->parseLinksFile($info->linksInfo);
+            $info->links = $this->parseCsvLinks($item);
+            $info->keys = $this->parseCsvKeys($item);
+            $agentsInfo[] = $info;
+            $count++;
+            goto start;
+        } catch (FileNotFoundException $e) {
+            // Finished.
+        }
+
+        return $agentsInfo;
+    }
+
+    /**
+     * @return AgentInfoType[]
+     */
+    private function getAgentsInfo2(string $item, int $numAgents = 1): array
+    {
+        $count = 1;
+        $agentsInfo = [];
+
+        try {
+            start:
+            $info = new AgentInfoType();
+            $info->agentNumber = $count;
+            // $fileName = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
+            // $info->keysInfo = $this->getTextFileContents($item, $fileName);
+            $fileName = sprintf('agent_%d_assignment.txt', $count);
             $info->linksInfo = $this->getTextFileContents($item, $fileName);
             //            $info->links       = $this->parseLinksFile($info->linksInfo);
             $info->links = $this->parseCsvLinks($item);
@@ -156,7 +212,7 @@ class MaxFieldGenerator
 
         foreach ($wayPoints as $wayPoint) {
             $points = $wayPoint->getLat().','.$wayPoint->getLon();
-            $maxFields[] = $wayPoint->getName().';https://'.$_ENV['INTEL_URL']
+            $maxFields[] = $wayPoint->getName().'; https://'.$_ENV['INTEL_URL']
                 .'?ll='.$points.'&z=1&pll='.$points;
         }
 
@@ -189,6 +245,40 @@ class MaxFieldGenerator
             $p->keysNeeded = (int)$parts[0];
             $p->mapNo = (int)$parts[2];
             $p->name = trim($parts[3]);
+
+            $keyPrep->addWayPoint($p);
+        }
+
+        return $keyPrep;
+    }
+
+    private function parseKeyPrepFileCsv(string $contents): InfoKeyPrepType
+    {
+        $keyPrep = new InfoKeyPrepType();
+
+        $lines = explode("\n", $contents);
+
+        foreach ($lines as $i => $line) {
+            $l = trim($line);
+
+            if (!$l || strpos($l, 'Keys Needed') === 0
+                || strpos($l, 'Number of missing') === 0
+                || $i === 0
+            ) {
+                continue;
+            }
+
+            $parts = explode(',', $l);
+
+            if (5 !== \count($parts)) {
+                continue;
+            }
+
+            $p = new WayPointPrepType();
+
+            $p->keysNeeded = (int)$parts[0];
+            $p->mapNo = (int)$parts[3];
+            $p->name = trim($parts[4]);
 
             $keyPrep->addWayPoint($p);
         }
@@ -273,6 +363,14 @@ class MaxFieldGenerator
         return $wayPoints;
     }
 
+    /**
+     * @return int
+     */
+    public function getMaxfieldVersion(): int
+    {
+        return $this->maxfieldVersion;
+    }
+
     private function parseLinksFile(string $contents)
     {
         $lines = explode("\n", $contents);
@@ -350,7 +448,11 @@ class MaxFieldGenerator
     {
         $links = [];
 
-        $contents = $this->getTextFileContents($item, 'links_for_agents.csv');
+        if ($this->maxfieldVersion < 4) {
+            $contents = $this->getTextFileContents($item, 'links_for_agents.csv');
+        } else {
+            $contents = $this->getTextFileContents($item, 'agent_assignments.csv');
+        }
 
         $lines = explode("\n", $contents);
 
@@ -367,8 +469,7 @@ class MaxFieldGenerator
 
             $link = new AgentLinkType();
 
-            // @todo zero base
-            $link->linkNum = (int)$parts[0] + 1;
+            $link->linkNum = (int)$parts[0];
             $link->isEarly = strpos($parts[0], '*') ? true : false;
             $link->agentNum = (int)$parts[1];
             $link->originNum = (int)$parts[2];
@@ -393,7 +494,11 @@ class MaxFieldGenerator
     {
         $keyInfo = new InfoKeyPrepType();
 
-        $contents = $this->getTextFileContents($item, 'keys_for_agents.csv');
+        if ($this->maxfieldVersion < 4) {
+            $contents = $this->getTextFileContents($item, 'keys_for_agents.csv');
+        } else {
+            $contents = $this->getTextFileContents($item, 'agent_key_preparation.csv');
+        }
 
         $lines = explode("\n", $contents);
 
@@ -410,10 +515,17 @@ class MaxFieldGenerator
 
             $wayPoint = new WayPointPrepType();
 
-            $wayPoint->agentNum = (int)$parts[0];
-            $wayPoint->mapNo = (int)$parts[1];
-            $wayPoint->name = trim($parts[2]);
-            $wayPoint->keysNeeded = (int)$parts[3];
+            if ($this->maxfieldVersion < 4) {
+                $wayPoint->agentNum = (int)$parts[0];
+                $wayPoint->mapNo = (int)$parts[1];
+                $wayPoint->name = trim($parts[2]);
+                $wayPoint->keysNeeded = (int)$parts[3];
+            } else {
+                $wayPoint->agentNum = (int)$parts[0];
+                $wayPoint->keysNeeded = (int)$parts[1];
+                $wayPoint->mapNo = (int)$parts[2];
+                $wayPoint->name = trim($parts[3]);
+            }
 
             $keyInfo->addWayPoint($wayPoint);
         }
