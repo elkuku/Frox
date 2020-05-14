@@ -39,13 +39,25 @@ class MaxFieldGenerator
      */
     private $maxfieldExec;
 
-    public function __construct(string $rootDir, string $maxfieldExec, int $maxfieldVersion)
+    /**
+     * @var string
+     */
+    private $googleApiKey;
+
+    /**
+     * @var string
+     */
+    private $googleApiSecret;
+
+    public function __construct(string $rootDir, string $maxfieldExec, int $maxfieldVersion, string $googleApiKey, string  $googleApiSecret)
     {
         $this->rootDir = $rootDir.'/public/maxfields';
 
         // Path to makePlan.py
         $this->maxfieldExec = $maxfieldExec;
         $this->maxfieldVersion = $maxfieldVersion;
+        $this->googleApiKey = $googleApiKey;
+        $this->googleApiSecret = $googleApiSecret;
     }
 
     public function generate(string $projectName, string $wayPointList, int $playersNum): void
@@ -68,8 +80,18 @@ class MaxFieldGenerator
             } else {
                 $command = "{$this->maxfieldExec} $fileName"
                     ." --outdir $projectRoot --num_agents $playersNum --output_csv"
-                    ." --num_cpus 0 --num_field_iterations 100 --max_route_solutions 100 > log.txt";
+                    ." --num_cpus 0 --num_field_iterations 100 --max_route_solutions 100";
+
+                if ($this->googleApiKey) {
+                    $command .= ' --google_api_key '.$this->googleApiKey;
+                    $command .= ' --google_api_secret '.$this->googleApiSecret;
+                }
+
+                $command .= " --skip_step_plots";
+                $command .= " --verbose > $projectRoot/log.txt";
             }
+
+            $fileSystem->dumpFile($projectRoot.'/command.txt', $command);
 
             exec($command);
         } catch (IOExceptionInterface $exception) {
