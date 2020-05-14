@@ -4,3 +4,6 @@ twig:
     # Kuku ADD
     form_themes: ['bootstrap_4_layout.html.twig']
 #    auto_reload: '%kernel.debug%'
+    paths:
+        # point this wherever your images live
+        '%kernel.project_dir%/public/maxfields': maxfieldimages

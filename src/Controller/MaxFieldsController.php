@@ -8,12 +8,14 @@ use App\Service\MaxFieldGenerator;
 use App\Service\StrikeLogger;
 use Knp\Snappy\Pdf;
 use Swift_Attachment;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -31,8 +33,8 @@ class MaxFieldsController extends AbstractController
         return $this->render(
             'max_fields/index.html.twig',
             [
-                'list' => $maxFieldGenerator->getList(),
-                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion()
+                'list'            => $maxFieldGenerator->getList(),
+                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion(),
             ]
         );
     }
@@ -45,10 +47,10 @@ class MaxFieldsController extends AbstractController
         return $this->render(
             'max_fields/result.html.twig',
             [
-                'item' => $item,
-                'info' => $maxFieldGenerator->getInfo($item),
-                'list' => $maxFieldGenerator->getContentList($item),
-                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion()
+                'item'            => $item,
+                'info'            => $maxFieldGenerator->getInfo($item),
+                'list'            => $maxFieldGenerator->getContentList($item),
+                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion(),
             ]
         );
     }
@@ -79,10 +81,10 @@ class MaxFieldsController extends AbstractController
         return $this->render(
             'max_fields/result.html.twig',
             [
-                'item' => $projectName,
-                'info' => $maxFieldGenerator->getInfo($projectName),
-                'list' => $maxFieldGenerator->getContentList($projectName),
-                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion()
+                'item'            => $projectName,
+                'info'            => $maxFieldGenerator->getInfo($projectName),
+                'list'            => $maxFieldGenerator->getContentList($projectName),
+                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion(),
 
             ]
         );
@@ -91,7 +93,75 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/send_mail", name="maxfields-send-mail")
      */
-    public function sendMail(
+    public function sendMail(MaxFieldGenerator $maxFieldGenerator, MailerInterface $mailer, Request $request, Pdf $pdf)
+    {
+        $agent = $request->get('agent');
+        $email = $request->get('email');
+        $item = $request->get('item');
+
+        try {
+            $info = $maxFieldGenerator->getInfo($item);
+
+            $linkList = $pdf
+                ->getOutputFromHtml(
+                    $this->renderView(
+                        'max_fields/link-list.html.twig',
+                        [
+                            'info'  => $info,
+                            'agent' => $agent,
+                        ]
+                    ),
+                    ['encoding' => 'utf-8']
+                );
+
+            $keyList = $pdf
+                ->getOutputFromHtml(
+                    $this->renderView(
+                        'max_fields/pdf-keys.html.twig',
+                        [
+                            'info'  => $info,
+                            'agent' => $agent,
+                        ]
+                    ),
+                    ['encoding' => 'utf-8']
+                );
+
+            $email = (new TemplatedEmail())
+                ->from($_ENV['MAILER_FROM_MAIL'])
+                ->to($email)
+                ->subject('MaxFields Plan '.$item)
+                ->attach($linkList, 'link-list.pdf', 'application/pdf')
+                ->attach($keyList, 'key-list.pdf', 'application/pdf')
+                ->htmlTemplate('max_fields/email.html.twig')
+                ->context(
+                    [
+                        'img_portal_map' => $item.'/portal_map.png',
+                        'img_link_map'   => $item.'/link_map.png',
+                        'item'           => $item,
+                        'agent'          => $agent,
+                        'info'           => $info,
+                    ]
+                );
+
+            $mailer->send($email);
+            $data = [
+                'status'  => 'ok',
+                'message' => 'Message has been sent.',
+            ];
+        } catch (\Exception $exception) {
+            $data = [
+                'status'  => 'error',
+                'message' => 'error sending mail: '.$exception->getMessage(),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+    /**
+     * @Route("/send_mail2", name="maxfields-send-mail2")
+     */
+    public function sendMail2(
         MaxFieldGenerator $maxFieldGenerator,
         \Swift_Mailer $mailer,
         Request $request,
@@ -201,7 +271,8 @@ class MaxFieldsController extends AbstractController
         return $this->render(
             'max_fields/index.html.twig',
             [
-                'list' => $maxFieldGenerator->getList(),
+                'list'            => $maxFieldGenerator->getList(),
+                'maxfieldVersion' => $maxFieldGenerator->getMaxfieldVersion(),
             ]
         );
     }
