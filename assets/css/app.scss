@@ -1,56 +1,59 @@
 body {
-    padding-top: 70px;
+  padding-top: 70px;
 }
 
 .agent-info {
-    font-family: monospace;
+  font-family: monospace;
 }
 
 .linkCurrent {
-    background-color: yellow;
+  background-color: yellow;
 }
 
-/* Language switcher*/
-/*.g11n-switcher {*/
-/*    background-color: #313131;*/
-/*    color: limegreen;*/
-/*}*/
+span.msgLink {
+  background-color: lime;
+
+}
+
+span.msgMove {
+  background-color: #8959A8;
+}
 
 #maxfield2strike_form {
-    display: none;
-    border: 3px dashed red;
-    background-color: #ffe9ee;
-    padding: 10px;
+  display: none;
+  border: 3px dashed red;
+  background-color: #ffe9ee;
+  padding: 10px;
 }
 
 #maxfield2strike_status {
-    background-color: #5d5f61;
-    color: #7ca1ff;
-    border: 1px solid #1b1e21;
-    padding: 10px;
-    font-family: monospace;
+  background-color: #5d5f61;
+  color: #7ca1ff;
+  border: 1px solid #1b1e21;
+  padding: 10px;
+  font-family: monospace;
 }
 
 #maxfield2strike_result {
-    border: 3px solid #5d5f61;
-    background-color: #1b1e21;
-    color: lime;
-    font-family: monospace;
+  border: 3px solid #5d5f61;
+  background-color: #1b1e21;
+  color: lime;
+  font-family: monospace;
 }
 
 .bg-frox {
-    height: 100%;
-    background: #635584 url("../img/Wasserfrosch.jpg") no-repeat center;
-    background-size: cover;
-    background-position: 0 50px;
+  height: 100%;
+  background: #635584 url("../img/Wasserfrosch.jpg") no-repeat center;
+  background-size: cover;
+  background-position: 0 50px;
 }
 
 .frox-title {
-    background-color: black;
-    opacity: 0.5;
-    border-radius: 10px;
-    padding: 5px;
-    color: lime;
+  background-color: black;
+  opacity: 0.5;
+  border-radius: 10px;
+  padding: 5px;
+  color: lime;
 }
 
 @import "~bootstrap/scss/bootstrap";

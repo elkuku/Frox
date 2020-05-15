@@ -174,13 +174,16 @@ $('#build').on('click', function () {
     }
 
     $(this).html(
-        '<span class="spinner-border spinner-border-sm" role="status"></span>' +
-        '  Working...')
+        '<span class="spinner-border spinner-border-sm" role="status"></span>'
+        + '  Working...'
+    )
 
     doPostRequest('/max-fields/export', {
         points: selectedMarkers,
         buildName: buildName,
-        players_num: $('#players_num').val()
+        players_num: $('#players_num').val(),
+        skip_plots: $('#skip_plots').is(":checked"),
+        skip_step_plots: $('#skip_step_plots').is(":checked")
     })
 })
 
@@ -212,7 +215,7 @@ $('#selectToggle').on('click', function () {
 
 map.on('draw:created', (e) => {
     let bounds = e.layer.getBounds()
-    markers.eachLayer(function(layer){
+    markers.eachLayer(function (layer) {
         if (bounds.contains(layer.getLatLng())) {
             if ('remove' === selectionMode) {
                 removeMarker(layer)
@@ -220,5 +223,5 @@ map.on('draw:created', (e) => {
                 addMarker(layer)
             }
         }
-    });
+    })
 })

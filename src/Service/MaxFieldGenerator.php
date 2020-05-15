@@ -12,6 +12,7 @@ use App\Entity\Waypoint;
 use App\Type\AgentInfoType;
 use App\Type\AgentLinkType;
 use App\Type\InfoKeyPrepType;
+use App\Type\InfoStepType;
 use App\Type\MaxFields\MaxFieldType;
 use App\Type\WayPointPrepType;
 use DirectoryIterator;
@@ -49,7 +50,7 @@ class MaxFieldGenerator
      */
     private $googleApiSecret;
 
-    public function __construct(string $rootDir, string $maxfieldExec, int $maxfieldVersion, string $googleApiKey, string  $googleApiSecret)
+    public function __construct(string $rootDir, string $maxfieldExec, int $maxfieldVersion, string $googleApiKey, string $googleApiSecret)
     {
         $this->rootDir = $rootDir.'/public/maxfields';
 
@@ -60,7 +61,7 @@ class MaxFieldGenerator
         $this->googleApiSecret = $googleApiSecret;
     }
 
-    public function generate(string $projectName, string $wayPointList, int $playersNum): void
+    public function generate(string $projectName, string $wayPointList, int $playersNum, array $options): void
     {
         $fileSystem = new Filesystem();
 
@@ -70,10 +71,6 @@ class MaxFieldGenerator
             $fileName = $projectRoot.'/'.$projectName.'.waypoints';
             $fileSystem->appendToFile($fileName, $wayPointList);
 
-            // EXEC
-            //  python makePlan.py -n 4 EXAMPLE.waypoints -d out/ -f output.pkl
-            //            $google = '-g';
-            //            $google_api_key = '-a '.$apiKey;
             if ($this->maxfieldVersion < 4) {
                 $command = "python {$this->maxfieldExec} $fileName"
                     ." -d $projectRoot -f output.pkl -n $playersNum";
@@ -87,8 +84,15 @@ class MaxFieldGenerator
                     $command .= ' --google_api_secret '.$this->googleApiSecret;
                 }
 
-                $command .= " --skip_step_plots";
-                $command .= " --verbose > $projectRoot/log.txt";
+                if ($options['skip_plots']) {
+                    $command .= " --skip_plots";
+                }
+
+                if ($options['skip_step_plots']) {
+                    $command .= " --skip_step_plots";
+                }
+
+                $command .= " --verbose &> $projectRoot/log.txt";
             }
 
             $fileSystem->dumpFile($projectRoot.'/command.txt', $command);
@@ -138,6 +142,7 @@ class MaxFieldGenerator
 
         $info->frames = $this->findFrames($item);
         $info->links = $this->parseCsvLinks($item);
+        $info->steps = $this->calculateSteps($info->links);
 
         return $info;
     }
@@ -284,9 +289,10 @@ class MaxFieldGenerator
         foreach ($lines as $i => $line) {
             $l = trim($line);
 
-            if (!$l || strpos($l, 'Keys Needed') === 0
-                || strpos($l, 'Number of missing') === 0
+            if (!$l
                 || $i === 0
+                || strpos($l, 'Keys Needed') === 0
+                || strpos($l, 'Number of missing') === 0
             ) {
                 continue;
             }
@@ -454,11 +460,15 @@ class MaxFieldGenerator
 
     private function findFrames(string $item): int
     {
-        $path = $this->rootDir.'/'.$item;
+        $path = $this->rootDir.'/'.$item.'/frames';
         $frames = 0;
 
+        if (false === file_exists($path)) {
+            return $frames;
+        }
+
         foreach (new \DirectoryIterator($path) as $file) {
-            if (preg_match('/frame_(\d\d\d)/', $file->getFilename(), $matches)) {
+            if (preg_match('/frame_(\d\d\d\d\d)/', $file->getFilename(), $matches)) {
                 $x = (int)$matches[1];
                 $frames = $x > $frames ? $x : $frames;
             }
@@ -554,5 +564,42 @@ class MaxFieldGenerator
         }
 
         return $keyInfo;
+    }
+
+    private function calculateSteps(array $links)
+    {
+        $steps = [];
+
+        foreach ($links as $i => $link) {
+            if ($i > 0) {
+                if ($link->originNum !== $links[$i - 1]->originNum) {
+                    $step = new InfoStepType();
+                    $step->action = InfoStepType::TYPE_MOVE;
+                    $step->agentNum = $link->agentNum;
+                    $step->originNum = $links[$i - 1]->originNum;
+                    $step->originName = $links[$i - 1]->originName;
+                    $step->destinationNum = $link->originNum;
+                    $step->destinationName = $link->originName;
+
+                    $steps[] = $step;
+                }
+            }
+
+            $step = new InfoStepType();
+
+            $step->action = InfoStepType::TYPE_LINK;
+
+            $step->linkNum = $link->linkNum;
+
+            $step->agentNum = $link->agentNum;
+            $step->originNum = $link->originNum;
+            $step->originName = $link->originName;
+            $step->destinationNum = $link->destinationNum;
+            $step->destinationName = $link->destinationName;
+
+            $steps[] = $step;
+        }
+
+        return $steps;
     }
 }

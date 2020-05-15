@@ -30,4 +30,6 @@ class MaxFieldType
     public $frames = 0;
 
     public $links;
+
+    public $steps;
 }

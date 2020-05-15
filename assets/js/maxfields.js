@@ -1,11 +1,11 @@
-let frameNum = -1
+let frameNum = 0
 let intervalId = 0
 
 const jsData = $('#js-data')
 
 const maxFrames = jsData.data('maxFrames')
 const item = jsData.data('item')
-const links = jsData.data('links')
+const steps = jsData.data('steps')
 
 $('.sendMail').click(function () {
     const agent = this.id
@@ -31,18 +31,20 @@ $('.sendMail').click(function () {
 })
 
 $('#framePlus').click(function () {
-    if (frameNum < maxFrames) {
-        frameNum++
+    if (frameNum === maxFrames) {
+        return
     }
 
+    frameNum++
     changeImage()
 })
 
 $('#frameMinus').click(function () {
-    if (frameNum > -1) {
-        frameNum--
+    if (frameNum === 0) {
+        return
     }
 
+    frameNum--
     changeImage()
 })
 
@@ -61,7 +63,7 @@ $('#maxfield2strike_form').on('submit', function (event) {
     intervalId = setInterval(updateMaxfieldLog, 1000)
 
     $.ajax({
-        url: '/max-fields/maxfield2strike?'+$(this).serialize(),
+        url: '/max-fields/maxfield2strike?' + $(this).serialize(),
 
         success: function (result) {
             statusContainer.html(result.message)
@@ -71,10 +73,10 @@ $('#maxfield2strike_form').on('submit', function (event) {
             statusContainer.html('THERE WAS AN ERROR!')
             resultContainer.html(error)
         },
-        complete: function() {
-            setTimeout(function() {
+        complete: function () {
+            setTimeout(function () {
                 clearInterval(intervalId)
-            }, (3000));
+            }, (3000))
         }
     })
 
@@ -103,27 +105,30 @@ function changeImage() {
     let num
     let msg = ''
 
-    if (frameNum === -1) {
-        num = -1
-    } else {
-        let s = '000000000' + frameNum
-        num = s.substr(s.length - 3)
-    }
+    let s = '000000000' + frameNum
+    num = s.substr(s.length - 5)
+    // if (frameNum === -1) {
+    //     num = -1
+    // } else {
+    //     let s = '000000000' + frameNum
+    //     num = s.substr(s.length - 5)
+    // }
 
-    $('#displayFrames').attr('src', '/maxfields/' + item + '/frame_' + num + '.png')
+    $('#displayFrames').attr('src', '/maxfields/' + item + '/frames/frame_' + num + '.png')
 
-    if (-1 === frameNum) {
+    if (0 === frameNum) {
         msg = 'Initial'
-    } else if (frameNum < maxFrames) {
+    } else if (frameNum <= maxFrames) {
+        let index = frameNum - 1
 
-        if (frameNum > 0) {
-            msg += getEventLine(links[frameNum - 1], false)
+        if (frameNum > 1) {
+            msg += getEventLine(steps[index - 1], false)
         }
 
-        msg += getEventLine(links[frameNum], true)
+        msg += getEventLine(steps[index], true)
 
-        if (frameNum + 1 < maxFrames) {
-            msg += getEventLine(links[frameNum + 1], false)
+        if (frameNum + 1 <= maxFrames) {
+            msg += getEventLine(steps[index + 1], false)
         }
     } else {
         msg = 'Final'
@@ -132,14 +137,16 @@ function changeImage() {
     $('#frameLinkInfo').html(msg)
 }
 
-function getEventLine(link, isCurrent) {
+function getEventLine(event, isCurrent) {
     let css = isCurrent ? 'linkCurrent' : 'link'
-    let num = link.linkNum + 1
+    let cssMsg = event.action === 1 ? 'msgLink' : 'msgMove'
+    let msg = event.action === 1 ? 'Link' : 'Move'
+    let num = event.linkNum > 0 ? event.linkNum : ''
 
     return '<div class="' + css + '">'
-        + num + ' - ' + link.agentNum
-        + ' - ' + link.originNum + ' ' + link.originName
-        + ' &rArr; ' + link.destinationNum + ' ' + link.destinationName
+        + '<span class="' + cssMsg + '"> ' + msg + ' </span> ' + num + ' - agent: ' + event.agentNum
+        + ' - ' + event.originName + ' (' + event.originNum + ')'
+        + ' &rArr; ' + event.destinationName + ' (' + event.destinationNum + ')'
         + '</div>'
 }
 

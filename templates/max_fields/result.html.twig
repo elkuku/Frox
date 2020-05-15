@@ -11,7 +11,7 @@
     <span id="js-data"
           data-max-frames="{{ info.frames }}"
           data-item="{{ item }}"
-          data-links="{{ info.links|json_encode }}"
+          data-steps="{{ info.steps|json_encode }}"
     ></span>
     <a href="{{ path('max_fields_gpx', {'item': item}) }}" class="btn btn-sm btn-outline-success">
         {{ 'Download GPX'|trans }}
@@ -38,7 +38,7 @@
             <div id="frameLinkInfo"></div>
         </div>
         <div class="col border">
-            <img id="displayFrames" src="/maxfields/{{ item }}/frame_-1.png" alt="Frames">
+            <img id="displayFrames" src="/maxfields/{{ item }}/frames/frame_00000.png" alt="Frames" width="350px">
         </div>
     </div>
     <div class="row">
