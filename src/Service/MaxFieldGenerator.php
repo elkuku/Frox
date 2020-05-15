@@ -92,7 +92,7 @@ class MaxFieldGenerator
                     $command .= " --skip_step_plots";
                 }
 
-                $command .= " --verbose &> $projectRoot/log.txt";
+                $command .= " --verbose > $projectRoot/log.txt 2>&1";
             }
 
             $fileSystem->dumpFile($projectRoot.'/command.txt', $command);
@@ -240,7 +240,8 @@ class MaxFieldGenerator
 
         foreach ($wayPoints as $wayPoint) {
             $points = $wayPoint->getLat().','.$wayPoint->getLon();
-            $maxFields[] = $wayPoint->getName().'; '.$_ENV['INTEL_URL']
+            $name = str_replace([';', '#'], '', $wayPoint->getName());
+            $maxFields[] = $name.'; '.$_ENV['INTEL_URL']
                 .'?ll='.$points.'&z=1&pll='.$points;
         }
 
