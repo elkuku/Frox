@@ -73,13 +73,30 @@ class ImportFormType extends AbstractType
                 ]
             )
             ->add(
+                'OffleJson',
+                TextareaType::class,
+                [
+                    'attr'     => ['cols' => '30', 'rows' => '5'],
+                    'required' => false,
+                ]
+            )
+            ->add(
                 'multiexportcsv',
                 TextareaType::class,
                 [
                     'attr'     => ['cols' => '30', 'rows' => '5'],
                     'required' => false,
                 ]
-            );
+            )
+            ->add(
+                'multiexport-json',
+                TextareaType::class,
+                [
+                    'attr'     => ['cols' => '30', 'rows' => '5'],
+                    'required' => false,
+                ]
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
