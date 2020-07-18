@@ -51,6 +51,11 @@ class Waypoint
      */
     private $city;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $guid;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,5 +152,17 @@ class Waypoint
     public function __toString()
     {
         return (string)$this->getName();
+    }
+
+    public function getGuid(): ?string
+    {
+        return $this->guid;
+    }
+
+    public function setGuid(?string $guid): self
+    {
+        $this->guid = $guid;
+
+        return $this;
     }
 }
