@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class FindDupesCommand extends Command
@@ -52,13 +53,27 @@ class FindDupesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-
-        $errorCount = 0;
-        $warningCount = 0;
-
         $waypoints = $this->waypointRepository->findAll();
-
         $progressBar = new ProgressBar($output, count($waypoints));
+
+        $helper = $this->getHelper('question');
+
+        $choices = [
+            'Remove A',
+            'Remove B',
+            'Change name A with B',
+            'Change name B with A',
+            'Skip',
+        ];
+
+        $question = new ChoiceQuestion(
+            'Please select [Skip]',
+            $choices,
+            4
+        );
+        $question->setErrorMessage('Color %s is invalid.');
+
+        $removals = 0;
 
         foreach ($waypoints as $waypoint) {
             foreach ($waypoints as $test) {
@@ -66,7 +81,36 @@ class FindDupesCommand extends Command
                     && $test->getLon() === $waypoint->getLon()
                     && $test->getId() !== $waypoint->getId()
                 ) {
-                    $io->error($waypoint->getId().' has dupe: '.$test->getId());
+                    $io->text(
+                        [
+                            '',
+                            sprintf('A: %s - %d', $waypoint->getName(), $waypoint->getId()),
+                            sprintf('B: %s - %d', $test->getName(), $test->getId()),
+                        ]
+                    );
+
+                    if ($waypoint->getName() !== $test->getName()) {
+                        $io->warning('Name mismatch!');
+                        $choice = $helper->ask($input, $output, $question);
+
+                        if ($choice === $choices[0]) {
+                            $io->text('@todo remove a');
+                        } elseif ($choice === $choices[1]) {
+                            $this->entityManager->remove($test);
+                            $this->entityManager->flush();
+                            $removals++;
+                        } elseif ($choice === $choices[2]) {
+                            $waypoint->setName($test->getName());
+                            $this->entityManager->persist($waypoint);
+                            $this->entityManager->flush();
+                        } elseif ($choice === $choices[3]) {
+                            $io->text('@todo change b with a');
+                        }
+                    } else {
+                        $this->entityManager->remove($test);
+                        $this->entityManager->flush();
+                        $removals++;
+                    }
                 }
             }
 
@@ -74,5 +118,13 @@ class FindDupesCommand extends Command
         }
 
         $progressBar->finish();
+
+        if ($removals) {
+            $io->warning(sprintf('%d duplicates have been removed.', $removals));
+        } else {
+            $io->success('Database is clean :)');
+        }
+
+        return 0;
     }
 }
