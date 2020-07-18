@@ -2,14 +2,14 @@
   "type": "project",
   "license": "proprietary",
   "require": {
-    "php": "^7.2.5",
+    "php": "^7.4",
     "ext-ctype": "*",
     "ext-curl": "*",
     "ext-iconv": "*",
     "ext-json": "*",
     "ext-simplexml": "*",
     "knplabs/knp-snappy-bundle": "^1.5",
-    "liip/imagine-bundle": "^2.1",
+    "liip/imagine-bundle": "^2.3",
     "sensio/framework-extra-bundle": "^5.1",
     "symfony/apache-pack": "^1.0",
     "symfony/asset": "*",
@@ -33,6 +33,7 @@
     "symfony/yaml": "*"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "symfony/debug-pack": "*",
     "symfony/dotenv": "*",
     "symfony/maker-bundle": "^1.0",
