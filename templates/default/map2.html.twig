@@ -3,13 +3,18 @@
 {% block title %}{{ parent() }} - {{ 'Map 2'|trans }}{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/map2.css') }}">
+    {{ parent() }}
+    {{ encore_entry_link_tags('map2') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('map2') }}
 {% endblock %}
 
 {% block body %}
 
     <div id="map"></div>
 
-    <script src="{{ asset('build/map2.js') }}"></script>
 
 {% endblock %}

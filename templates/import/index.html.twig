@@ -53,6 +53,11 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" id="offle-json-tab" data-toggle="tab" href="#offle-json" role="tab">
+                Offle JSON
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" id="multiexportcsv-tab" data-toggle="tab" href="#multiexportcsv" role="tab">
                 multiexportcsv
             </a>
@@ -73,6 +78,9 @@
         </div>
         <div class="tab-pane fade" id="json" role="tabpanel">
             {{ form_row(form.JsonRaw) }}
+        </div>
+        <div class="tab-pane fade" id="offle-json" role="tabpanel">
+            {{ form_row(form.OffleJson) }}
         </div>
         <div class="tab-pane fade" id="multiexportcsv" role="tabpanel">
             {{ form_row(form.multiexportcsv) }}
