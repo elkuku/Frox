@@ -12,14 +12,14 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class WayPointHelper
 {
-    private $rootDir;
+    private string $rootDir;
 
     public function __construct(string $rootDir)
     {
         $this->rootDir = $rootDir.'/public/wp_images';
     }
 
-    public function checkImage(int $wpId, string $imageUrl, bool $forceUpdate = false)
+    public function checkImage(string $wpId, string $imageUrl, bool $forceUpdate = false): void
     {
         $fileSystem = new Filesystem();
 
