@@ -7,10 +7,9 @@
 
 const $ = require('jquery')
 
-// require('bootstrap/dist/css/bootstrap.css')
-
-// require('open-iconic/font/css/open-iconic-bootstrap.css')
-
 require('bootstrap')
+require('bootstrap/dist/css/bootstrap.css')
+require('open-iconic/font/css/open-iconic-bootstrap.css')
+
 // any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.scss')
+require('../css/app.css')

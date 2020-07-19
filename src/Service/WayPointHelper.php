@@ -13,10 +13,12 @@ use Symfony\Component\Filesystem\Filesystem;
 class WayPointHelper
 {
     private string $rootDir;
+    private string $intelUrl;
 
-    public function __construct(string $rootDir)
+    public function __construct(string $rootDir, string $intelUrl)
     {
         $this->rootDir = $rootDir.'/public/wp_images';
+        $this->intelUrl = $intelUrl;
     }
 
     public function checkImage(string $wpId, string $imageUrl, bool $forceUpdate = false): void
@@ -48,9 +50,14 @@ class WayPointHelper
         fclose($fp);
     }
 
-    public function getRootDir()
+    public function getRootDir(): string
     {
         return $this->rootDir;
+    }
+
+    public function getIntelUrl(): string
+    {
+        return $this->intelUrl;
     }
 
     public function cleanName(string $name): string

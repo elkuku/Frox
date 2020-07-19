@@ -1,0 +1,30 @@
+<h1>{{ collection.name }}</h1>
+
+<div class="row">
+    {% for point in points %}
+        <div class="card" style="width: 9rem;">
+            <img class="card-img-top"
+                 src="{{ asset('wp_images/'~ point.guid ~ '.jpg') | imagine_filter('squared_thumbnail') }}"
+                 alt="{{ point.name }}" title="{{ point.name }}">
+            <div>
+                <a href="{{ point|intelLink }}">Intel</a>
+
+                <a href="qq">xxx</a>
+                <a href="qq">yyy</a>
+                <a href="qq">zzz</a>
+
+            </div>
+
+            {# <img src="{{ asset('wp_images/'~ point.guid ~ '.jpg') | imagine_filter('squared_thumbnail') }}" alt="Image"> #}
+
+            {# <div class="card-body"> #}
+            {# <h5 class="card-title">{{ point.name }}</h5> #}
+            {# <p class="card-text"> #}
+            {# {{ point.guid }} #}
+            {# </p> #}
+            {# <a href="#" class="btn btn-primary btn-sm">Go somewhere</a> #}
+            {# </div> #}
+            {# </div> #}
+        </div>
+    {% endfor %}
+</div>

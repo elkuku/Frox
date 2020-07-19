@@ -47,6 +47,19 @@ function initmap() {
     // map.setView(new L.LatLng(50.085314, 8.240779), 9)
 
     map.addLayer(osm)
+
+    map.on('draw:created', (e) => {
+        let bounds = e.layer.getBounds()
+        markers.eachLayer(function (layer) {
+            if (bounds.contains(layer.getLatLng())) {
+                if ('remove' === selectionMode) {
+                    removeMarker(layer)
+                } else {
+                    addMarker(layer)
+                }
+            }
+        })
+    })
 }
 
 function loadMarkers() {
@@ -73,6 +86,13 @@ function loadMarkers() {
     }, 'json')
 }
 
+function initControls() {
+    const mapControlsContainer = document.getElementsByClassName('leaflet-control')[0]
+    // mapControlsContainer.appendChild(document.getElementById("logoContainer"));
+    mapControlsContainer.appendChild(document.getElementById('selection-count'))
+    mapControlsContainer.appendChild(document.getElementById('controls-container'))
+}
+
 function toggleMarker(marker) {
     if (marker.options.wp_selected) {
         removeMarker(marker)
@@ -87,7 +107,7 @@ function addMarker(marker) {
         marker.setIcon(redIcon)
         marker.options.wp_selected = true
         selectedMarkers.push(marker.options.wp_id)
-        $('#result_message').html(selectedMarkers.length)
+        $('#selection-count').html(selectedMarkers.length)
     }
 }
 
@@ -97,7 +117,7 @@ function removeMarker(marker) {
         marker.setIcon(orangeIcon)
         marker.options.wp_selected = false
         selectedMarkers.splice(index, 1)
-        $('#result_message').html(selectedMarkers.length)
+        $('#selection-count').html(selectedMarkers.length)
     }
 }
 
@@ -110,14 +130,14 @@ function doPostRequest(path, parameters) {
     $.each(parameters, function (key, value) {
         if (typeof value == 'object' || typeof value == 'array') {
             $.each(value, function (subkey, subvalue) {
-                var field = $('<input />')
+                const field = $('<input />')
                 field.attr('type', 'hidden')
                 field.attr('name', key + '[]')
                 field.attr('value', subvalue)
                 form.append(field)
             })
         } else {
-            var field = $('<input />')
+            const field = $('<input />')
             field.attr('type', 'hidden')
             field.attr('name', key)
             field.attr('value', value)
@@ -130,6 +150,7 @@ function doPostRequest(path, parameters) {
 
 initmap()
 loadMarkers()
+initControls()
 
 $('#result_maxFields').on('click', function () {
     $.post('/export2', {points: selectedMarkers}, function (data) {
@@ -151,7 +172,34 @@ $('#result_Gpx').on('click', function () {
     })
 })
 
-$('#maxfieldModal').on('show.bs.modal', function (event) {
+$('#createGallery').on('click', function () {
+    const options = {}
+    const modal = $('#galleryModal')
+    modal.modal(options)
+    modal.find('.status').text('Waypoints selected: ' + selectedMarkers.length)
+})
+
+const galleryModal = $('#galleryModal')
+
+galleryModal.find('button').on('click', function () {
+    const input = galleryModal.find('input')
+
+    // console.log(input)
+    // console.log(input.val())
+
+    $.post('/collection/create', {points: selectedMarkers, name: input.val()}, function (data) {
+        console.log(data)
+
+        // const options = {}
+        // const modal = $('#resultModal')
+        // modal.find('.modal-title').text('GPX')
+        // modal.find('.modal-body').text(data.gpx)
+        // modal.modal(options)
+    })
+
+})
+
+$('#maxfieldModal').on('show.bs.modal', function () {
     const modal = $(this)
 
     if (!selectedMarkers.length) {
@@ -166,10 +214,10 @@ $('#maxfieldModal').on('show.bs.modal', function (event) {
 })
 
 $('#build').on('click', function () {
-    let buildName = $('#build_name').val()
-    if (!buildName) {
+    let buildName = $('#build_name')
+    if (!buildName.val()) {
         alert('Please provide a name')
-        $('#build_name').focus()
+        buildName.focus()
         return
     }
 
@@ -180,10 +228,10 @@ $('#build').on('click', function () {
 
     doPostRequest('/max-fields/export', {
         points: selectedMarkers,
-        buildName: buildName,
+        buildName: buildName.val(),
         players_num: $('#players_num').val(),
-        skip_plots: $('#skip_plots').is(":checked"),
-        skip_step_plots: $('#skip_step_plots').is(":checked")
+        skip_plots: $('#skip_plots').is(':checked'),
+        skip_step_plots: $('#skip_step_plots').is(':checked')
     })
 })
 
@@ -211,17 +259,4 @@ $('#selectToggle').on('click', function () {
         $(this).find('span').addClass('oi-minus')
         $(this).find('span').removeClass('oi-plus')
     }
-})
-
-map.on('draw:created', (e) => {
-    let bounds = e.layer.getBounds()
-    markers.eachLayer(function (layer) {
-        if (bounds.contains(layer.getLatLng())) {
-            if ('remove' === selectionMode) {
-                removeMarker(layer)
-            } else {
-                addMarker(layer)
-            }
-        }
-    })
 })

@@ -12,22 +12,26 @@
 {% endblock %}
 
 {% block body %}
-    <div id="result">
-        <button id="selectToggle" title="Toggle select mode" class="btn btn-outline-success btn-sm">
-            <span class="oi oi-plus"></span>
-        </button>
-        <button id="selectRect" title="Select Rectangle" class="btn btn-outline-secondary btn-sm">
-            <span class="oi oi-media-stop"></span>
-        </button>
-        <button id="selectPoly" title="Select Polygon" class="btn btn-outline-secondary btn-sm">
-            <span class="oi oi-medical-cross"></span>
-        </button>
-        {{ 'Waypoints:'|trans }}&nbsp;<code id="result_message">0</code>
-        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#maxfieldModal">
-            {{ 'Create MaxField'|trans }}
+    <div id="selection-count">0</div>
+
+    <div id="controls-container">
+        <div id="selection-buttons" class="btn-group">
+            <button id="selectToggle" title="Toggle select mode" class="btn btn-outline-success btn-sm">
+                <span class="oi oi-plus"></span>
+            </button>
+            <button id="selectRect" title="Select Rectangle" class="btn btn-outline-secondary btn-sm">
+                <span class="oi oi-media-stop"></span>
+            </button>
+            <button id="selectPoly" title="Select Polygon" class="btn btn-outline-secondary btn-sm">
+                <span class="oi oi-medical-cross"></span>
+            </button>
+        </div>
+        <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#maxfieldModal">
+            Create MaxField
         </button>
         <button id="result_maxFields" class="btn btn-outline-secondary btn-sm">MaxField RAW</button>
         <button id="result_Gpx" class="btn btn-outline-secondary btn-sm">Gpx RAW</button>
+        <button id="createGallery" class="btn btn-outline-warning btn-sm">Gallery</button>
     </div>
 
     <div id="map"></div>
@@ -37,7 +41,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ 'Create MaxField'|trans }}</h5>
+                    <h5 class="modal-title">Create MaxField</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -46,21 +50,21 @@
                     <div class="controls">
                         <form>
                             <div class="form-group row">
-                                <label for="build_name" class="col-sm-2 col-form-label col-form-label-lg">{{ 'name'|trans }}</label>
+                                <label for="build_name" class="col-sm-2 col-form-label col-form-label-lg">Name</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control form-control-lg" id="build_name"
-                                           placeholder="{{ 'Maxfield name'|trans }}">
+                                           placeholder="Maxfield name">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="players_num" class="col-sm-2 col-form-label">#</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="players_num"
-                                           placeholder="{{ 'Number of agents (1)'|trans }}">
+                                           placeholder="Number of agents (1)">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-sm-2">{{ 'Skip'|trans }}</div>
+                                <div class="col-sm-2">Skip</div>
                                 <div class="col-sm-10">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skip_plots">
@@ -81,7 +85,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="status"></div>
-                    <button id="build" class="btn btn-outline-primary btn-sm">{{ 'Create MaxField'|trans }}</button>
+                    <button id="build" class="btn btn-outline-primary btn-sm">Create MaxField</button>
                 </div>
             </div>
         </div>
@@ -97,6 +101,25 @@
                     </button>
                 </div>
                 <textarea class="modal-body" rows="15" cols="150"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="galleryModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Gallery</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="status"></div>
+                    <form action="create-gallery" method="post"></form>
+                    <input type="text" placeholder="Name" class="form-control">
+                    <button class="btn btn-outline-success">Create</button>
+                </div>
             </div>
         </div>
     </div>

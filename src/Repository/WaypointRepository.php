@@ -27,11 +27,11 @@ class WaypointRepository extends ServiceEntityRepository
     /**
      * @return Waypoint[] Returns an array of Waypoint objects
      */
-    public function findById($id)
+    public function findById($id): array
     {
         return $this->createQueryBuilder('w')
             ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
+            ->setParameter('val', $id)
             ->orderBy('w.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
@@ -39,9 +39,21 @@ class WaypointRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Waypoint[] Returns an array of Waypoint objects
+     * @return Waypoint[]
      */
-    public function findLatLon()
+    public function findByIds(array $ids): array
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.id IN (:val)')
+            ->setParameter('val', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Waypoint[]
+     */
+    public function findLatLon(): array
     {
         $result = $this->createQueryBuilder('w')
             ->select("CONCAT(w.lat, ',', w.lon) AS lat_lon")
@@ -50,35 +62,6 @@ class WaypointRepository extends ServiceEntityRepository
 
         return array_column($result, 'lat_lon');
     }
-
-    //    /**
-    //     * @return Waypoint[] Returns an array of Waypoint objects
-    //     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Waypoint
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 
     /**
      * @param PaginatorOptions $options

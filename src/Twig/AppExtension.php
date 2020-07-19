@@ -2,19 +2,26 @@
 
 namespace App\Twig;
 
+use App\Entity\Waypoint;
+use App\Service\WayPointHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    /**
-     * {@inheritdoc}
-     */
+    private WayPointHelper $wayPointHelper;
+
+    public function __construct(WayPointHelper $wayPointHelper)
+    {
+        $this->wayPointHelper = $wayPointHelper;
+    }
+
     public function getFilters(): array
     {
         return [
             new TwigFilter('cast_to_array', [$this, 'objectFilter']),
+            new TwigFilter('intelLink', [$this, 'intelLink']),
         ];
     }
 
@@ -55,5 +62,17 @@ class AppExtension extends AbstractExtension
         }
 
         return $response;
+    }
+
+    public function intelLink(Waypoint $wayPoint): string
+    {
+        return sprintf(
+            '%s/intel?ll=%s,%s&z=17&pll=%s,%s',
+            $this->wayPointHelper->getIntelUrl(),
+            $wayPoint->getLat(),
+            $wayPoint->getLon(),
+            $wayPoint->getLat(),
+            $wayPoint->getLon(),
+        );
     }
 }

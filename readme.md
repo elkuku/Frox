@@ -4,12 +4,15 @@ Maxfield helper.
 
 ## Install
 
-* clone `https://github.com/tvwenger/maxfield`
-* Setup env vars in `.env.local`
+* clone `https://github.com/tvwenger/maxfield` and run the setup. Supported are V2 and V3 of MaxField
+* Setup env vars in `.env.local`<br>
+Set path to maxfield as `MAXFIELDS_EXEC` use the full path for maxfield V 2 and `maxfield-plan` for V 3
 * `composer install`
 * `npm install`
 * `npm run dev`
-* `bin/go.sh`
+* `bin/go`
+
+This requires Docker, Docker compose and the Symfony binary installed.
 
 ### Docker MySQL Restore
 

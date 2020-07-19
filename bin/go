@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#
+# Startup script
+#
+
+check() {
+if ! command -v "$1" &> /dev/null
+then
+    echo "ERROR: Command '$1' could not be found on your system :("
+    exit 1
+fi
+}
+
+check "docker-compose"
+check "symfony"
+
+docker-compose up -d
+symfony server:start -d
+symfony open:local
+
