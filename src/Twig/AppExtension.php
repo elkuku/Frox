@@ -29,6 +29,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('get_url', [$this, 'getUrl']),
+            new TwigFunction('hasImage', [$this, 'hasImage']),
         ];
     }
 
@@ -74,5 +75,10 @@ class AppExtension extends AbstractExtension
             $wayPoint->getLat(),
             $wayPoint->getLon(),
         );
+    }
+
+    public function hasImage(Waypoint $waypoint)
+    {
+        return $this->wayPointHelper->findImage($waypoint->getGuid());
     }
 }

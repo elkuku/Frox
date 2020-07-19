@@ -148,6 +148,21 @@ function doPostRequest(path, parameters) {
     form.submit()
 }
 
+function copyToClipboard(elementId) {
+    if (!navigator.clipboard) {
+        alert('Copy not possible - change browser :P')
+        return
+    }
+    const text = $('#' + elementId).val()
+    navigator.clipboard.writeText(text).then(function () {
+        alert('Content has been copied to your clipboard.')
+        // console.log('Async: Copying to clipboard was successful!')
+    }, function (err) {
+        alert('Could not copy text: '+ err)
+        // console.error('Async: Could not copy text: ', err)
+    })
+}
+
 initmap()
 loadMarkers()
 initControls()
@@ -183,9 +198,6 @@ const galleryModal = $('#galleryModal')
 
 galleryModal.find('button').on('click', function () {
     const input = galleryModal.find('input')
-
-    // console.log(input)
-    // console.log(input.val())
 
     $.post('/collection/create', {points: selectedMarkers, name: input.val()}, function (data) {
         console.log(data)
@@ -259,4 +271,8 @@ $('#selectToggle').on('click', function () {
         $(this).find('span').addClass('oi-minus')
         $(this).find('span').removeClass('oi-plus')
     }
+})
+
+$('#copyToClipboard').on('click', function () {
+    copyToClipboard('resultText')
 })

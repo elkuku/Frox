@@ -21,8 +21,12 @@ class WayPointHelper
         $this->intelUrl = $intelUrl;
     }
 
-    public function checkImage(string $wpId, string $imageUrl, bool $forceUpdate = false): void
+    public function findImage(?string $wpId): bool
     {
+        if (!$wpId) {
+            return false;
+        }
+
         $fileSystem = new Filesystem();
 
         if (false === $fileSystem->exists($this->rootDir)) {
@@ -31,9 +35,17 @@ class WayPointHelper
 
         $imagePath = $this->rootDir.'/'.$wpId.'.jpg';
 
-        if (true === $fileSystem->exists($imagePath)
-            && false === $forceUpdate
-        ) {
+        return $fileSystem->exists($imagePath) ? $imagePath : false;
+    }
+
+    public function checkImage(
+        string $wpId,
+        string $imageUrl,
+        bool $forceUpdate = false
+    ): void {
+        $imagePath = $this->findImage($wpId);
+
+        if ($imagePath && false === $forceUpdate) {
             return;
         }
 

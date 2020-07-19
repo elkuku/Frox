@@ -1,9 +1,12 @@
 <h6>{{ waypoint.name }}</h6>
-
-<a href="{{ asset('wp_images/'~ waypoint.id ~ '.jpg') }}">
+{% if hasImage(waypoint) %}
+<a href="{{ asset('wp_images/'~ waypoint.guid ~ '.jpg') }}">
     <img src="{{ asset('wp_images/'~ waypoint.guid ~ '.jpg') | imagine_filter('squared_thumbnail') }}" alt="Image">
 </a>
-<ul>
+{% else %}
+    No image found :(
+{% endif %}
+<ul class="list-unstyled">
     <li>{{ waypoint.province ? waypoint.province.name : '' }} / {{ waypoint.city }}</li>
     <li>Lat: {{ waypoint.lat }}</li>
     <li>Lon: {{ waypoint.lon }}</li>

@@ -10,11 +10,10 @@ require('leaflet-draw/dist/leaflet.draw.css')
 
 require('../css/map2.css')
 
-// const g11n3t = require('g11n-js').g11n3t
+const map  = new L.Map('map')
+const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
 
 function initmap() {
-    map = new L.Map('map')
-
     const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     const osmAttrib = 'Map data (C) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
     const osm = new L.TileLayer(osmUrl, {attribution: osmAttrib})
@@ -22,7 +21,6 @@ function initmap() {
     map.setView(new L.LatLng(0.990275, -79.659482), 9)
     map.addLayer(osm)
 
-    // Initialise the FeatureGroup to store editable layers
     const editableLayers = new L.FeatureGroup()
     map.addLayer(editableLayers)
 
@@ -67,47 +65,36 @@ function initmap() {
     })
 }
 
-const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
-
 function loadMarkers() {
 
     markers.clearLayers()
-    let bounds = map.getBounds()
-    bounds = bounds._northEast.lat + ',' + bounds._northEast.lng + ',' + bounds._southWest.lat + ',' + bounds._southWest.lng
 
-    //Workaround for marker icons ->
-    delete L.Icon.Default.prototype._getIconUrl
-
-    L.Icon.Default.mergeOptions({
-        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-        iconUrl: require('leaflet/dist/images/marker-icon.png'),
-        shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    const myIcon = L.icon({
+        iconUrl: '/build/img/ico/my-icon.png',
+        iconSize: [22, 36],
+        iconAnchor: [11, 36],
+        popupAnchor: [0, -18],
     })
-    //Workaround for marker icons <-
 
-    $.get('/waypoints_map?bounds=' + bounds, {some_var: ''}, function (data) {
-
+    $.get('/waypoints_map', function (data) {
         $(data).each(function () {
             let marker =
                 new L.Marker(
                     new L.LatLng(this.lat, this.lng),
                     {
-                        // icon: orangeIcon,
+                        icon: myIcon,
                         wp_id: this.id, wp_selected: false, title: this.name
                     }
                 )
 
-            marker.bindPopup('Loading...')
+            marker.bindPopup('Loading...', {maxWidth: 'auto'})
 
-            // var now = new Date().getTime();
-            // while(new Date().getTime() < now + 2000){ /* do nothing */ }
-
-            marker.on('click', function(e) {
-                var popup = e.target.getPopup();
+            marker.on('click', function (e) {
+                const popup = e.target.getPopup()
                 $.get('/waypoints_info/' + e.target.options.wp_id).done(function (data) {
-                    popup.setContent(data);
-                    popup.update();
-                });
+                    popup.setContent(data)
+                    popup.update()
+                })
             })
 
             markers.addLayer(marker)

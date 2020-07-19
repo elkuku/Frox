@@ -25,20 +25,4 @@ class DefaultController extends AbstractController
             ]
         );
     }
-
-    /**
-     * @Route("/map2", name="map2")
-     */
-    public function map2(): Response
-    {
-        return $this->render('default/map2.html.twig');
-    }
-
-    /**
-     * @Route("/map3", name="map3")
-     */
-    public function map3(): Response
-    {
-        return $this->render('default/map3.html.twig');
-    }
 }
