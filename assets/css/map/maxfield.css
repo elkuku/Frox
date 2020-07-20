@@ -22,7 +22,7 @@ body {
 #selection-count {
     position: absolute;
     z-index: 1;
-    top: 65px;
+    top: 85px;
     font-size: 3em;
     color: #07bf05;
     text-shadow: 2px 2px #666666;

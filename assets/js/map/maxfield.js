@@ -8,6 +8,8 @@ require('leaflet.markercluster/dist/MarkerCluster.Default.css')
 
 require('leaflet-draw')
 require('leaflet-draw/dist/leaflet.draw.css')
+require('leaflet-fullscreen')
+require('leaflet-fullscreen/dist/leaflet.fullscreen.css')
 
 import 'bootstrap/js/dist/modal'
 
@@ -30,12 +32,13 @@ const redIcon = new LeafIcon({iconUrl: '/build/img/leaf-red.png'}),
 const selectedMarkers = []
 const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
 
-function initmap() {
+function initMap() {
     const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     const osmAttrib = 'Map data (C) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
     const osm = new L.TileLayer(osmUrl, {attribution: osmAttrib})
 
     map = new L.Map('map', {
+        fullscreenControl: true,
         editable: true,
         editOptions: {}
     })
@@ -163,7 +166,7 @@ function copyToClipboard(elementId) {
     })
 }
 
-initmap()
+initMap()
 loadMarkers()
 initControls()
 

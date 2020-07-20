@@ -21,6 +21,11 @@ class WayPointHelper
         $this->intelUrl = $intelUrl;
     }
 
+    public function getImagePath(string $wpId):string
+    {
+        return $this->rootDir.'/'.$wpId.'.jpg';
+    }
+
     public function findImage(?string $wpId): bool
     {
         if (!$wpId) {
@@ -33,7 +38,7 @@ class WayPointHelper
             $fileSystem->mkdir($this->rootDir);
         }
 
-        $imagePath = $this->rootDir.'/'.$wpId.'.jpg';
+        $imagePath = $this->getImagePath($wpId);
 
         return $fileSystem->exists($imagePath) ? $imagePath : false;
     }
@@ -48,6 +53,8 @@ class WayPointHelper
         if ($imagePath && false === $forceUpdate) {
             return;
         }
+
+        $imagePath = $this->getImagePath($wpId);
 
         $ch = curl_init($imageUrl);
         $fp = fopen($imagePath, 'wb');
