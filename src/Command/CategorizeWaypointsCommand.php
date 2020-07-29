@@ -26,10 +26,25 @@ class CategorizeWaypointsCommand extends Command
     private array $searchWords
         = [
             // Church
-            2 => ['iglesia'],
+            2 => ['iglesia', 'capilla', 'salon del reino', 'casa de oracion'],
+            // Playground
+            3 => ['juegos infantiles', 'zona de juegos'],
+            // Mural
+            4 => ['mural'],
             // Ball games
-            6 => ['cancha'],
-            // 2 => [],
+            6 => ['cancha', 'coliseo deportivo', 'centro deportivo', 'coliseo de deportes', 'estadio', 'polideportivo'],
+            // Monument
+            7 => ['escultura', 'monumento', 'busto'],
+            // Shrine
+            8 => ['gruta'],
+            // Sign
+            9 => ['placa', 'letrero'],
+            // Structure
+            10 => ['glorieta'],
+            // Building
+            11 => ['biblioteca', 'fiscalia', 'municipio', 'terminal de transportes', 'mercado municipal'],
+            // Park
+            12 => ['parque'],
         ];
 
     public function __construct(
@@ -66,6 +81,7 @@ class CategorizeWaypointsCommand extends Command
                 || 'None' === $waypoint->getCategory()->getName()
             ) {
                 // $io->text('NONE');
+                $found = false;
                 foreach ($this->searchWords as $catId => $searchWords) {
                     foreach ($searchWords as $searchWord) {
                         // var_dump($waypoint->getName());
@@ -80,24 +96,34 @@ class CategorizeWaypointsCommand extends Command
                                 .$category->getName().'"?'
                             );
 
-                            if ($questionHelper->ask(
-                                $input,
-                                $output,
-                                $question
-                            )
-                            ) {
+                            if (true)
+                                //     $questionHelper->ask(
+                                //     $input,
+                                //     $output,
+                                //     $question
+                                // )
+                                // )
+                            {
                                 $waypoint->setCategory($category);
                                 $this->entityManager->persist($waypoint);
-                                $this->entityManager->flush();
-                                $io->text('ja');
+                                $io->text(
+                                    $waypoint->getId().' '.$waypoint->getName()
+                                    .' === "'
+                                    .$category->getName().'"?'
+                                );
+                                $found = true;
                                 // return Command::SUCCESS;
                             } else {
                                 $io->text('neee');
                             }
-                        } else {
-                            $nones++;
                         }
                     }
+                }
+
+                if (!$found) {
+                    $io->text($waypoint->getName());
+                    $nones++;
+
                 }
             } else {
                 // Waypoint has cat
@@ -108,17 +134,9 @@ class CategorizeWaypointsCommand extends Command
             }
         }
 
+        $this->entityManager->flush();
+
         $io->text('Nones: '.$nones);
-
-        $arg1 = $input->getArgument('arg1');
-
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
-        }
-
-        if ($input->getOption('option1')) {
-            // ...
-        }
 
         $io->success(
             'You have a new command! Now make it your own! Pass --help to see your options.'

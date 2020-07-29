@@ -3,3 +3,7 @@ html, body, #map {
     height: 100%;
     width: 100%;
 }
+
+.marker-cluster span {
+    color: black;
+}

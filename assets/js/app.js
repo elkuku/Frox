@@ -8,8 +8,8 @@
 const $ = require('jquery')
 
 require('bootstrap')
-require('bootstrap/dist/css/bootstrap.css')
-require('bootswatch/dist/darkly/bootstrap.min.css')
+// require('bootstrap/dist/css/bootstrap.css')
+require('bootswatch/dist/slate/bootstrap.css')
 require('open-iconic/font/css/open-iconic-bootstrap.css')
 
 // any CSS you require will output into a single css file (app.css in this case)
