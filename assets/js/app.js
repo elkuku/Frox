@@ -9,7 +9,12 @@ const $ = require('jquery')
 
 require('bootstrap')
 require('bootstrap/dist/css/bootstrap.css')
+require('bootswatch/dist/darkly/bootstrap.min.css')
 require('open-iconic/font/css/open-iconic-bootstrap.css')
 
 // any CSS you require will output into a single css file (app.css in this case)
 require('../css/app.css')
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
