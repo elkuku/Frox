@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Chat index{% endblock %}
+{% block title %}Category index{% endblock %}
 
 {% block body %}
-    <h1>Chat index</h1>
+    <h1>Category index</h1>
 
     <table class="table">
         <thead>
@@ -14,13 +14,13 @@
             </tr>
         </thead>
         <tbody>
-        {% for chat in chats %}
+        {% for category in categories %}
             <tr>
-                <td>{{ chat.id }}</td>
-                <td>{{ chat.name }}</td>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
                 <td>
-                    <a href="{{ path('chat_show', {'id': chat.id}) }}">show</a>
-                    <a href="{{ path('chat_edit', {'id': chat.id}) }}">edit</a>
+                    <a href="{{ path('category_show', {'id': category.id}) }}">show</a>
+                    <a href="{{ path('category_edit', {'id': category.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('chat_new') }}">Create new</a>
+    <a href="{{ path('category_new') }}">Create new</a>
 {% endblock %}
