@@ -19,9 +19,12 @@
             <tr>
                 <td>{{ collection.id }}</td>
                 <td>{{ collection.type }}</td>
-                <td>{{ collection.name }}</td>
                 <td>
-                    <a href="{{ path('collection_show', {'id': collection.id}) }}">show</a>
+                    <a href="{{ path('collection_show', {'id': collection.id}) }}">
+                        {{ collection.name }}
+                    </a>
+                </td>
+                <td>
                     <a href="{{ path('collection_edit', {'id': collection.id}) }}">edit</a>
                 </td>
             </tr>

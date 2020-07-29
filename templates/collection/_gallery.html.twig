@@ -1,17 +1,20 @@
 <h1>{{ collection.name }}</h1>
 
+{% for category, catPoints in categories %}
 <div class="row">
-    {% for point in points %}
+    <h3>{{ category }}</h3>
+    {% for point in catPoints %}
+        {# {% if point.category and categoryName != point.category.name %} #}
+        {# {% set categoryName = point.category.name %} #}
+        {# {% endif %} #}
         <div class="card" style="width: 9rem;">
             <img class="card-img-top"
                  src="{{ asset('wp_images/'~ point.guid ~ '.jpg') | imagine_filter('squared_thumbnail') }}"
-                 alt="{{ point.name }}" title="{{ point.name }}">
+                 alt="{{ point.name }}" title="{{ point.name }}" data-toggle="tooltip">
             <div>
                 <a href="{{ point|intelLink }}">Intel</a>
 
-                <a href="qq">xxx</a>
-                <a href="qq">yyy</a>
-                <a href="qq">zzz</a>
+                <a href="{{ path('waypoints_edit', { 'id': point.id }) }}">Edit</a>
 
             </div>
 
@@ -28,3 +31,4 @@
         </div>
     {% endfor %}
 </div>
+{% endfor %}

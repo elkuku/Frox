@@ -21,6 +21,7 @@ class WaypointFormType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('province')
+            ->add('category')
             ->add('city');
     }
 

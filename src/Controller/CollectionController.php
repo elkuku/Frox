@@ -59,9 +59,25 @@ class CollectionController extends AbstractController
         $points = $waypointRepository->findByIds(
             explode(',', $collection->getPoints())
         );
+
+        $categories = [];
+
+        foreach ($points as $point) {
+            $category = $point->getCategory();
+
+            if ($category) {
+                $categories[$category->getName()][] = $point;
+
+            } else{
+                $categories['None'][] = $point;
+
+            }
+
+        }
         return $this->render('collection/show.html.twig', [
             'collection' => $collection,
             'points' => $points,
+            'categories' => $categories,
         ]);
     }
 
