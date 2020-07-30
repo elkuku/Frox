@@ -1,9 +1,8 @@
 {% extends 'base-map.html.twig' %}
 
 {% block javascripts %}
-        {{ parent() }}
+    {{ parent() }}
     {{ encore_entry_script_tags('background') }}
-{#    <script type="text/javascript" src="{{ asset('build/background.js') }}"></script>#}
 {% endblock %}
 
 {% block body %}
@@ -22,12 +21,12 @@
         </h4>
 
 
-            {% for province in provinces %}
-        <span class="frox-title">
+        {% for province in provinces %}
+            <span class="frox-title">
                 {{ province.name }}: <strong>
                 {{ province.waypoints|length }}
             </strong><br/>
         </span>
-            {% endfor %}
+        {% endfor %}
     </div>
 {% endblock %}

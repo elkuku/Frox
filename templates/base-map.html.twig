@@ -14,7 +14,6 @@
 </head>
 
 <body id="app-layout">
-<noscript><h1 class="alert alert-danger">Please activate Javascript</h1></noscript>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="{{ path('default') }}">FroX</a>
@@ -28,6 +27,8 @@
         {% include '_menu.twig' %}
     </div>
 </nav>
+
+<noscript><h1 class="alert alert-danger">Please activate Javascript</h1></noscript>
 
 {% include ('_flash-messages.html.twig') %}
 

@@ -31,6 +31,7 @@ Encore
     .addEntry('maxfields', './assets/js/maxfields.js')
     .addEntry('paginator', './assets/js/paginator.js')
     .addEntry('background', './assets/js/background.js')
+    .addEntry('gallery', './assets/js/gallery.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

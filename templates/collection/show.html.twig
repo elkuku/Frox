@@ -2,6 +2,20 @@
 
 {% block title %}Collection{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% if 'gallery' == collection.type %}
+        {{ encore_entry_script_tags('gallery') }}
+    {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% if 'gallery' == collection.type %}
+        {{ encore_entry_link_tags('gallery') }}
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     <div class="btn-group float-right">
 
@@ -14,7 +28,6 @@
 
     {% if 'gallery' == collection.type %}
         {{ include('collection/_gallery.html.twig') }}
-
     {% else %}
         no collection template found for "{{ collection.type }}" :(
     {% endif %}
