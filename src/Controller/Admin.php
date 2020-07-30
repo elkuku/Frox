@@ -10,8 +10,6 @@ class Admin extends AbstractController
 {
     /**
      * @Route("/backup", name="backup")
-     *
-     * @return Response
      */
     public function backup(\Swift_Mailer $mailer): Response
     {

@@ -15,8 +15,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WaypointFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options
+    ): void {
         $builder
             ->add('name')
             ->add('description')
@@ -25,7 +27,7 @@ class WaypointFormType extends AbstractType
             ->add('city');
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

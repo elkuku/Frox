@@ -7,6 +7,8 @@ use App\Service\WayPointHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use UnexpectedValueException;
+use function get_class;
 
 class AppExtension extends AbstractExtension
 {
@@ -38,9 +40,8 @@ class AppExtension extends AbstractExtension
         switch ($type) {
             case 'intel':
                 return $_ENV['INTEL_URL'];
-                break;
             default:
-                throw new \UnexpectedValueException('Unknown URL type: '.$type);
+                throw new UnexpectedValueException('Unknown URL type: '.$type);
         }
     }
 
@@ -56,7 +57,7 @@ class AppExtension extends AbstractExtension
         $array = (array)$classObject;
         $response = [];
 
-        $className = \get_class($classObject);
+        $className = get_class($classObject);
 
         foreach ($array as $k => $v) {
             $response[trim(str_replace($className, '', $k))] = $v;
@@ -77,7 +78,7 @@ class AppExtension extends AbstractExtension
         );
     }
 
-    public function hasImage(Waypoint $waypoint)
+    public function hasImage(Waypoint $waypoint): bool
     {
         return $this->wayPointHelper->findImage($waypoint->getGuid());
     }

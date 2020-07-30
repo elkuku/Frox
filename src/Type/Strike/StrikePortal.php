@@ -4,11 +4,11 @@ namespace App\Type\Strike;
 
 class StrikePortal
 {
-    public $num = 0;
-    public $name = '';
+    public int $num = 0;
+    public string $name = '';
 
-    public $lat = 0.0;
-    public $lon = 0.0;
+    public float $lat = 0.0;
+    public float $lon = 0.0;
 
-    public $missingKeys = 0;
+    public int $missingKeys = 0;
 }

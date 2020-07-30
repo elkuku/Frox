@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Repository\WaypointRepository;
-use App\Service\WayPointHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -18,39 +17,37 @@ class FindDupesCommand extends Command
 {
     protected static $defaultName = 'finddupes';
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
+    private WaypointRepository $waypointRepository;
 
-    /**
-     * @var WaypointRepository
-     */
-    private $waypointRepository;
-
-    /**
-     * @var WayPointHelper
-     */
-    private $wayPointHelper;
-
-    public function __construct(EntityManagerInterface $entityManager, WaypointRepository $waypointRepository, WayPointHelper $wayPointHelper)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        WaypointRepository $waypointRepository
+    ) {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->waypointRepository = $waypointRepository;
-        $this->wayPointHelper = $wayPointHelper;
     }
 
-    protected function configure()
+    protected function configure():void
     {
         $this
             ->setDescription('Add a short description for your command')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description');
+            ->addArgument(
+                'arg1',
+                InputArgument::OPTIONAL,
+                'Argument description'
+            )
+            ->addOption(
+                'option1',
+                null,
+                InputOption::VALUE_NONE,
+                'Option description'
+            );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $io = new SymfonyStyle($input, $output);
         $waypoints = $this->waypointRepository->findAll();
@@ -84,8 +81,16 @@ class FindDupesCommand extends Command
                     $io->text(
                         [
                             '',
-                            sprintf('A: %s - %d', $waypoint->getName(), $waypoint->getId()),
-                            sprintf('B: %s - %d', $test->getName(), $test->getId()),
+                            sprintf(
+                                'A: %s - %d',
+                                $waypoint->getName(),
+                                $waypoint->getId()
+                            ),
+                            sprintf(
+                                'B: %s - %d',
+                                $test->getName(),
+                                $test->getId()
+                            ),
                         ]
                     );
 
@@ -120,11 +125,13 @@ class FindDupesCommand extends Command
         $progressBar->finish();
 
         if ($removals) {
-            $io->warning(sprintf('%d duplicates have been removed.', $removals));
+            $io->warning(
+                sprintf('%d duplicates have been removed.', $removals)
+            );
         } else {
             $io->success('Database is clean :)');
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

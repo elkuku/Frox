@@ -17,8 +17,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImportFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options
+    ): void {
         $builder
             ->add(
                 'province',
@@ -95,11 +97,10 @@ class ImportFormType extends AbstractType
                     'attr'     => ['cols' => '30', 'rows' => '5'],
                     'required' => false,
                 ]
-            )
-        ;
+            );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
     }
 }

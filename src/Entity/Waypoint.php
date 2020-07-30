@@ -14,47 +14,47 @@ class Waypoint
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name = '';
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $description;
+    private ?string $description = '';
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=6)
      */
-    private $lat;
+    private float $lat = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=6)
      */
-    private $lon;
+    private float $lon = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="waypoints")
      */
-    private $category;
+    private ?Category $category = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Province", inversedBy="waypoints")
      */
-    private $province;
+    private ?Province $province = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $city;
+    private ?string $city = '';
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $guid;
+    private ?string $guid = '';
 
     public function getId(): ?int
     {
@@ -78,7 +78,7 @@ class Waypoint
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -138,7 +138,7 @@ class Waypoint
         return $this->city;
     }
 
-    public function setCity(?string $city): self
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -159,7 +159,7 @@ class Waypoint
         return $this->guid;
     }
 
-    public function setGuid(?string $guid): self
+    public function setGuid(string $guid): self
     {
         $this->guid = $guid;
 

@@ -16,6 +16,7 @@ use App\Type\InfoStepType;
 use App\Type\MaxFields\MaxFieldType;
 use App\Type\WayPointPrepType;
 use DirectoryIterator;
+use Exception;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -28,27 +29,27 @@ class MaxFieldGenerator
     /**
      * @var string
      */
-    protected $rootDir;
+    protected string $rootDir = '';
 
     /**
      * @var int
      */
-    private $maxfieldVersion;
+    private int $maxfieldVersion;
 
     /**
      * @var string
      */
-    private $maxfieldExec;
+    private string $maxfieldExec;
 
     /**
      * @var string
      */
-    private $googleApiKey;
+    private string $googleApiKey;
 
     /**
      * @var string
      */
-    private $googleApiSecret;
+    private string $googleApiSecret;
 
     public function __construct(string $rootDir, string $maxfieldExec, int $maxfieldVersion, string $googleApiKey, string $googleApiSecret)
     {
@@ -101,7 +102,7 @@ class MaxFieldGenerator
         } catch (IOExceptionInterface $exception) {
             echo 'An error occurred while creating your directory at '
                 .$exception->getPath();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             echo $exception->getMessage();
         }
     }
@@ -434,7 +435,7 @@ class MaxFieldGenerator
                 $link->originName = $matches[4];
             } elseif (preg_match('/(\d+)\s+([\w|\s]+)/', $l, $matches)) {
                 if (!$link) {
-                    throw new \Exception('Parse error in links file');
+                    throw new Exception('Parse error in links file');
                 }
 
                 $link->destinationNum = $matches[1];

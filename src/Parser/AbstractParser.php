@@ -4,6 +4,7 @@ namespace App\Parser;
 
 use App\Entity\Waypoint;
 use App\Service\WayPointHelper;
+use UnexpectedValueException;
 
 abstract class AbstractParser
 {
@@ -26,7 +27,7 @@ abstract class AbstractParser
         $type = $this->gettype();
 
         if (!$type) {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Type is not set in class '.__CLASS__
             );
         }

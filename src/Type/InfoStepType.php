@@ -7,14 +7,14 @@ class InfoStepType
     public const TYPE_LINK = 1;
     public const TYPE_MOVE = 2;
 
-    public $linkNum;
+    public int $linkNum;
 
-    public $action = '';
+    public string $action = '';
 
-    public $agentNum = 0;
+    public int $agentNum = 0;
 
-    public $originNum = 0;
-    public $originName = '';
-    public $destinationNum = 0;
-    public $destinationName = '';
+    public int $originNum = 0;
+    public string $originName = '';
+    public int $destinationNum = 0;
+    public string $destinationName = '';
 }

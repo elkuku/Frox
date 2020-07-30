@@ -4,11 +4,11 @@ namespace App\Type\Strike;
 
 class StrikeLink
 {
-    public $originName = '';
+    public string $originName = '';
     public $originLat = 0;
     public $originLon = 0;
 
-    public $destinationName = '';
+    public string $destinationName = '';
     public $destinationLat = 0;
     public $destinationLon = 0;
 

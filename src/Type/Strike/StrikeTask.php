@@ -17,7 +17,7 @@ class StrikeTask
     /**
      * Id of that task. Unique inside of an operation.    int    Set by the backend    X
      **/
-    public $id = 0;
+    public int $id = 0;
 
     /**
      * op    ID of the Operation this task belongs to    int    Set by the backend    X
@@ -26,7 +26,7 @@ class StrikeTask
     /**
      * name    Name of that task    char    -    X
      **/
-    public $name = '';
+    public string $name = '';
 
     /**
      * owner    GID    int    Set by the backend    X
@@ -35,17 +35,17 @@ class StrikeTask
     /**
      * lat    Latitude    float    -    X
      **/
-    public $lat = 0.0;
+    public float $lat = 0.0;
 
     /**
      * lon    Longitude    float    -    X
      **/
-    public $lon = 0.0;
+    public float $lon = 0.0;
 
     /**
      * portal    Name of the Portal targeted in the task    char    -
      **/
-    public $portal = '';
+    public string $portal = '';
 
     /**
      * portalID    ID (guid) of the Portal targeted in the task    char    -
@@ -63,13 +63,13 @@ class StrikeTask
     /**
      * repeat    How often should this task be done?    int    -
      **/
-    public $repeat = 1;
+    public int $repeat = 1;
 
     /**
      * todo    What should be done?    int    1: 'DESTROY', 2: 'CAPTURE', 4: 'FLIP', 8: 'LINK',
      * 9: 'KEYFARM', 10: 'MEET', 11: 'RECHARGE', 12: 'UPGRADE', 99: 'OTHER'    X
      **/
-    public $todo = 0;
+    public int $todo = 0;
 
     /**
      * linkTarget    If this is a task to link somewhere, give the name and coordinates of the

@@ -10,11 +10,11 @@ namespace App\Type;
 
 class WayPointPrepType
 {
-    public $agentNum = 0;
+    public int $agentNum = 0;
 
-    public $mapNo = 0;
+    public int $mapNo = 0;
 
-    public $name = '';
+    public string $name = '';
 
-    public $keysNeeded = 0;
+    public int $keysNeeded = 0;
 }

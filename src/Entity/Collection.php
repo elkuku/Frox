@@ -15,22 +15,22 @@ class Collection
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $type;
+    private string $type = '';
 
     /**
      * @ORM\Column(type="text")
      */
-    private $points;
+    private string $points = '';
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name = '';
 
     public function getId(): ?int
     {

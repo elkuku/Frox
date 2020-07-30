@@ -13,23 +13,18 @@ use App\Type\InfoKeyPrepType;
 
 class MaxFieldType
 {
-    /**
-     * @var InfoKeyPrepType
-     */
-    public $keyPrep;
-
-    public $keyPrepTxt = '';
-
-    public $ownershipPrep = '';
+    public InfoKeyPrepType $keyPrep;
+    public string $keyPrepTxt = '';
+    public string $ownershipPrep = '';
 
     /**
      * @var AgentInfoType[]
      */
-    public $agentsInfo = [];
+    public array $agentsInfo = [];
 
-    public $frames = 0;
+    public int $frames = 0;
 
-    public $links;
+    public array $links;
 
-    public $steps;
+    public array $steps;
 }

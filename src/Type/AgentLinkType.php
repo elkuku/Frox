@@ -10,13 +10,13 @@ namespace App\Type;
 
 class AgentLinkType
 {
-    public $linkNum = 0;
-    public $agentNum = 0;
+    public int $linkNum = 0;
+    public int $agentNum = 0;
 
-    public $isEarly = false;
+    public bool $isEarly = false;
 
-    public $originNum = 0;
-    public $originName = '';
-    public $destinationNum = 0;
-    public $destinationName = '';
+    public int $originNum = 0;
+    public string $originName = '';
+    public int $destinationNum = 0;
+    public string $destinationName = '';
 }

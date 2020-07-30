@@ -1,23 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: elkuku
- * Date: 11.10.18
- * Time: 14:39
- */
 
 namespace App\Type;
 
 class AgentInfoType
 {
-    public $agentNumber = 0;
+    public int $agentNumber = 0;
 
-    public $keysInfo = '';
-    public $linksInfo = '';
+    public string $keysInfo = '';
+    public string $linksInfo = '';
 
     /**
      * @var AgentLinkType[]
      */
-    public $links = [];
-    public $keys = [];
+    public array $links = [];
+    public InfoKeyPrepType $keys;
 }

@@ -13,15 +13,15 @@ class InfoKeyPrepType
     /**
      * @var WayPointPrepType[]
      */
-    private $wayPoints = [];
+    private array $wayPoints = [];
 
-    public function addWayPoint(WayPointPrepType $wayPoint)
+    public function addWayPoint(WayPointPrepType $wayPoint): self
     {
         $this->wayPoints[] = $wayPoint;
 
         usort(
             $this->wayPoints,
-            function ($a, $b) {
+            static function ($a, $b) {
                 return $a->mapNo - $b->mapNo;
             }
         );

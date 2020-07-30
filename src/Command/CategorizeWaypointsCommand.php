@@ -4,12 +4,9 @@ namespace App\Command;
 
 use App\Repository\CategoryRepository;
 use App\Repository\WaypointRepository;
-use App\Service\WayPointHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,7 +18,6 @@ class CategorizeWaypointsCommand extends Command
     private EntityManagerInterface $entityManager;
     private WaypointRepository $waypointRepository;
     private CategoryRepository $categoryRepository;
-    private WayPointHelper $wayPointHelper;
 
     private array $searchWords
         = [
@@ -32,7 +28,14 @@ class CategorizeWaypointsCommand extends Command
             // Mural
             4 => ['mural'],
             // Ball games
-            6 => ['cancha', 'coliseo deportivo', 'centro deportivo', 'coliseo de deportes', 'estadio', 'polideportivo'],
+            6 => [
+                'cancha',
+                'coliseo deportivo',
+                'centro deportivo',
+                'coliseo de deportes',
+                'estadio',
+                'polideportivo',
+            ],
             // Monument
             7 => ['escultura', 'monumento', 'busto'],
             // Shrine
@@ -42,7 +45,13 @@ class CategorizeWaypointsCommand extends Command
             // Structure
             10 => ['glorieta'],
             // Building
-            11 => ['biblioteca', 'fiscalia', 'municipio', 'terminal de transportes', 'mercado municipal'],
+            11 => [
+                'biblioteca',
+                'fiscalia',
+                'municipio',
+                'terminal de transportes',
+                'mercado municipal',
+            ],
             // Park
             12 => ['parque'],
         ];
@@ -50,14 +59,12 @@ class CategorizeWaypointsCommand extends Command
     public function __construct(
         EntityManagerInterface $entityManager,
         WaypointRepository $waypointRepository,
-        CategoryRepository $categoryRepository,
-        WayPointHelper $wayPointHelper
+        CategoryRepository $categoryRepository
     ) {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->waypointRepository = $waypointRepository;
-        $this->wayPointHelper = $wayPointHelper;
         $this->categoryRepository = $categoryRepository;
     }
 
@@ -123,7 +130,6 @@ class CategorizeWaypointsCommand extends Command
                 if (!$found) {
                     $io->text($waypoint->getName());
                     $nones++;
-
                 }
             } else {
                 // Waypoint has cat
@@ -142,6 +148,6 @@ class CategorizeWaypointsCommand extends Command
             'You have a new command! Now make it your own! Pass --help to see your options.'
         );
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

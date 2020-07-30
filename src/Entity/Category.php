@@ -16,17 +16,17 @@ class Category
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name = '';
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Waypoint", mappedBy="category")
      */
-    private $waypoints;
+    private Collection $waypoints;
 
     public function __construct()
     {
@@ -43,7 +43,7 @@ class Category
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
