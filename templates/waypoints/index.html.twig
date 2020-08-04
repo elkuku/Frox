@@ -71,7 +71,7 @@
                     <td>{{ waypoint.id }}</td>
                     <td>{{ waypoint.province ? waypoint.province.name : 'n/a' }}</td>
                     <td>{{ waypoint.city }}</td>
-                    <td>{{ waypoint.category.name }}</td>
+                    <td>{{ waypoint.category ? waypoint.category.name : 'n/a' }}</td>
                     <td>{{ waypoint.name }}</td>
                     <td>
                         {% if get_url('intel') %}
