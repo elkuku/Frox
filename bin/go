@@ -1,8 +1,10 @@
-#!/usr/bin/env bash
-
+#!/bin/bash
 #
 # Startup script
 #
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd )"
+cd "$DIR" || exit 1
 
 check() {
 if ! command -v "$1" &> /dev/null
@@ -14,6 +16,8 @@ fi
 
 check "docker-compose"
 check "symfony"
+
+echo "Starting dev env in $DIR ..."
 
 docker-compose up -d
 symfony server:start -d
