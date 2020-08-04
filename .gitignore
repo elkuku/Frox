@@ -13,9 +13,6 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-/fakewebpack.config.js
-/public/maxfields/
-/public/wp_images/
 
 ###> liip/imagine-bundle ###
 /public/media/cache/
@@ -29,6 +26,9 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /test/
-!/public/maxfields/
+/fakewebpack.config.js
+/public/wp_images/
+/public/maxfields/
+!/public/maxfields/.gitignore
 
 .idea/workspace.xml
