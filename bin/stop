@@ -17,6 +17,9 @@ check "symfony"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd )"
 cd "$DIR" || exit 1
 
-docker-compose stop
+echo "Stopping dev env in $DIR ..."
 
+docker-compose stop
 symfony server:stop
+
+echo "bye =;)"
