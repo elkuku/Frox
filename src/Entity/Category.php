@@ -85,4 +85,16 @@ class Category
 
         return $this;
     }
+
+    /**
+     * @param int|null $id
+     *
+     * @return Category
+     */
+    public function setId(?int $id): Category
+    {
+        $this->id = $id;
+
+        return $this;
+}
 }
