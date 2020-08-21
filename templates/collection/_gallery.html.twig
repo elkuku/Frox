@@ -11,6 +11,7 @@
                 data-guid="{{ point.guid }}"
                 data-intel-link="{{ point|intelLink }}"
                 data-edit-link="{{ path('waypoints_edit', { 'id': point.id }) }}"
+                data-details-link="{{ path('waypoints_edit_details', { 'id': point.id }) }}"
             >
         </div>
     {% endfor %}
@@ -27,8 +28,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <img src="" alt="Image">
-                ...
+                <div class="row">
+                    <div class="col">
+                        <img src="" alt="Image">
+
+                    </div>
+                    <div class="col">
+                        <div class="detailsForm"></div>
+
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a class="btn editLink">Edit</a>

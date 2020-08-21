@@ -10,6 +10,9 @@
         "open-iconic": "^1.1.1",
         "popper.js": "^1.16.1",
         "regenerator-runtime": "^0.13.7",
+        "vue": "^2.5",
+        "vue-loader": "^15",
+        "vue-template-compiler": "^2.6.11",
         "webpack-notifier": "^1.8.0"
     },
     "license": "UNLICENSED",
@@ -21,7 +24,9 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "axios": "^0.19.2",
         "bootswatch": "^4.5.0",
+        "form-serializer": "^2.5.0",
         "leaflet-fullscreen": "^1.0.2"
     }
 }

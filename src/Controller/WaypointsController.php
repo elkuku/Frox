@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Waypoint;
 use App\Form\WaypointFormType;
+use App\Form\WaypointFormTypeDetails;
 use App\Helper\Paginator\PaginatorTrait;
 use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
@@ -45,6 +46,33 @@ class WaypointsController extends AbstractController
             ]
         );
     }
+    /**
+     * @Route("/waypoints2", name="waypoints2")
+     */
+    public function index2(
+        WaypointRepository $repository,
+        ProvinceRepository $provinceRepository,
+        Request $request
+    ): Response {
+        $paginatorOptions = $this->getPaginatorOptions($request);
+
+        $waypoints = $repository->getRawList($paginatorOptions);
+
+        $paginatorOptions->setMaxPages(
+            (int)ceil(
+                $waypoints->count() / $paginatorOptions->getLimit()
+            )
+        );
+
+        return $this->render(
+            'waypoints/index2.html.twig',
+            [
+                'waypoints'        => $waypoints,
+                'provinces'        => $provinceRepository->findAll(),
+                'paginatorOptions' => $paginatorOptions,
+            ]
+        );
+    }
 
     /**
      * @Route("/waypoint/{id}", name="waypoints_edit")
@@ -66,6 +94,39 @@ class WaypointsController extends AbstractController
 
         return $this->render(
             'waypoints/edit.html.twig',
+            [
+                'form'     => $form->createView(),
+                'waypoint' => $waypoint,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/waypoint-details/{id}", name="waypoints_edit_details")
+     */
+    public function editDetails(Request $request, Waypoint $waypoint)
+    {
+        $form = $this->createForm(WaypointFormTypeDetails::class, $waypoint);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $waypoint = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($waypoint);
+            $em->flush();
+            $this->addFlash('success', 'Waypoint updated!');
+
+            $redirectUri = $request->request->get('redirectUri');
+
+            if ($redirectUri) {
+                return $this->redirect($redirectUri);
+            }
+
+            return $this->redirectToRoute('waypoints');
+        }
+
+        return $this->render(
+            'waypoints/edit_details.html.twig',
             [
                 'form'     => $form->createView(),
                 'waypoint' => $waypoint,

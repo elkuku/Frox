@@ -4,7 +4,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('paginator') }}
+    {{ encore_entry_script_tags('vue/waypoints') }}
 {% endblock %}
 
 {% block title %}{{ parent() }} - Waypoints{% endblock %}
@@ -12,6 +12,10 @@
 {% block body %}
     <h1>Waypoints</h1>
 
+    <div id="app"></div>
+
+    <hr>
+    <hr>
     <form method="post">
 
         <div class="row">

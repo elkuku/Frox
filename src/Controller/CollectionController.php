@@ -23,9 +23,12 @@ class CollectionController extends AbstractController
      */
     public function index(CollectionRepository $collectionRepository): Response
     {
-        return $this->render('collection/index.html.twig', [
-            'collections' => $collectionRepository->findAll(),
-        ]);
+        return $this->render(
+            'collection/index.html.twig',
+            [
+                'collections' => $collectionRepository->findAll(),
+            ]
+        );
     }
 
     /**
@@ -45,17 +48,22 @@ class CollectionController extends AbstractController
             return $this->redirectToRoute('collection_index');
         }
 
-        return $this->render('collection/new.html.twig', [
-            'collection' => $collection,
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'collection/new.html.twig',
+            [
+                'collection' => $collection,
+                'form'       => $form->createView(),
+            ]
+        );
     }
 
     /**
      * @Route("/{id}", name="collection_show", methods={"GET"})
      */
-    public function show(Collection $collection, WaypointRepository $waypointRepository): Response
-    {
+    public function show(
+        Collection $collection,
+        WaypointRepository $waypointRepository
+    ): Response {
         $points = $waypointRepository->findByIds(
             explode(',', $collection->getPoints())
         );
@@ -67,18 +75,19 @@ class CollectionController extends AbstractController
 
             if ($category) {
                 $categories[$category->getName()][] = $point;
-
-            } else{
+            } else {
                 $categories['None'][] = $point;
-
             }
-
         }
-        return $this->render('collection/show.html.twig', [
-            'collection' => $collection,
-            'points' => $points,
-            'categories' => $categories,
-        ]);
+
+        return $this->render(
+            'collection/show.html.twig',
+            [
+                'collection' => $collection,
+                'points'     => $points,
+                'categories' => $categories,
+            ]
+        );
     }
 
     /**
@@ -95,10 +104,13 @@ class CollectionController extends AbstractController
             return $this->redirectToRoute('collection_index');
         }
 
-        return $this->render('collection/edit.html.twig', [
-            'collection' => $collection,
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'collection/edit.html.twig',
+            [
+                'collection' => $collection,
+                'form'       => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -106,7 +118,11 @@ class CollectionController extends AbstractController
      */
     public function delete(Request $request, Collection $collection): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$collection->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete'.$collection->getId(),
+            $request->request->get('_token')
+        )
+        ) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($collection);
             $entityManager->flush();
@@ -115,29 +131,26 @@ class CollectionController extends AbstractController
         return $this->redirectToRoute('collection_index');
     }
 
-
     /**
      * @Route("/create", name="collection_create", methods={"POST"})
      */
-    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
-    {
-
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
         $waypoints = $request->request->get('points');
         $name = $request->request->get('name');
 
         $collection = (new Collection())
             ->setType('gallery')
             ->setPoints(implode(',', $waypoints))
-        ->setName($name);
+            ->setName($name);
 
-        // $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($collection);
         $entityManager->flush();
 
-        $response = ['ok',$name];
+        $response = ['ok', $name];
 
         return $this->json($response);
-
     }
-
 }

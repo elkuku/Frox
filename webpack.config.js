@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+var path = require('path');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -32,6 +33,8 @@ Encore
     .addEntry('paginator', './assets/js/paginator.js')
     .addEntry('background', './assets/js/background.js')
     .addEntry('gallery', './assets/js/gallery.js')
+
+    .addEntry('vue/waypoints', './assets/js/vue/waypoints.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -80,6 +83,14 @@ Encore
         from: './assets/img',
         to: 'img/[path][name].[ext]',
     })
+
+    // This is our alias to the root vue components dir
+    .addAliases({
+        '@': path.resolve(__dirname, 'assets', 'js'),
+        styles: path.resolve(__dirname, 'assets', 'scss'),
+    })
+
+    .enableVueLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();

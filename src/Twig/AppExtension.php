@@ -52,7 +52,7 @@ class AppExtension extends AbstractExtension
      *
      * @return array
      */
-    public function objectFilter($classObject): array
+    public function objectFilter(object $classObject): array
     {
         $array = (array)$classObject;
         $response = [];
