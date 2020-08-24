@@ -176,25 +176,14 @@ function updatePolyLine(ids) {
 }
 
 function updateIntelLink(ids) {
-    // http://intel.ingress.com/intel?
-    // ll=0.871329,-79.845754
-    // &z=16
-    // &pls=0.873898,-79.849369,0.875209,-79.847183_0.875209,-79.847183,0.876667,-79.844865
-
-    // http://intel.ingress.com/intel?
-    // ll=0.871329,-79.845754
-    // &z=16
-    // &pls=0.873898,-79.849369,0.875209,-79.847183
-
-    // http://intel.ingress.com/intel?ll=0.873898,-79.849369&z=16&pls=0.873898,-79.849369,0.875209,-79.847183
-
-    let link, point, lastPoint, center, links=[]
+    let link, point, center, links = [], linkList = [], count = 1
     ids.forEach(function (item, index) {
         point = ''
-        // lastPoint = ''
         wayPoints.forEach(function (wp) {
             if (wp.id === parseInt(item)) {
-                point = wp.lat+','+ wp.lng
+                point = wp.lat + ',' + wp.lng
+                linkList.push(count+'. https://intel.ingress.com/?pll='+point)
+                count++
             }
         })
         if (!point) {
@@ -206,17 +195,16 @@ function updateIntelLink(ids) {
         if (!link) {
             link = point
         } else {
-            link += ','+point
+            link += ',' + point
             links.push(link)
             link = point
         }
     })
 
-    let text = 'http://intel.ingress.com/intel?ll='+center+'&z=15&pls='+links.join('_')
+    let text = 'http://intel.ingress.com/intel?ll=' + center + '&z=15&pls=' + links.join('_')
 
-    console.log(links)
-    console.log(links.join('_'))
     $('#intelLink').val(text)
+    $('#intelLinkList').val(linkList.join("\n"))
 }
 
 initmap()

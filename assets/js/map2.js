@@ -1,6 +1,10 @@
 require('leaflet')
 require('leaflet/dist/leaflet.css')
 
+require('leaflet.markercluster')
+require('leaflet.markercluster/dist/MarkerCluster.css')
+require('leaflet.markercluster/dist/MarkerCluster.Default.css')
+
 require('leaflet-draw')
 require('leaflet-draw/dist/leaflet.draw.css')
 
