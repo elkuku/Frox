@@ -14,3 +14,10 @@ input#intelLink, textarea#intelLinkList {
     font-family: monospace;
     border: 0;
 }
+
+ul#sortable li {
+    background: black;
+    color: lime;
+    border: 1px solid #333;
+    cursor: row-resize;
+}
