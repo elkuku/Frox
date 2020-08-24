@@ -82,7 +82,7 @@ class MaxFieldGenerator
 
                 if ($this->googleApiKey) {
                     $command .= ' --google_api_key '.$this->googleApiKey;
-                    $command .= ' --google_api_secret '.$this->googleApiSecret;
+                    // $command .= ' --google_api_secret '.$this->googleApiSecret;
                 }
 
                 if ($options['skip_plots']) {
@@ -568,7 +568,7 @@ class MaxFieldGenerator
         return $keyInfo;
     }
 
-    private function calculateSteps(array $links)
+    private function calculateSteps(array $links): array
     {
         $steps = [];
 

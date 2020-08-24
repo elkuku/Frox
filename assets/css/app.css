@@ -7,16 +7,18 @@ body {
 }
 
 .linkCurrent {
-  background-color: yellow;
+  background-color: #ffffa0;
+  color: black;
 }
 
 span.msgLink {
-  background-color: lime;
-
+  background-color: #b3ffb3;
+  color: black;
 }
 
 span.msgMove {
-  background-color: #8959A8;
+  background-color: #e3beff;
+  color: black;
 }
 
 #maxfield2strike_form {

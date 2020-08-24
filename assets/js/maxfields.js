@@ -138,6 +138,7 @@ function changeImage() {
 }
 
 function getEventLine(event, isCurrent) {
+    console.log(event)
     let css = isCurrent ? 'linkCurrent' : 'link'
     let cssMsg = event.action === 1 ? 'msgLink' : 'msgMove'
     let msg = event.action === 1 ? 'Link' : 'Move'

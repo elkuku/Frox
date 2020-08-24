@@ -53,6 +53,19 @@ class WaypointRepository extends ServiceEntityRepository
     /**
      * @return Waypoint[]
      */
+    public function findDetailsByIds(array $ids): array
+    {
+        return $this->createQueryBuilder('w')
+            ->select('w.id, w.guid, w.name, w.lat, w.lon as lng')
+            ->andWhere('w.id IN (:val)')
+            ->setParameter('val', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Waypoint[]
+     */
     public function findLatLon(): array
     {
         $result = $this->createQueryBuilder('w')

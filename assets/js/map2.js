@@ -1,14 +1,10 @@
 require('leaflet')
 require('leaflet/dist/leaflet.css')
 
-require('leaflet.markercluster')
-require('leaflet.markercluster/dist/MarkerCluster.css')
-require('leaflet.markercluster/dist/MarkerCluster.Default.css')
-
 require('leaflet-draw')
 require('leaflet-draw/dist/leaflet.draw.css')
 
-require('../css/map2.css')
+require('../css/map-decode.css')
 
 const map  = new L.Map('map')
 const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})

@@ -58,7 +58,7 @@ class CollectionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="collection_show", methods={"GET"})
+     * @Route("/{id}", name="collection_show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(
         Collection $collection,
@@ -91,7 +91,7 @@ class CollectionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="collection_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="collection_edit", methods={"GET","POST"}, requirements={"id"="\d+"})
      */
     public function edit(Request $request, Collection $collection): Response
     {
@@ -152,5 +152,19 @@ class CollectionController extends AbstractController
         $response = ['ok', $name];
 
         return $this->json($response);
+    }
+    /**
+     * @Route("/d3c0de", name="collection_decode_points", methods={"GET"})
+     */
+    public function decodePoints(Request $request, WaypointRepository $waypointRepository): Response
+    {
+        $ids = explode(',', $request->query->get('ids'));
+
+        return $this->render(
+            'collection/d3c0de.html.twig',
+            [
+                'wayPoints' => $waypointRepository->findDetailsByIds($ids),
+            ]
+        );
     }
 }

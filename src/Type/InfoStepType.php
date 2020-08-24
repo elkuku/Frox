@@ -9,7 +9,7 @@ class InfoStepType
 
     public int $linkNum;
 
-    public string $action = '';
+    public int $action = 0;
 
     public int $agentNum = 0;
 

@@ -1,5 +1,9 @@
 <h1>{{ collection.name }}</h1>
 
+<div id="selectedPoints">
+
+</div>
+<button id="decodeSelected">Decode</button>
 {% for category, catPoints in categories %}
 <div class="row">
     <h3>{{ category }}</h3>
@@ -8,6 +12,7 @@
             <img class="card-img-top"
                  src="{{ asset('wp_images/'~ point.guid ~ '.jpg') | imagine_filter('squared_thumbnail_100') }}"
                  alt="{{ point.name }}" title="{{ point.name }}" data-toggle="tooltip"
+                data-id="{{ point.id }}"
                 data-guid="{{ point.guid }}"
                 data-intel-link="{{ point|intelLink }}"
                 data-edit-link="{{ path('waypoints_edit', { 'id': point.id }) }}"
@@ -41,10 +46,10 @@
             </div>
             <div class="modal-footer">
                 <a class="btn editLink">Edit</a>
-                <a class="btn intelLink">Intel</a>
+                <a class="btn btn-primary intelLink">Intel</a>
 
+                <button type="button" class="btn btn-warning btnSelect">Select</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>

@@ -28,6 +28,7 @@ Encore
     .addEntry('map-maxfield', './assets/js/map/maxfield.js')
     .addEntry('map2', './assets/js/map2.js')
     .addEntry('map3', './assets/js/map3.js')
+    .addEntry('map-decode', './assets/js/map-decode.js')
     .addEntry('export', './assets/js/export.js')
     .addEntry('maxfields', './assets/js/maxfields.js')
     .addEntry('paginator', './assets/js/paginator.js')

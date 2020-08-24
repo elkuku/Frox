@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}D3c0de{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('map-decode') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        window.wayPoints = {{ wayPoints|json_encode|raw }}
+    </script>
+    {% for wayPoint in wayPoints %}
+
+    {% endfor %}
+    {{ encore_entry_script_tags('map-decode') }}
+{% endblock %}
+
+{% block body %}
+    <h1>D3c0de</h1>
+    <div class="row">
+        <div class="col-4">
+            {# {{ dump(wayPoints) }} #}
+            <ul id="sortable" class="list-unstyled">
+
+                {% for wayPoint in wayPoints %}
+                    <li
+                            class="ui-state-default"
+                            id="{{ wayPoint.id }}"
+                            data-lat="{{ wayPoint.lat }}"
+                    >
+                        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                        <img src="{{ asset('wp_images/'~ wayPoint.guid ~ '.jpg') | imagine_filter('squared_thumbnail_36') }}" alt="">
+                        {{ wayPoint.name }}
+                    </li>
+                {% endfor %}
+
+            </ul>
+            <input class="form-control" id="intelLink"/>
+        </div>
+        <div class="col-7">
+            <div id="map"></div>
+        </div>
+    </div>
+{% endblock %}
+
