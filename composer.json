@@ -1,8 +1,10 @@
 {
+  "name": "elkuku/frox",
+  "description": "An ingress maxfields helper",
   "type": "project",
   "license": "proprietary",
   "require": {
-    "php": "^7.4",
+    "php": "^8.0",
     "ext-ctype": "*",
     "ext-curl": "*",
     "ext-iconv": "*",
@@ -16,7 +18,7 @@
     "liip/imagine-bundle": "^2.3",
     "nelmio/cors-bundle": "^1.5 || ^2.0",
     "phpdocumentor/reflection-docblock": "^3.0 || ^4.0 || ^5.0",
-    "sensio/framework-extra-bundle": "^5.1",
+    "sensio/framework-extra-bundle": "^6.1",
     "symfony/apache-pack": "^1.0",
     "symfony/asset": "5.*",
     "symfony/console": "*",
