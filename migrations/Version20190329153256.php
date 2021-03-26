@@ -38,4 +38,9 @@ final class Version20190329153256 extends AbstractMigration
 
         $this->addSql('DROP TABLE chat');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

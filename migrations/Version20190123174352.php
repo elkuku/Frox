@@ -31,4 +31,9 @@ final class Version20190123174352 extends AbstractMigration
 
         $this->addSql('DROP TABLE agent');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

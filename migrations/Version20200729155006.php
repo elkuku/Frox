@@ -36,4 +36,9 @@ final class Version20200729155006 extends AbstractMigration
         $this->addSql('ALTER TABLE agent_chat ADD CONSTRAINT FK_C80648491A9A7125 FOREIGN KEY (chat_id) REFERENCES chat (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE agent_chat ADD CONSTRAINT FK_C80648493414710B FOREIGN KEY (agent_id) REFERENCES agent (id) ON DELETE CASCADE');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

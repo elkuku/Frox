@@ -31,4 +31,9 @@ final class Version20181005182820 extends AbstractMigration
 
         $this->addSql('ALTER TABLE waypoint DROP city');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

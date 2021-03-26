@@ -28,4 +28,9 @@ final class Version20200719005652 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE collection DROP name');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

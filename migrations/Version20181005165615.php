@@ -49,4 +49,9 @@ final class Version20181005165615 extends AbstractMigration
         $this->addSql('DROP TABLE province');
         $this->addSql('DROP TABLE waypoint');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

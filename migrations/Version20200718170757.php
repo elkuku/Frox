@@ -32,4 +32,9 @@ final class Version20200718170757 extends AbstractMigration
 
         $this->addSql('ALTER TABLE waypoint DROP guid, CHANGE category_id category_id INT NOT NULL');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
