@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\WaypointRepository;
+use App\Service\GpxHelper;
 use App\Service\MaxField2Strike;
 use App\Service\MaxFieldGenerator;
 use App\Service\StrikeLogger;
@@ -249,12 +250,42 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/gpx/{item}", name="max_fields_gpx")
      */
-    public function getGpx(MaxFieldGenerator $maxFieldGenerator, string $item): void
+    public function getGpx(string $item, GpxHelper $gpxHelper): void
     {
-        $gpx = $maxFieldGenerator->getGpx($item);
+        $gpx = $gpxHelper->getWaypointsGpx($item);
 
         header('Content-type: text/plain');
-        header('Content-Disposition: attachment; filename="'.$item.'.gpx"');
+        header('Content-Disposition: attachment; filename="'.$item.'-waypoints.gpx"');
+
+        echo $gpx;
+
+        exit();
+    }
+
+    /**
+     * @Route("/gpxroute/{item}", name="max_fields_gpxroute")
+     */
+    public function getGpxRoute(GpxHelper $gpxHelper, string $item): void
+    {
+        $gpx = $gpxHelper->getRouteGpx($item);
+
+        header('Content-type: text/plain');
+        header('Content-Disposition: attachment; filename="'.$item.'-route.gpx"');
+
+        echo $gpx;
+
+        exit();
+    }
+
+    /**
+     * @Route("/gpxtrack/{item}", name="max_fields_gpxtrack")
+     */
+    public function getGpxTrack(GpxHelper $gpxHelper, string $item): void
+    {
+        $gpx = $gpxHelper->getTrackGpx($item);
+
+        header('Content-type: text/plain');
+        header('Content-Disposition: attachment; filename="'.$item.'-track.gpx"');
 
         echo $gpx;
 

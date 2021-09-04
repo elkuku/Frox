@@ -51,8 +51,13 @@ class MaxFieldGenerator
      */
     private string $googleApiSecret;
 
-    public function __construct(string $rootDir, string $maxfieldExec, int $maxfieldVersion, string $googleApiKey, string $googleApiSecret)
-    {
+    public function __construct(
+        string $rootDir,
+        string $maxfieldExec,
+        int $maxfieldVersion,
+        string $googleApiKey,
+        string $googleApiSecret,
+    ) {
         $this->rootDir = $rootDir.'/public/maxfields';
 
         // Path to makePlan.py
@@ -62,8 +67,12 @@ class MaxFieldGenerator
         $this->googleApiSecret = $googleApiSecret;
     }
 
-    public function generate(string $projectName, string $wayPointList, int $playersNum, array $options): void
-    {
+    public function generate(
+        string $projectName,
+        string $wayPointList,
+        int $playersNum,
+        array $options
+    ): void {
         $fileSystem = new Filesystem();
 
         try {
@@ -130,14 +139,26 @@ class MaxFieldGenerator
             : 1;
 
         if ($this->maxfieldVersion < 4) {
-            $info->keyPrepTxt = $this->getTextFileContents($item, 'keyPrep.txt');
+            $info->keyPrepTxt = $this->getTextFileContents(
+                $item,
+                'keyPrep.txt'
+            );
             $info->keyPrep = $this->parseKeyPrepFile($info->keyPrepTxt);
-            $info->ownershipPrep = $this->getTextFileContents($item, 'ownershipPrep.txt');
+            $info->ownershipPrep = $this->getTextFileContents(
+                $item,
+                'ownershipPrep.txt'
+            );
             $info->agentsInfo = $this->getAgentsInfo($item, $numPlayers);
         } else {
-            $info->keyPrepTxt = $this->getTextFileContents($item, 'key_preparation.csv');
+            $info->keyPrepTxt = $this->getTextFileContents(
+                $item,
+                'key_preparation.csv'
+            );
             $info->keyPrep = $this->parseKeyPrepFileCsv($info->keyPrepTxt);
-            $info->ownershipPrep = $this->getTextFileContents($item, 'ownership_preparation.txt');
+            $info->ownershipPrep = $this->getTextFileContents(
+                $item,
+                'ownership_preparation.txt'
+            );
             $info->agentsInfo = $this->getAgentsInfo2($item, $numPlayers);
         }
 
@@ -160,9 +181,17 @@ class MaxFieldGenerator
             start:
             $info = new AgentInfoType();
             $info->agentNumber = $count;
-            $fileName = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
+            $fileName = sprintf(
+                'keys_for_agent_%d_of_%d.txt',
+                $count,
+                $numAgents
+            );
             $info->keysInfo = $this->getTextFileContents($item, $fileName);
-            $fileName = sprintf('links_for_agent_%d_of_%d.txt', $count, $numAgents);
+            $fileName = sprintf(
+                'links_for_agent_%d_of_%d.txt',
+                $count,
+                $numAgents
+            );
             $info->linksInfo = $this->getTextFileContents($item, $fileName);
             //            $info->links       = $this->parseLinksFile($info->linksInfo);
             $info->links = $this->parseCsvLinks($item);
@@ -189,11 +218,8 @@ class MaxFieldGenerator
             start:
             $info = new AgentInfoType();
             $info->agentNumber = $count;
-            // $fileName = sprintf('keys_for_agent_%d_of_%d.txt', $count, $numAgents);
-            // $info->keysInfo = $this->getTextFileContents($item, $fileName);
             $fileName = sprintf('agent_%d_assignment.txt', $count);
             $info->linksInfo = $this->getTextFileContents($item, $fileName);
-            //            $info->links       = $this->parseLinksFile($info->linksInfo);
             $info->links = $this->parseCsvLinks($item);
             $info->keys = $this->parseCsvKeys($item);
             $agentsInfo[] = $info;
@@ -317,35 +343,6 @@ class MaxFieldGenerator
         return $keyPrep;
     }
 
-    public function getGpx(string $item)
-    {
-        return $this->createGpx($this->parseWayPointsFile($item));
-    }
-
-    /**
-     * @param Waypoint[] $wayPoints
-     */
-    public function createGpx(array $wayPoints): string
-    {
-        $xml = [];
-
-        $xml[] = '<?xml version="1.0" encoding="UTF-8"?>';
-        $xml[] = '<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">';
-
-        foreach ($wayPoints as $wayPoint) {
-            $xml[] = '<wpt lat="'.$wayPoint->getLat().'" lon="'
-                .$wayPoint->getLon().'">';
-            $xml[] = '  <name>'.$wayPoint->getName().'</name>';
-            //     $xml[] = '  <cmt>'.$names[$i].'</cmt>';
-            //     $xml[] = '  <desc>'.$names[$i].'</desc>';
-            $xml[] = '</wpt>';
-        }
-
-        $xml[] = '</gpx>';
-
-        return implode("\n", $xml);
-    }
-
     /**
      * @param string $item
      *
@@ -426,7 +423,12 @@ class MaxFieldGenerator
                 continue;
             }
 
-            if (preg_match('/(\d+)(\*)?\s+____1\s+(\d+)\s+([\w|\s]+)/', $l, $matches)) {
+            if (preg_match(
+                '/(\d+)(\*)?\s+____1\s+(\d+)\s+([\w|\s]+)/',
+                $l,
+                $matches
+            )
+            ) {
                 $link = new AgentLinkType();
 
                 $link->linkNum = $matches[1];
@@ -470,7 +472,12 @@ class MaxFieldGenerator
         }
 
         foreach (new \DirectoryIterator($path) as $file) {
-            if (preg_match('/frame_(\d\d\d\d\d)/', $file->getFilename(), $matches)) {
+            if (preg_match(
+                '/frame_(\d\d\d\d\d)/',
+                $file->getFilename(),
+                $matches
+            )
+            ) {
                 $x = (int)$matches[1];
                 $frames = $x > $frames ? $x : $frames;
             }
@@ -484,9 +491,15 @@ class MaxFieldGenerator
         $links = [];
 
         if ($this->maxfieldVersion < 4) {
-            $contents = $this->getTextFileContents($item, 'links_for_agents.csv');
+            $contents = $this->getTextFileContents(
+                $item,
+                'links_for_agents.csv'
+            );
         } else {
-            $contents = $this->getTextFileContents($item, 'agent_assignments.csv');
+            $contents = $this->getTextFileContents(
+                $item,
+                'agent_assignments.csv'
+            );
         }
 
         $lines = explode("\n", $contents);
@@ -505,7 +518,7 @@ class MaxFieldGenerator
             $link = new AgentLinkType();
 
             $link->linkNum = (int)$parts[0];
-            $link->isEarly = strpos($parts[0], '*') ? true : false;
+            $link->isEarly = (bool)strpos($parts[0], '*');
             $link->agentNum = (int)$parts[1];
             $link->originNum = (int)$parts[2];
             $link->originName = trim($parts[3]);
@@ -530,9 +543,15 @@ class MaxFieldGenerator
         $keyInfo = new InfoKeyPrepType();
 
         if ($this->maxfieldVersion < 4) {
-            $contents = $this->getTextFileContents($item, 'keys_for_agents.csv');
+            $contents = $this->getTextFileContents(
+                $item,
+                'keys_for_agents.csv'
+            );
         } else {
-            $contents = $this->getTextFileContents($item, 'agent_key_preparation.csv');
+            $contents = $this->getTextFileContents(
+                $item,
+                'agent_key_preparation.csv'
+            );
         }
 
         $lines = explode("\n", $contents);

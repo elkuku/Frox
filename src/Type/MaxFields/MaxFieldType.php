@@ -24,6 +24,9 @@ class MaxFieldType
 
     public int $frames = 0;
 
+    /**
+     * @var \App\Type\AgentLinkType[]
+     */
     public array $links;
 
     public array $steps;
