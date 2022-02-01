@@ -8,6 +8,8 @@ use UnexpectedValueException;
 
 abstract class AbstractParser
 {
+    public bool $processImages = false;
+
     protected WayPointHelper $wayPointHelper;
 
     public function __construct(WayPointHelper $wayPointHelper)

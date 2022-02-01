@@ -293,6 +293,21 @@ class MaxFieldsController extends AbstractController
     }
 
     /**
+     * @Route("/gpxroutetrack/{item}", name="max_fields_gpxroutetrack")
+     */
+    public function getGpxRouteTrack(GpxHelper $gpxHelper, string $item): void
+    {
+        $gpx = $gpxHelper->getRouteTrackGpx($item);
+
+        header('Content-type: text/plain');
+        header('Content-Disposition: attachment; filename="'.$item.'-maxfield.gpx"');
+
+        echo $gpx;
+
+        exit();
+    }
+
+    /**
      * @Route("/delete/{item}", name="max_fields_delete")
      */
     public function delete(MaxFieldGenerator $maxFieldGenerator, string $item): Response

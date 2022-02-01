@@ -9,6 +9,8 @@ use UnexpectedValueException;
 
 class WayPointParser
 {
+    public bool $processImages = false;
+
     private WayPointHelper $wayPointHelper;
 
     public function __construct(WayPointHelper $wayPointHelper)

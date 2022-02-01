@@ -14,6 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ImportFormType extends AbstractType
 {
@@ -41,6 +42,9 @@ class ImportFormType extends AbstractType
                     'attr'     => ['list' => 'citiesList'],
                 ]
             )
+            ->add('importImages', CheckboxType::class, [
+                'required' => false,
+                ])
             ->add('intelLink', null, ['required' => false])
             ->add(
                 'gpxRaw',
