@@ -9,7 +9,7 @@ class WaypointTest extends TestCase
 {
     public function testAdd()
     {
-        $helper = new WayPointHelper('tests/testdir');
+        $helper = new WayPointHelper('tests/testdir', 'fooo');
 
         $this->assertEquals(
             'test',
