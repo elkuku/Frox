@@ -6,6 +6,7 @@ use App\Entity\Waypoint;
 use App\Form\ImportFormType;
 use App\Parser\WayPointParser;
 use App\Repository\WaypointRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,12 +59,8 @@ class ImportController extends AbstractController
         );
     }
 
-    private function storeWayPoints(array $wayPoints): int
+    private function storeWayPoints(array $wayPoints, WaypointRepository $repository, EntityManagerInterface $entityManager): int
     {
-        $repository = $this->getDoctrine()
-            ->getRepository(Waypoint::class);
-        $entityManager = $this->getDoctrine()->getManager();
-
         $currentWayPoints = $repository->findAll();
 
         $cnt = 0;

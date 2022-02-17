@@ -34,14 +34,13 @@ class CollectionController extends AbstractController
     /**
      * @Route("/new", name="collection_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $collection = new Collection();
         $form = $this->createForm(CollectionType::class, $collection);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($collection);
             $entityManager->flush();
 
@@ -93,13 +92,13 @@ class CollectionController extends AbstractController
     /**
      * @Route("/{id}/edit", name="collection_edit", methods={"GET","POST"}, requirements={"id"="\d+"})
      */
-    public function edit(Request $request, Collection $collection): Response
+    public function edit(Request $request, Collection $collection, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CollectionType::class, $collection);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
 
             return $this->redirectToRoute('collection_index');
         }
@@ -116,14 +115,13 @@ class CollectionController extends AbstractController
     /**
      * @Route("/{id}", name="collection_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Collection $collection): Response
+    public function delete(Request $request, Collection $collection, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid(
             'delete'.$collection->getId(),
             $request->request->get('_token')
         )
         ) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($collection);
             $entityManager->flush();
         }

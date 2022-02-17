@@ -8,6 +8,7 @@ use App\Form\WaypointFormTypeDetails;
 use App\Helper\Paginator\PaginatorTrait;
 use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -77,16 +78,15 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoint/{id}", name="waypoints_edit")
      */
-    public function edit(Request $request, Waypoint $waypoint)
+    public function edit(Request $request, Waypoint $waypoint, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(WaypointFormType::class, $waypoint);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $waypoint = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($waypoint);
-            $em->flush();
+            $entityManager->persist($waypoint);
+            $entityManager->flush();
             $this->addFlash('success', 'Waypoint updated!');
 
             return $this->redirectToRoute('waypoints');
@@ -104,16 +104,15 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoint-details/{id}", name="waypoints_edit_details")
      */
-    public function editDetails(Request $request, Waypoint $waypoint)
+    public function editDetails(Request $request, Waypoint $waypoint, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(WaypointFormTypeDetails::class, $waypoint);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $waypoint = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($waypoint);
-            $em->flush();
+            $entityManager->persist($waypoint);
+            $entityManager->flush();
             $this->addFlash('success', 'Waypoint updated!');
 
             $redirectUri = $request->request->get('redirectUri');
@@ -137,13 +136,11 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoint-remove/{id}", name="waypoints_remove")
      */
-    public function remove(Waypoint $waypoint): RedirectResponse
+    public function remove(Waypoint $waypoint, EntityManagerInterface $entityManager): RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        $entityManager->remove($waypoint);
 
-        $em->remove($waypoint);
-
-        $em->flush();
+        $entityManager->flush();
 
         $this->addFlash('success', 'Waypoint removed!');
 
@@ -153,16 +150,12 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoints_run", name="run-waypoints")
      */
-    public function waypoints(): Response
+    public function waypoints(WaypointRepository $repository): Response
     {
-        $waypoints = $this->getDoctrine()
-            ->getRepository(Waypoint::class)
-            ->findAll();
-
         return $this->render(
             'waypoints/index.html.twig',
             [
-                'waypoints' => $waypoints,
+                'waypoints' => $repository->findAll(),
             ]
         );
     }
@@ -170,11 +163,9 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoints_map", name="map-waypoints")
      */
-    public function map(): JsonResponse
+    public function map(WaypointRepository $repository): JsonResponse
     {
-        $waypoints = $this->getDoctrine()
-            ->getRepository(Waypoint::class)
-            ->findAll();
+        $waypoints = $repository->findAll();
 
         $wps = [];
 

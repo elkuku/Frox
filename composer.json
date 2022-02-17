@@ -16,31 +16,31 @@
     "doctrine/doctrine-bundle": "^1.6 || ^2.0",
     "doctrine/doctrine-migrations-bundle": "^3.1",
     "doctrine/orm": "^2.4.5",
+    "elkuku/maxfield-parser": "@dev",
     "knplabs/knp-snappy-bundle": "^1.5",
     "liip/imagine-bundle": "^2.3",
     "nelmio/cors-bundle": "^1.5 || ^2.0",
     "phpdocumentor/reflection-docblock": "^3.0 || ^4.0 || ^5.0",
     "sensio/framework-extra-bundle": "^6.1",
     "symfony/apache-pack": "^1.0",
-    "symfony/asset": "5.*",
+    "symfony/asset": "6.*",
     "symfony/console": "*",
-    "symfony/expression-language": "5.*",
+    "symfony/expression-language": "6.*",
     "symfony/flex": "^1.1",
     "symfony/form": "*",
     "symfony/framework-bundle": "*",
-    "symfony/google-mailer": "5.*",
-    "symfony/mailer": "5.*",
+    "symfony/google-mailer": "6.*",
+    "symfony/mailer": "6.*",
     "symfony/monolog-bundle": "^3.1",
     "symfony/process": "*",
-    "symfony/property-access": "5.*",
-    "symfony/property-info": "5.*",
-    "symfony/proxy-manager-bridge": "5.*",
-    "symfony/runtime": "5.*",
-    "symfony/security-bundle": "5.*",
-    "symfony/serializer": "5.*",
-    "symfony/swiftmailer-bundle": "^3.1",
-    "symfony/twig-bundle": "5.*",
-    "symfony/validator": "5.*",
+    "symfony/property-access": "6.*",
+    "symfony/property-info": "6.*",
+    "symfony/proxy-manager-bridge": "6.*",
+    "symfony/runtime": "6.*",
+    "symfony/security-bundle": "6.*",
+    "symfony/serializer": "6.*",
+    "symfony/twig-bundle": "6.*",
+    "symfony/validator": "6.*",
     "symfony/web-link": "*",
     "symfony/webpack-encore-bundle": "^1.6",
     "symfony/yaml": "*"
@@ -48,21 +48,25 @@
   "require-dev": {
     "hautelook/alice-bundle": "^2.7",
     "phpunit/phpunit": "^9.5",
-    "roave/security-advisories": "dev-master",
-    "symfony/browser-kit": "^5.3",
-    "symfony/css-selector": "^5.3",
-    "symfony/debug-bundle": "^5.3",
+    "roave/security-advisories": "dev-latest",
+    "symfony/browser-kit": "^6.0",
+    "symfony/css-selector": "^6.0",
+    "symfony/debug-bundle": "^6.0",
     "symfony/dotenv": "*",
     "symfony/maker-bundle": "^1.0",
-    "symfony/phpunit-bridge": "^5.3",
-    "symfony/stopwatch": "^5.3",
-    "symfony/web-profiler-bundle": "^5.3"
+    "symfony/phpunit-bridge": "^6.0",
+    "symfony/stopwatch": "^6.0",
+    "symfony/web-profiler-bundle": "^6.0"
   },
   "config": {
     "preferred-install": {
       "*": "dist"
     },
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "symfony/flex": true,
+      "symfony/runtime": true
+    }
   },
   "autoload": {
     "psr-4": {
@@ -103,7 +107,7 @@
   "extra": {
     "symfony": {
       "allow-contrib": true,
-      "require": "5.*"
+      "require": "6.*"
     }
   }
 }

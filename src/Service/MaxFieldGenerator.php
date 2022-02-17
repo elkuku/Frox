@@ -51,6 +51,8 @@ class MaxFieldGenerator
      */
     private string $googleApiSecret;
 
+    // private MaxP
+
     public function __construct(
         string $rootDir,
         string $maxfieldExec,
@@ -237,7 +239,7 @@ class MaxFieldGenerator
         $path = $this->rootDir.'/'.$item.'/'.$fileName;
 
         if (false === file_exists($path)) {
-            throw new FileNotFoundException('File not found.');
+            throw new FileNotFoundException('File not found.: '.$path);
         }
 
         return file_get_contents($path);
@@ -364,7 +366,7 @@ class MaxFieldGenerator
             $parts = explode(';', $l);
 
             if (2 !== count($parts)) {
-                throw new \UnexpectedValueException('Fishy CSV line');
+                // throw new \UnexpectedValueException('Fishy CSV line');
             }
 
             $loc = explode('pll=', $parts[1]);
@@ -391,9 +393,6 @@ class MaxFieldGenerator
         return $wayPoints;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxfieldVersion(): int
     {
         return $this->maxfieldVersion;
@@ -479,7 +478,7 @@ class MaxFieldGenerator
             )
             ) {
                 $x = (int)$matches[1];
-                $frames = $x > $frames ? $x : $frames;
+                $frames = max($x, $frames);
             }
         }
 
