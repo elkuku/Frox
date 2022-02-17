@@ -26,7 +26,7 @@
     "symfony/asset": "6.*",
     "symfony/console": "*",
     "symfony/expression-language": "6.*",
-    "symfony/flex": "^1.1",
+    "symfony/flex": "^2",
     "symfony/form": "*",
     "symfony/framework-bundle": "*",
     "symfony/google-mailer": "6.*",
