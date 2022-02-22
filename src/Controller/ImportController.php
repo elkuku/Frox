@@ -59,8 +59,11 @@ class ImportController extends AbstractController
         );
     }
 
-    private function storeWayPoints(array $wayPoints, WaypointRepository $repository, EntityManagerInterface $entityManager): int
-    {
+    private function storeWayPoints(
+        array $wayPoints,
+        WaypointRepository $repository,
+        EntityManagerInterface $entityManager
+    ): int {
         $currentWayPoints = $repository->findAll();
 
         $cnt = 0;

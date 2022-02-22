@@ -44,7 +44,7 @@ class ImportFormType extends AbstractType
             )
             ->add('importImages', CheckboxType::class, [
                 'required' => false,
-                ])
+            ])
             ->add('intelLink', null, ['required' => false])
             ->add(
                 'gpxRaw',

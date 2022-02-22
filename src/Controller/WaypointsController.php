@@ -47,6 +47,7 @@ class WaypointsController extends AbstractController
             ]
         );
     }
+
     /**
      * @Route("/waypoints2", name="waypoints2")
      */
@@ -78,8 +79,11 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoint/{id}", name="waypoints_edit")
      */
-    public function edit(Request $request, Waypoint $waypoint, EntityManagerInterface $entityManager)
-    {
+    public function edit(
+        Request $request,
+        Waypoint $waypoint,
+        EntityManagerInterface $entityManager
+    ) {
         $form = $this->createForm(WaypointFormType::class, $waypoint);
         $form->handleRequest($request);
 
@@ -104,8 +108,11 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoint-details/{id}", name="waypoints_edit_details")
      */
-    public function editDetails(Request $request, Waypoint $waypoint, EntityManagerInterface $entityManager)
-    {
+    public function editDetails(
+        Request $request,
+        Waypoint $waypoint,
+        EntityManagerInterface $entityManager
+    ) {
         $form = $this->createForm(WaypointFormTypeDetails::class, $waypoint);
         $form->handleRequest($request);
 
@@ -136,8 +143,10 @@ class WaypointsController extends AbstractController
     /**
      * @Route("/waypoint-remove/{id}", name="waypoints_remove")
      */
-    public function remove(Waypoint $waypoint, EntityManagerInterface $entityManager): RedirectResponse
-    {
+    public function remove(
+        Waypoint $waypoint,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse {
         $entityManager->remove($waypoint);
 
         $entityManager->flush();

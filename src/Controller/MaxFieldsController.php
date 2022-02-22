@@ -42,8 +42,10 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/show/{item}", name="max_fields_result")
      */
-    public function display(MaxFieldHelper $maxFieldHelper, string $item): Response
-    {
+    public function display(
+        MaxFieldHelper $maxFieldHelper,
+        string $item
+    ): Response {
         return $this->render(
             'max_fields/result.html.twig',
             [
@@ -76,13 +78,20 @@ class MaxFieldsController extends AbstractController
         $playersNum = (int)$request->request->get('players_num') ?: 1;
         $options = [
             'skip_plots'      => $request->request->getBoolean('skip_plots'),
-            'skip_step_plots' => $request->request->getBoolean('skip_step_plots'),
+            'skip_step_plots' => $request->request->getBoolean(
+                'skip_step_plots'
+            ),
         ];
 
         $timeStamp = date('Y-m-d');
         $projectName = $playersNum.'pl-'.$timeStamp.'-'.$buildName;
 
-        $maxFieldGenerator->generate($projectName, $maxField, $playersNum, $options);
+        $maxFieldGenerator->generate(
+            $projectName,
+            $maxField,
+            $playersNum,
+            $options
+        );
 
         return $this->render(
             'max_fields/result.html.twig',
@@ -98,8 +107,12 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/send_mail", name="maxfields-send-mail")
      */
-    public function sendMail(MaxFieldHelper $maxFieldHelper, MailerInterface $mailer, Request $request, Pdf $pdf)
-    {
+    public function sendMail(
+        MaxFieldHelper $maxFieldHelper,
+        MailerInterface $mailer,
+        Request $request,
+        Pdf $pdf
+    ) {
         $agent = $request->get('agent');
         $email = $request->get('email');
         $item = $request->get('item');
@@ -171,7 +184,10 @@ class MaxFieldsController extends AbstractController
         $gpx = $gpxHelper->getWaypointsGpx($item);
 
         header('Content-type: text/plain');
-        header('Content-Disposition: attachment; filename="'.$item.'-waypoints.gpx"');
+        header(
+            'Content-Disposition: attachment; filename="'.$item
+            .'-waypoints.gpx"'
+        );
 
         echo $gpx;
 
@@ -186,7 +202,9 @@ class MaxFieldsController extends AbstractController
         $gpx = $gpxHelper->getRouteGpx($item);
 
         header('Content-type: text/plain');
-        header('Content-Disposition: attachment; filename="'.$item.'-route.gpx"');
+        header(
+            'Content-Disposition: attachment; filename="'.$item.'-route.gpx"'
+        );
 
         echo $gpx;
 
@@ -201,7 +219,9 @@ class MaxFieldsController extends AbstractController
         $gpx = $gpxHelper->getTrackGpx($item);
 
         header('Content-type: text/plain');
-        header('Content-Disposition: attachment; filename="'.$item.'-track.gpx"');
+        header(
+            'Content-Disposition: attachment; filename="'.$item.'-track.gpx"'
+        );
 
         echo $gpx;
 
@@ -216,7 +236,9 @@ class MaxFieldsController extends AbstractController
         $gpx = $gpxHelper->getRouteTrackGpx($item);
 
         header('Content-type: text/plain');
-        header('Content-Disposition: attachment; filename="'.$item.'-maxfield.gpx"');
+        header(
+            'Content-Disposition: attachment; filename="'.$item.'-maxfield.gpx"'
+        );
 
         echo $gpx;
 
@@ -226,8 +248,11 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/delete/{item}", name="max_fields_delete")
      */
-    public function delete(MaxFieldGenerator $maxFieldGenerator, MaxFieldHelper $maxFieldHelper, string $item): Response
-    {
+    public function delete(
+        MaxFieldGenerator $maxFieldGenerator,
+        MaxFieldHelper $maxFieldHelper,
+        string $item
+    ): Response {
         try {
             $maxFieldGenerator->remove($item);
 
@@ -248,8 +273,10 @@ class MaxFieldsController extends AbstractController
     /**
      * @Route("/maxfield2strike", name="maxfields-maxfield2strike")
      */
-    public function maxfield2strike(MaxField2Strike $maxField2Strike, Request $request)
-    {
+    public function maxfield2strike(
+        MaxField2Strike $maxField2Strike,
+        Request $request
+    ) {
         $opName = $request->query->get('opName');
         $maxfieldName = $request->query->get('maxfieldName');
 

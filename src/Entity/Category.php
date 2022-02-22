@@ -98,5 +98,5 @@ class Category
         $this->id = $id;
 
         return $this;
-}
+    }
 }

@@ -34,7 +34,9 @@ class ExportController extends AbstractController
                 'export/result.html.twig',
                 [
                     'gpx'      => $maxFieldGenerator->createGpx($wayPoints),
-                    'maxField' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
+                    'maxField' => $maxFieldGenerator->convertWayPointsToMaxFields(
+                        $wayPoints
+                    ),
                 ]
             );
         }
@@ -73,7 +75,9 @@ class ExportController extends AbstractController
         if ($points) {
             $wayPoints = $repository->findBy(['id' => $points]);
             $data = [
-                'maxfield' => $maxFieldGenerator->convertWayPointsToMaxFields($wayPoints),
+                'maxfield' => $maxFieldGenerator->convertWayPointsToMaxFields(
+                    $wayPoints
+                ),
                 'gpx'      => $maxFieldGenerator->createGpx($wayPoints),
             ];
         } else {

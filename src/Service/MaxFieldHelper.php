@@ -8,8 +8,10 @@ use Elkuku\MaxfieldParser\Type\MaxField;
 
 class MaxFieldHelper
 {
-    public function __construct(private string $rootDir, private int $maxfieldVersion)
-    {
+    public function __construct(
+        private string $rootDir,
+        private int $maxfieldVersion
+    ) {
         $this->rootDir = $rootDir.'/public/maxfields';
     }
 

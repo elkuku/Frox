@@ -30,7 +30,7 @@ class FindDupesCommand extends Command
         $this->waypointRepository = $waypointRepository;
     }
 
-    protected function configure():void
+    protected function configure(): void
     {
         $this
             ->setDescription('Add a short description for your command')
@@ -47,8 +47,10 @@ class FindDupesCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output):int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output
+    ): int {
         $io = new SymfonyStyle($input, $output);
         $waypoints = $this->waypointRepository->findAll();
         $progressBar = new ProgressBar($output, count($waypoints));

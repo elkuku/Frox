@@ -34,8 +34,10 @@ class CollectionController extends AbstractController
     /**
      * @Route("/new", name="collection_new", methods={"GET","POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
         $collection = new Collection();
         $form = $this->createForm(CollectionType::class, $collection);
         $form->handleRequest($request);
@@ -92,8 +94,11 @@ class CollectionController extends AbstractController
     /**
      * @Route("/{id}/edit", name="collection_edit", methods={"GET","POST"}, requirements={"id"="\d+"})
      */
-    public function edit(Request $request, Collection $collection, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        Collection $collection,
+        EntityManagerInterface $entityManager
+    ): Response {
         $form = $this->createForm(CollectionType::class, $collection);
         $form->handleRequest($request);
 
@@ -115,8 +120,11 @@ class CollectionController extends AbstractController
     /**
      * @Route("/{id}", name="collection_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Collection $collection, EntityManagerInterface $entityManager): Response
-    {
+    public function delete(
+        Request $request,
+        Collection $collection,
+        EntityManagerInterface $entityManager
+    ): Response {
         if ($this->isCsrfTokenValid(
             'delete'.$collection->getId(),
             $request->request->get('_token')
@@ -151,11 +159,14 @@ class CollectionController extends AbstractController
 
         return $this->json($response);
     }
+
     /**
      * @Route("/d3c0de", name="collection_decode_points", methods={"GET"})
      */
-    public function decodePoints(Request $request, WaypointRepository $waypointRepository): Response
-    {
+    public function decodePoints(
+        Request $request,
+        WaypointRepository $waypointRepository
+    ): Response {
         $ids = explode(',', $request->query->get('ids'));
 
         return $this->render(

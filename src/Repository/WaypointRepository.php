@@ -96,20 +96,26 @@ class WaypointRepository extends ServiceEntityRepository
         if ($options->searchCriteria('city')) {
             $query->andWhere('w.city LIKE :city')
                 ->setParameter(
-                    'city', '%'.$options->searchCriteria('city').'%'
+                    'city',
+                    '%'.$options->searchCriteria('city').'%'
                 );
         }
 
         if ($options->searchCriteria('name')) {
             $query->andWhere('LOWER(w.name) LIKE :name')
                 ->setParameter(
-                    'name', '%'.strtolower($options->searchCriteria('name')).'%'
+                    'name',
+                    '%'.strtolower($options->searchCriteria('name')).'%'
                 );
         }
 
         $query = $query->getQuery();
 
-        return $this->paginate($query, $options->getPage(), $options->getLimit());
+        return $this->paginate(
+            $query,
+            $options->getPage(),
+            $options->getLimit()
+        );
     }
 
     public function findCities()

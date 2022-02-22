@@ -41,7 +41,9 @@ class IdmCsv extends AbstractParser
             $parts = explode(',', $line);
 
             if (3 !== \count($parts)) {
-                throw new \UnexpectedValueException('Error parsing Idm CSV file');
+                throw new \UnexpectedValueException(
+                    'Error parsing Idm CSV file'
+                );
             }
 
             $lat = (float)$parts[1];

@@ -21,7 +21,7 @@ class WayPointHelper
         $this->intelUrl = $intelUrl;
     }
 
-    public function getImagePath(string $wpId):string
+    public function getImagePath(string $wpId): string
     {
         return $this->rootDir.'/'.$wpId.'.jpg';
     }

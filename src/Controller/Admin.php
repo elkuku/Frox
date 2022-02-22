@@ -19,14 +19,21 @@ class Admin extends AbstractController
         $mailAddress = $_ENV['MAILER_FROM_MAIL'];
 
         if (4 !== \count($matches)) {
-            throw new \UnexpectedValueException('Error parsing the database URL.');
+            throw new \UnexpectedValueException(
+                'Error parsing the database URL.'
+            );
         }
 
         $dbUser = $matches[1];
         $dbPass = $matches[2];
         $dbName = $matches[3];
 
-        $cmd = sprintf('mysqldump -u%s -p%s %s|gzip 2>&1', $dbUser, $dbPass, $dbName);
+        $cmd = sprintf(
+            'mysqldump -u%s -p%s %s|gzip 2>&1',
+            $dbUser,
+            $dbPass,
+            $dbName
+        );
 
         ob_start();
         passthru($cmd, $retVal);
@@ -49,7 +56,10 @@ class Admin extends AbstractController
         $count = $mailer->send($message);
 
         if (!$count) {
-            $this->addFlash('danger', 'There was an error sending the message...');
+            $this->addFlash(
+                'danger',
+                'There was an error sending the message...'
+            );
         } else {
             $this->addFlash('success', 'Backup has been sent to your inbox.');
         }

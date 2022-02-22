@@ -13,8 +13,10 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="default")
      */
-    public function index(WaypointRepository $repository, ProvinceRepository $provinceRepository): Response
-    {
+    public function index(
+        WaypointRepository $repository,
+        ProvinceRepository $provinceRepository
+    ): Response {
         $provinces = $provinceRepository->findAll();
 
         return $this->render(

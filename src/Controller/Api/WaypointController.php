@@ -16,13 +16,13 @@ class WaypointController extends AbstractController
      */
     public function getList(): JsonResponse
     {
-
         $list = [
-            'hydra:member'=>['a','b','c'],
-            'hydra:totalItems'=>123,
-            'hydra:view'=>[],
-            'a'=>'',
+            'hydra:member'     => ['a', 'b', 'c'],
+            'hydra:totalItems' => 123,
+            'hydra:view'       => [],
+            'a'                => '',
         ];
+
         return $this->json($list);
     }
 }

@@ -22,13 +22,13 @@ class CategorizeWaypointsCommand extends Command
     private array $searchWords
         = [
             // Church
-            2 => ['iglesia', 'capilla', 'salon del reino', 'casa de oracion'],
+            2  => ['iglesia', 'capilla', 'salon del reino', 'casa de oracion'],
             // Playground
-            3 => ['juegos infantiles', 'zona de juegos'],
+            3  => ['juegos infantiles', 'zona de juegos'],
             // Mural
-            4 => ['mural'],
+            4  => ['mural'],
             // Ball games
-            6 => [
+            6  => [
                 'cancha',
                 'coliseo deportivo',
                 'centro deportivo',
@@ -37,11 +37,11 @@ class CategorizeWaypointsCommand extends Command
                 'polideportivo',
             ],
             // Monument
-            7 => ['escultura', 'monumento', 'busto'],
+            7  => ['escultura', 'monumento', 'busto'],
             // Shrine
-            8 => ['gruta'],
+            8  => ['gruta'],
             // Sign
-            9 => ['placa', 'letrero'],
+            9  => ['placa', 'letrero'],
             // Structure
             10 => ['glorieta'],
             // Building

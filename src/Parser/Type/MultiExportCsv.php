@@ -38,7 +38,9 @@ class MultiExportCsv extends AbstractParser
             if (3 !== \count($parts)) {
                 $parts = $this->parseFishyCsvLine2($line);
                 if (3 !== \count($parts)) {
-                    throw new \UnexpectedValueException('Error parsing CSV file');
+                    throw new \UnexpectedValueException(
+                        'Error parsing CSV file'
+                    );
                 }
             }
 

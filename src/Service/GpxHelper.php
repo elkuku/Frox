@@ -31,7 +31,6 @@ class GpxHelper
         return implode("\n", $xml);
     }
 
-
     public function getRouteTrackGpx(string $item)
     {
         $maxField = $this->maxFieldGenerator->getInfo($item);
@@ -76,7 +75,6 @@ class GpxHelper
 
         return implode("\n", $xml);
     }
-
 
     public function getRouteGpx(string $item): string
     {

@@ -42,7 +42,9 @@ class Csv extends AbstractParser
             if (4 !== \count($parts)) {
                 $parts = $this->parseFishyCsvLine($parts);
                 if (4 !== \count($parts)) {
-                    throw new \UnexpectedValueException('Error parsing CSV file');
+                    throw new \UnexpectedValueException(
+                        'Error parsing CSV file'
+                    );
                 }
             }
 

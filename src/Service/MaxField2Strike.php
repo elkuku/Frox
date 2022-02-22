@@ -36,8 +36,11 @@ class MaxField2Strike
      */
     private $logger;
 
-    public function __construct(MaxFieldGenerator $maxFieldGenerator, VAPI $VAPI, StrikeLogger $logger)
-    {
+    public function __construct(
+        MaxFieldGenerator $maxFieldGenerator,
+        VAPI $VAPI,
+        StrikeLogger $logger
+    ) {
         $this->maxFieldGenerator = $maxFieldGenerator;
         $this->VAPI = $VAPI;
         $this->logger = $logger;
@@ -54,7 +57,11 @@ class MaxField2Strike
 
         $this->logger->add('OP created successfully!!');
 
-        return sprintf('OP "%s" with ID #%d has been created.', $OpName, $this->opId);
+        return sprintf(
+            'OP "%s" with ID #%d has been created.',
+            $OpName,
+            $this->opId
+        );
     }
 
     private function collectData(string $maxfieldName): self
@@ -118,7 +125,10 @@ class MaxField2Strike
         $total = count($this->portals);
         $count = 1;
         foreach ($this->portals as $portal) {
-            $this->logger->add(sprintf('Creating Keyfarming task %d of %d...', $count, $total), false);
+            $this->logger->add(
+                sprintf('Creating Keyfarming task %d of %d...', $count, $total),
+                false
+            );
             $count++;
 
             if (0 === $portal->missingKeys) {
@@ -126,7 +136,10 @@ class MaxField2Strike
                 continue;
             }
 
-            $response = $this->VAPI->newTask($this->opId, $this->createKeyFarmingTask($portal));
+            $response = $this->VAPI->newTask(
+                $this->opId,
+                $this->createKeyFarmingTask($portal)
+            );
 
             $a = $response->getContent();
 
@@ -147,7 +160,10 @@ class MaxField2Strike
             $count = 1;
 
             foreach ($agentInfo->links as $link) {
-                $this->logger->add(sprintf('Creating Link task %d of %d...', $count, $total), false);
+                $this->logger->add(
+                    sprintf('Creating Link task %d of %d...', $count, $total),
+                    false
+                );
                 $count++;
 
                 $origin = $this->findPortalByNumber($link->originNum);
@@ -162,7 +178,10 @@ class MaxField2Strike
                     $destination->lon
                 );
 
-                $response = $this->VAPI->newTask($this->opId, $this->createLinkTask($link));
+                $response = $this->VAPI->newTask(
+                    $this->opId,
+                    $this->createLinkTask($link)
+                );
 
                 $a = $response->getContent();
 
@@ -182,7 +201,11 @@ class MaxField2Strike
         $task->lon = $portal->lon;
         $task->portal = $portal->name;
         $task->repeat = $portal->missingKeys;
-        $task->name = sprintf('FARM KEYS: %s (total: %d)', $portal->name, $portal->missingKeys);
+        $task->name = sprintf(
+            'FARM KEYS: %s (total: %d)',
+            $portal->name,
+            $portal->missingKeys
+        );
 
         return $task;
     }
