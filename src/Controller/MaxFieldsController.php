@@ -18,16 +18,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class MaxFieldsController
- *
- * @Route("max-fields")
- */
+#[Route(path: 'max-fields')]
 class MaxFieldsController extends AbstractController
 {
-    /**
-     * @Route("/", name="max_fields")
-     */
+    #[Route(path: '/', name: 'max_fields')]
     public function index(MaxFieldHelper $maxFieldHelper): Response
     {
         return $this->render(
@@ -39,9 +33,7 @@ class MaxFieldsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/show/{item}", name="max_fields_result")
-     */
+    #[Route(path: '/show/{item}', name: 'max_fields_result')]
     public function display(
         MaxFieldHelper $maxFieldHelper,
         string $item
@@ -56,16 +48,14 @@ class MaxFieldsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/export", name="export-maxfields")
-     */
+    #[Route(path: '/export', name: 'export-maxfields')]
     public function generateMaxFields(
         WaypointRepository $repository,
         MaxFieldGenerator $maxFieldGenerator,
         MaxFieldHelper $maxFieldHelper,
         Request $request
     ): Response {
-        $points = $request->request->get('points');
+        $points = $request->request->all('points');
 
         if (!$points) {
             throw new NotFoundHttpException('No waypoints selected.');
@@ -104,9 +94,7 @@ class MaxFieldsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/send_mail", name="maxfields-send-mail")
-     */
+    #[Route(path: '/send_mail', name: 'maxfields-send-mail')]
     public function sendMail(
         MaxFieldHelper $maxFieldHelper,
         MailerInterface $mailer,
@@ -176,9 +164,7 @@ class MaxFieldsController extends AbstractController
         return $this->json($data);
     }
 
-    /**
-     * @Route("/gpx/{item}", name="max_fields_gpx")
-     */
+    #[Route(path: '/gpx/{item}', name: 'max_fields_gpx')]
     public function getGpx(string $item, GpxHelper $gpxHelper): void
     {
         $gpx = $gpxHelper->getWaypointsGpx($item);
@@ -194,9 +180,7 @@ class MaxFieldsController extends AbstractController
         exit();
     }
 
-    /**
-     * @Route("/gpxroute/{item}", name="max_fields_gpxroute")
-     */
+    #[Route(path: '/gpxroute/{item}', name: 'max_fields_gpxroute')]
     public function getGpxRoute(GpxHelper $gpxHelper, string $item): void
     {
         $gpx = $gpxHelper->getRouteGpx($item);
@@ -211,9 +195,7 @@ class MaxFieldsController extends AbstractController
         exit();
     }
 
-    /**
-     * @Route("/gpxtrack/{item}", name="max_fields_gpxtrack")
-     */
+    #[Route(path: '/gpxtrack/{item}', name: 'max_fields_gpxtrack')]
     public function getGpxTrack(GpxHelper $gpxHelper, string $item): void
     {
         $gpx = $gpxHelper->getTrackGpx($item);
@@ -228,9 +210,7 @@ class MaxFieldsController extends AbstractController
         exit();
     }
 
-    /**
-     * @Route("/gpxroutetrack/{item}", name="max_fields_gpxroutetrack")
-     */
+    #[Route(path: '/gpxroutetrack/{item}', name: 'max_fields_gpxroutetrack')]
     public function getGpxRouteTrack(GpxHelper $gpxHelper, string $item): void
     {
         $gpx = $gpxHelper->getRouteTrackGpx($item);
@@ -245,9 +225,7 @@ class MaxFieldsController extends AbstractController
         exit();
     }
 
-    /**
-     * @Route("/delete/{item}", name="max_fields_delete")
-     */
+    #[Route(path: '/delete/{item}', name: 'max_fields_delete')]
     public function delete(
         MaxFieldGenerator $maxFieldGenerator,
         MaxFieldHelper $maxFieldHelper,
@@ -270,9 +248,7 @@ class MaxFieldsController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/maxfield2strike", name="maxfields-maxfield2strike")
-     */
+    #[Route(path: '/maxfield2strike', name: 'maxfields-maxfield2strike')]
     public function maxfield2strike(
         MaxField2Strike $maxField2Strike,
         Request $request
@@ -291,9 +267,7 @@ class MaxFieldsController extends AbstractController
         return $this->json($data);
     }
 
-    /**
-     * @Route("/log", name="maxfields-log")
-     */
+    #[Route(path: '/log', name: 'maxfields-log')]
     public function getLog(StrikeLogger $logger)
     {
         $response = new Response();

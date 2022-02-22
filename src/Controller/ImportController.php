@@ -15,9 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportController extends AbstractController
 {
-    /**
-     * @Route("/import", name="import")
-     */
+    #[Route(path: '/import', name: 'import')]
     public function index(
         Request $request,
         WaypointRepository $waypointRepo,

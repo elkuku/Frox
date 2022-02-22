@@ -6,14 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/zapi/waypoints")
- */
+#[Route(path: '/zapi/waypoints')]
 class WaypointController extends AbstractController
 {
-    /**
-     * @Route("/", name="api_waypoints")
-     */
+    #[Route(path: '/', name: 'api_waypoints')]
     public function getList(): JsonResponse
     {
         $list = [

@@ -13,14 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/collection")
- */
+#[Route(path: '/collection')]
 class CollectionController extends AbstractController
 {
-    /**
-     * @Route("/", name="collection_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'collection_index', methods: ['GET'])]
     public function index(CollectionRepository $collectionRepository): Response
     {
         return $this->render(
@@ -31,9 +27,7 @@ class CollectionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/new", name="collection_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'collection_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         EntityManagerInterface $entityManager
@@ -41,7 +35,6 @@ class CollectionController extends AbstractController
         $collection = new Collection();
         $form = $this->createForm(CollectionType::class, $collection);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($collection);
             $entityManager->flush();
@@ -58,9 +51,7 @@ class CollectionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="collection_show", methods={"GET"}, requirements={"id"="\d+"})
-     */
+    #[Route(path: '/{id}', name: 'collection_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(
         Collection $collection,
         WaypointRepository $waypointRepository
@@ -68,9 +59,7 @@ class CollectionController extends AbstractController
         $points = $waypointRepository->findByIds(
             explode(',', $collection->getPoints())
         );
-
         $categories = [];
-
         foreach ($points as $point) {
             $category = $point->getCategory();
 
@@ -91,9 +80,10 @@ class CollectionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}/edit", name="collection_edit", methods={"GET","POST"}, requirements={"id"="\d+"})
-     */
+    #[Route(path: '/{id}/edit', name: 'collection_edit', requirements: ['id' => '\d+'], methods: [
+        'GET',
+        'POST',
+    ])]
     public function edit(
         Request $request,
         Collection $collection,
@@ -101,7 +91,6 @@ class CollectionController extends AbstractController
     ): Response {
         $form = $this->createForm(CollectionType::class, $collection);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
@@ -117,9 +106,7 @@ class CollectionController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="collection_delete", methods={"DELETE"})
-     */
+    #[Route(path: '/{id}', name: 'collection_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,
         Collection $collection,
@@ -137,32 +124,25 @@ class CollectionController extends AbstractController
         return $this->redirectToRoute('collection_index');
     }
 
-    /**
-     * @Route("/create", name="collection_create", methods={"POST"})
-     */
+    #[Route(path: '/create', name: 'collection_create', methods: ['POST'])]
     public function create(
         Request $request,
         EntityManagerInterface $entityManager
     ): JsonResponse {
         $waypoints = $request->request->get('points');
         $name = $request->request->get('name');
-
         $collection = (new Collection())
             ->setType('gallery')
             ->setPoints(implode(',', $waypoints))
             ->setName($name);
-
         $entityManager->persist($collection);
         $entityManager->flush();
-
         $response = ['ok', $name];
 
         return $this->json($response);
     }
 
-    /**
-     * @Route("/d3c0de", name="collection_decode_points", methods={"GET"})
-     */
+    #[Route(path: '/d3c0de', name: 'collection_decode_points', methods: ['GET'])]
     public function decodePoints(
         Request $request,
         WaypointRepository $waypointRepository

@@ -8,9 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class Admin extends AbstractController
 {
-    /**
-     * @Route("/backup", name="backup")
-     */
+    #[Route(path: '/backup', name: 'backup')]
     public function backup(\Swift_Mailer $mailer): Response
     {
         $pattern = '#mysql://(.+)\:(.+)@127.0.0.1:3306/(.+)#';

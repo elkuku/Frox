@@ -16,9 +16,7 @@ class ExportController extends AbstractController
 {
     use PaginatorTrait;
 
-    /**
-     * @Route("/export", name="export")
-     */
+    #[Route(path: '/export', name: 'export')]
     public function index(
         WaypointRepository $repository,
         ProvinceRepository $provinceRepository,
@@ -62,9 +60,7 @@ class ExportController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/export2", name="export2")
-     */
+    #[Route(path: '/export2', name: 'export2')]
     public function export2(
         WaypointRepository $repository,
         MaxFieldGenerator $maxFieldGenerator,
