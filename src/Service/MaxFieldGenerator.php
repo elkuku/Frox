@@ -51,8 +51,6 @@ class MaxFieldGenerator
      */
     private string $googleApiSecret;
 
-    // private MaxP
-
     public function __construct(
         string $rootDir,
         string $maxfieldExec,
@@ -234,7 +232,7 @@ class MaxFieldGenerator
         return $agentsInfo;
     }
 
-    public function getTextFileContents(string $item, string $fileName): string
+    private function getTextFileContents(string $item, string $fileName): string
     {
         $path = $this->rootDir.'/'.$item.'/'.$fileName;
 
@@ -243,21 +241,6 @@ class MaxFieldGenerator
         }
 
         return file_get_contents($path);
-    }
-
-    public function getList(): array
-    {
-        $list = [];
-
-        foreach (new DirectoryIterator($this->rootDir) as $fileInfo) {
-            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
-                $list[] = $fileInfo->getFilename();
-            }
-        }
-
-        sort($list);
-
-        return $list;
     }
 
     /**
@@ -391,11 +374,6 @@ class MaxFieldGenerator
         }
 
         return $wayPoints;
-    }
-
-    public function getMaxfieldVersion(): int
-    {
-        return $this->maxfieldVersion;
     }
 
     private function parseLinksFile(string $contents)

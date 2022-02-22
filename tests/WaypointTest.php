@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class WaypointTest extends TestCase
 {
-    public function testAdd()
+    public function testAdd(): void
     {
         $helper = new WayPointHelper('tests/testdir', 'fooo');
 

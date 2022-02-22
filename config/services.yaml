@@ -43,3 +43,10 @@ services:
             $maxfieldExec: '%env(MAXFIELDS_EXEC)%'
             $googleApiKey: '%env(GOOGLE_API_KEY)%'
             $googleApiSecret: '%env(GOOGLE_API_SECRET)%'
+
+    App\Service\MaxFieldHelper:
+        arguments:
+            $maxfieldVersion: '%env(MAXFIELD_VERSION)%'
+#            $maxfieldExec: '%env(MAXFIELDS_EXEC)%'
+#            $googleApiKey: '%env(GOOGLE_API_KEY)%'
+#            $googleApiSecret: '%env(GOOGLE_API_SECRET)%'

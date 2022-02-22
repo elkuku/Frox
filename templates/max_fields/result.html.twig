@@ -86,17 +86,12 @@
                 {% endfor %}
             </table>
         </div>
-        <div class="col">
-            <h4>Ownership Preparation</h4>
-            <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ info.ownershipPrep }}</textarea>
-        </div>
     </div>
 
     {% for agentInfo in info.agentsInfo %}
         <div class="row">
-            <div class="col">
+            <div class="col-lg">
                 <h4>Keys for agent {{ agentInfo.agentNumber }}</h4>
-                <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.keysInfo }}</textarea>
                 <table class="table table-sm">
                     {% for point in agentInfo.keys.wayPoints %}
                         {% if point.agentNum + 1 == agentInfo.agentNumber %}
@@ -109,13 +104,17 @@
                     {% endfor %}
                 </table>
             </div>
-            <div class="col">
+            <div class="col-lg">
                 <h4>Links for agent {{ agentInfo.agentNumber }}</h4>
-                <textarea class="agent-info" name="" id="" cols="80" rows="12">{{ agentInfo.linksInfo }}</textarea>
+                <button class="showAllLinks" data-agent-id="{{ agentInfo.agentNumber }}">Show all</button>
                 <table class="table table-sm">
                     {% set origin=-1 %}
                     {% for link in agentInfo.links %}
-                        <tr style="border-bottom: 1px solid silver;{% if link.originNum != origin %}border-top: 2px solid darkblue;{% endif %}">
+                        <tr
+                                {% if agentInfo.agentNumber != link.agentNum %}
+                                class="foreign-Link-{{ agentInfo.agentNumber }}"
+                                {% endif %}
+                                style="border-bottom: 1px solid silver;{% if link.originNum != origin %}border-top: 2px solid darkblue;{% endif %}">
                             <td>{{ link.isEarly ? 'X' : '' }}</td>
                             <td>{{ link.linkNum }}</td>
                             <td>

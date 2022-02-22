@@ -7,6 +7,12 @@ const maxFrames = jsData.data('maxFrames')
 const item = jsData.data('item')
 const steps = jsData.data('steps')
 
+$('.showAllLinks').click(function () {
+    console.log($(this).data('agentId'))
+
+    $('.foreign-Link-'+$(this).data('agentId')).toggle()
+})
+
 $('.sendMail').click(function () {
     const agent = this.id
     const email = $(this).prevAll('input[type=text]').val()

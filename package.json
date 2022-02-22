@@ -1,5 +1,6 @@
 {
     "devDependencies": {
+        "@hotwired/stimulus": "^3.0.1",
         "@symfony/stimulus-bridge": "^2.0.0",
         "@symfony/webpack-encore": "^1.0.0",
         "bootstrap": "^4.5.0",
