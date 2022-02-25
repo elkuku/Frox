@@ -96,9 +96,11 @@ class MaxField2Strike
 
         $content = json_decode($response->getContent(), false);
 
-        $this->opId = $content->id;
+        if (isset($content->id)) {
+            $this->opId = $content->id;
 
-        $this->logger->add('OK - ID: '.$content->id);
+            $this->logger->add('OK - ID: '.$content->id);
+        }
 
         return $this;
     }
