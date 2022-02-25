@@ -257,8 +257,6 @@ class MaxFieldsController extends AbstractController
         $opName = (string)$request->query->get('opName');
         $maxfieldName = (string)$request->query->get('maxfieldName');
 
-        //        $restClient = $this->container->get('circle.restclient');
-
         $result = $maxField2Strike->generateOp($opName, $maxfieldName);
         $data = [
             'status'  => 'ok',

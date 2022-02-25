@@ -39,7 +39,7 @@ class MultiExportCsv extends AbstractParser
 
             $wayPoint = new Waypoint();
 
-            $wayPoint->setName(trim($parts[0], '""'));
+            $wayPoint->setName(trim((string)$parts[0], '"'));
             $wayPoint->setLat($lat);
             $wayPoint->setLon($lon);
 

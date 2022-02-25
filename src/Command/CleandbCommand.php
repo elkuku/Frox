@@ -83,7 +83,7 @@ class CleandbCommand extends Command
                 $this->entityManager->remove($waypoint);
             }
 
-            $cleanName = $this->wayPointHelper->cleanName($waypoint->getName());
+            $cleanName = $this->wayPointHelper->cleanName((string)$waypoint->getName());
 
             if ($waypoint->getName() !== $cleanName) {
                 $io->warning(
