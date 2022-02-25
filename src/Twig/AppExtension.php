@@ -80,6 +80,6 @@ class AppExtension extends AbstractExtension
 
     public function hasImage(Waypoint $waypoint): bool
     {
-        return $this->wayPointHelper->findImage($waypoint->getGuid());
+        return (bool)$this->wayPointHelper->findImage($waypoint->getGuid());
     }
 }

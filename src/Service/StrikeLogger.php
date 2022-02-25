@@ -47,7 +47,7 @@ class StrikeLogger
     public function getLog(): string
     {
         if ($this->fileSystem->exists($this->logFile)) {
-            return file_get_contents($this->logFile);
+            return (string)file_get_contents($this->logFile);
         }
 
         return 'Log file not found :(';

@@ -109,7 +109,7 @@ class WaypointsController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Waypoint updated!');
 
-            $redirectUri = $request->request->get('redirectUri');
+            $redirectUri = (string)$request->request->get('redirectUri');
 
             if ($redirectUri) {
                 return $this->redirect($redirectUri);

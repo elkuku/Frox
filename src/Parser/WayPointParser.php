@@ -32,6 +32,10 @@ class WayPointParser
 
             $className = '\\'.__NAMESPACE__.'\\Type\\'
                 .basename($item->getFilename(), '.php');
+
+            /**
+             * @var AbstractParser $parser
+             */
             $parser = new $className($this->wayPointHelper);
 
             if ($parser->supports($data)) {

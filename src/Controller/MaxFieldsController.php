@@ -254,8 +254,8 @@ class MaxFieldsController extends AbstractController
         MaxField2Strike $maxField2Strike,
         Request $request
     ): JsonResponse {
-        $opName = $request->query->get('opName');
-        $maxfieldName = $request->query->get('maxfieldName');
+        $opName = (string)$request->query->get('opName');
+        $maxfieldName = (string)$request->query->get('maxfieldName');
 
         //        $restClient = $this->container->get('circle.restclient');
 

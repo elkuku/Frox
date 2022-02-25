@@ -26,7 +26,7 @@ class WayPointHelper
         return $this->rootDir.'/'.$wpId.'.jpg';
     }
 
-    public function findImage(?string $wpId): bool
+    public function findImage(?string $wpId): bool|string
     {
         if (!$wpId) {
             return false;
@@ -57,7 +57,13 @@ class WayPointHelper
         $imagePath = $this->getImagePath($wpId);
 
         $ch = curl_init($imageUrl);
+        if (false === $ch) {
+            throw new \UnexpectedValueException('Can not init curl for: '.$imageUrl);
+        }
         $fp = fopen($imagePath, 'wb');
+        if (false === $fp) {
+            throw new \UnexpectedValueException('Can not open image file under: '.$imageUrl);
+        }
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);

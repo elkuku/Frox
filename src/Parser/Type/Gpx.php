@@ -23,6 +23,10 @@ class Gpx extends AbstractParser
 
         $waypoints = [];
 
+        if (false === $xml) {
+            throw new \UnexpectedValueException('Something wrong with your XML :(');
+        }
+
         foreach ($xml->children() as $wp) {
             $waypoints[] = $this->createWayPoint(
                 '',

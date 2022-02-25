@@ -50,7 +50,7 @@ class MultiExportCsv extends AbstractParser
     }
 
     /**
-     * @return array<string>
+     * @return array<int, string|null>
      */
     private function parseFishyCsvLine2(string $line): array
     {

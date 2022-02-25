@@ -92,7 +92,7 @@ class MaxField2Strike
         $newOp->name = $opName;
         $newOp->type = 'linkart';
 
-        $response = $this->VAPI->post('op', json_encode($newOp));
+        $response = $this->VAPI->post('op', (string)json_encode($newOp));
 
         $content = json_decode($response->getContent(), false);
 
