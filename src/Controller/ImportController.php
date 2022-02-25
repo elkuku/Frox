@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Waypoint;
 use App\Form\ImportFormType;
 use App\Parser\WayPointParser;
 use App\Repository\WaypointRepository;
@@ -19,14 +18,15 @@ class ImportController extends AbstractController
     public function index(
         Request $request,
         WaypointRepository $waypointRepo,
-        WayPointParser $wayPointParser
+        WayPointParser $wayPointParser,
+        EntityManagerInterface $entityManager,
     ): Response {
         $form = $this->createForm(ImportFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $waypoints = $wayPointParser->parse($form->getData());
-                $count = $this->storeWayPoints($waypoints);
+                $count = $this->storeWayPoints($waypoints, $waypointRepo, $entityManager);
                 if ($count) {
                     $this->addFlash('success', $count.' Waypoint(s) imported!');
                 } else {
@@ -42,7 +42,6 @@ class ImportController extends AbstractController
                     'import/index.html.twig',
                     [
                         'form'   => $form->createView(),
-                        'cities' => $waypointRepo->findCities(),
                     ]
                 );
             }
@@ -52,7 +51,6 @@ class ImportController extends AbstractController
             'import/index.html.twig',
             [
                 'form'   => $form->createView(),
-                'cities' => $waypointRepo->findCities(),
             ]
         );
     }

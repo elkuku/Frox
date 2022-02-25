@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,15 +12,11 @@ class DefaultController extends AbstractController
     #[Route(path: '/', name: 'default')]
     public function index(
         WaypointRepository $repository,
-        ProvinceRepository $provinceRepository
     ): Response {
-        $provinces = $provinceRepository->findAll();
-
         return $this->render(
             'default/index.html.twig',
             [
                 'numWayPoints' => \count($repository->findAll()),
-                'provinces'    => $provinces,
             ]
         );
     }

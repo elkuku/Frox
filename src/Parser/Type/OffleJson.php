@@ -20,29 +20,23 @@ class OffleJson extends AbstractParser
     public function parse(array $data): array
     {
         $waypoints = [];
-        $jsonData = json_decode($JsonRaw, false);
+        $jsonData = json_decode($data, false);
 
         if (!$jsonData) {
             throw new \UnexpectedValueException('Invalid JSON data received');
         }
 
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['id' => 1]);
-
         foreach ($jsonData as $item) {
             if (isset($item->name)) {
                 $waypoints[] = $this->createWayPoint(
+                    $item->guid,
                     $item->lat,
                     $item->lng,
                     $item->name,
-                    $category,
-                    $province,
-                    $city
                 );
             }
         }
 
-        return $this->storeWayPoints($waypoints);
+        return $waypoints;
     }
 }

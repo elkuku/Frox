@@ -9,21 +9,6 @@
 
     {{ form_errors(form) }}
 
-    <div class="row">
-        <div class="col-4">
-            {{ form_row(form.province) }}
-        </div>
-        <div class="col-8">
-            {{ form_row(form.city) }}
-        </div>
-    </div>
-
-    <datalist id="citiesList">
-        {% for city in cities %}
-            <option value="{{ city }}"></option>
-        {% endfor %}
-    </datalist>
-
     <h5>Import method</h5>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">

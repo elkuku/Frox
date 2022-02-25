@@ -24,11 +24,6 @@ class Waypoint
     private string $name = '';
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $description = '';
-
-    /**
      * @ORM\Column(type="decimal", precision=10, scale=6)
      */
     private float $lat = 0;
@@ -37,21 +32,6 @@ class Waypoint
      * @ORM\Column(type="decimal", precision=10, scale=6)
      */
     private float $lon = 0;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="waypoints")
-     */
-    private ?Category $category = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Province", inversedBy="waypoints")
-     */
-    private ?Province $province = null;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $city = '';
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
@@ -71,18 +51,6 @@ class Waypoint
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -107,42 +75,6 @@ class Waypoint
     public function setLon(float $lon): self
     {
         $this->lon = $lon;
-
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getProvince(): ?Province
-    {
-        return $this->province;
-    }
-
-    public function setProvince(?Province $province): self
-    {
-        $this->province = $province;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(?string $city): self
-    {
-        $this->city = $city;
 
         return $this;
     }

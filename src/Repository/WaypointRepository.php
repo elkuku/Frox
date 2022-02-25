@@ -88,19 +88,6 @@ class WaypointRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('w')
             ->orderBy('w.'.$options->getOrder(), $options->getOrderDir());
 
-        if (isset($criteria['province']) && $criteria['province']) {
-            $query->where('w.province = :province')
-                ->setParameter('province', $criteria['province']);
-        }
-
-        if ($options->searchCriteria('city')) {
-            $query->andWhere('w.city LIKE :city')
-                ->setParameter(
-                    'city',
-                    '%'.$options->searchCriteria('city').'%'
-                );
-        }
-
         if ($options->searchCriteria('name')) {
             $query->andWhere('LOWER(w.name) LIKE :name')
                 ->setParameter(
@@ -116,22 +103,5 @@ class WaypointRepository extends ServiceEntityRepository
             $options->getPage(),
             $options->getLimit()
         );
-    }
-
-    public function findCities()
-    {
-        $result = $this->createQueryBuilder('w')
-            ->select('w.city')
-            ->distinct()
-            ->getQuery()
-            ->getResult();
-
-        $cities = array_column($result, 'city');
-
-        $cities = array_filter($cities);
-
-        sort($cities);
-
-        return $cities;
     }
 }

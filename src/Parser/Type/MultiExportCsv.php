@@ -18,19 +18,9 @@ class MultiExportCsv extends AbstractParser
      */
     public function parse(array $data): array
     {
-        $repository = $this->getDoctrine()
-            ->getRepository(Waypoint::class);
+        $waypoints = [];
 
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['id' => 1]);
-
-        $lines = explode("\n", $csvRaw);
-        $cnt = 0;
-
-        foreach ($lines as $i => $line) {
+        foreach ($data as $line) {
             $line = trim($line);
 
             $parts = explode(',', $line);
@@ -47,35 +37,16 @@ class MultiExportCsv extends AbstractParser
             $lat = (float)$parts[1];
             $lon = (float)$parts[2];
 
-            $wayPoint = $repository->findOneBy(
-                [
-                    'lat' => $lat,
-                    'lon' => $lon,
-                ]
-            );
+            $wayPoint = new Waypoint();
 
-            if (!$wayPoint) {
-                $wayPoint = new Waypoint();
+            $wayPoint->setName(trim($parts[0], '""'));
+            $wayPoint->setLat($lat);
+            $wayPoint->setLon($lon);
 
-                $wayPoint->setName(trim($parts[0], '""'));
-                $wayPoint->setLat($lat);
-                $wayPoint->setLon($lon);
-                $wayPoint->setCategory($category);
-                $wayPoint->setProvince($province);
-                $wayPoint->setCity($city);
-
-                $entityManager->persist($wayPoint);
-
-                $entityManager->flush();
-
-                $cnt++;
-            }
-
-            // Check image
-            // $wayPointHelper->checkImage($wayPoint->getId(), trim($parts[3]));
+            $waypoints[] = $wayPoint;
         }
 
-        return $cnt;
+        return $waypoints;
     }
 
     private function parseFishyCsvLine2(string $line)

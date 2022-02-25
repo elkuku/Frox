@@ -20,17 +20,13 @@ class Json extends AbstractParser
     public function parse(array $data): array
     {
         $waypoints = [];
-        $jsonData = json_decode($JsonRaw, false);
+        // $jsonData = json_decode($JsonRaw, false);
+        //
+        // if (!$jsonData) {
+        //     throw new \UnexpectedValueException('Invalid JSON data received');
+        // }
 
-        if (!$jsonData) {
-            throw new \UnexpectedValueException('Invalid JSON data received');
-        }
-
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['id' => 1]);
-
-        foreach ($jsonData as $item) {
+        foreach ($data as $item) {
             $latlng = explode(',', $item->latlng);
 
             if (2 != count($latlng)) {
@@ -38,15 +34,13 @@ class Json extends AbstractParser
             }
 
             $waypoints[] = $this->createWayPoint(
+                '',
                 $latlng[0],
                 $latlng[1],
                 $item->title,
-                $category,
-                $province,
-                $city
             );
         }
 
-        return $this->storeWayPoints($waypoints);
+        return $waypoints;
     }
 }

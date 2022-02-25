@@ -19,15 +19,8 @@ class Gpx extends AbstractParser
      */
     public function parse(array $data): array
     {
-        $repository = $this->getDoctrine()
-            ->getRepository(Waypoint::class);
-        $entityManager = $this->getDoctrine()->getManager();
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['id' => 1]);
-
         try {
-            $xml = simplexml_load_string($gpxData);
+            $xml = simplexml_load_string($dagpxData);
         } catch (Exception $exception) {
             throw new \UnexpectedValueException('Invalid GPX data received!');
         }

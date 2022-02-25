@@ -8,8 +8,6 @@
 
 namespace App\Form;
 
-use App\Entity\Province;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,25 +21,6 @@ class ImportFormType extends AbstractType
         array $options
     ): void {
         $builder
-            ->add(
-                'province',
-                EntityType::class,
-                [
-                    'label'       => 'Province',
-                    'class'       => Province::class,
-                    'placeholder' => 'Select a Province...',
-                    'required'    => false,
-                ]
-            )
-            ->add(
-                'city',
-                null,
-                [
-                    'label'    => 'City',
-                    'required' => false,
-                    'attr'     => ['list' => 'citiesList'],
-                ]
-            )
             ->add('importImages', CheckboxType::class, [
                 'required' => false,
             ])

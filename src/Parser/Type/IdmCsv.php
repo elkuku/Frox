@@ -19,19 +19,9 @@ class IdmCsv extends AbstractParser
      */
     public function parse(array $data): array
     {
-        $repository = $this->getDoctrine()
-            ->getRepository(Waypoint::class);
+        $waypoints = [];
 
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['id' => 1]);
-
-        $lines = explode("\n", $csvRaw);
-        $cnt = 0;
-
-        foreach ($lines as $i => $line) {
+        foreach ($data as $line) {
             $line = trim($line);
 
             if (!$line) {
@@ -46,29 +36,14 @@ class IdmCsv extends AbstractParser
                 );
             }
 
-            $lat = (float)$parts[1];
-            $lon = (float)$parts[2];
-
-            $wayPoint = $repository->findOneBy(['lat' => $lat, 'lon' => $lon,]);
-
-            if (!$wayPoint) {
-                $wayPoint = new Waypoint();
-
-                $wayPoint->setName(trim($parts[0], '"'));
-                $wayPoint->setLat($lat);
-                $wayPoint->setLon($lon);
-                $wayPoint->setCategory($category);
-                $wayPoint->setProvince($province);
-                $wayPoint->setCity($city);
-
-                $entityManager->persist($wayPoint);
-
-                $entityManager->flush();
-
-                $cnt++;
-            }
+            $waypoints[] = $this->createWayPoint(
+                '',
+                (float)$parts[1],
+                (float)$parts[2],
+                trim($parts[0], '"')
+            );
         }
 
-        return $cnt;
+        return $waypoints;
     }
 }

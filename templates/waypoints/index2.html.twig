@@ -28,41 +28,18 @@
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Province</th>
-                <th>City</th>
-                <th>Category</th>
                 <th>Name</th>
                 <th>Link</th>
                 <th>Action</th>
             </tr>
             <tr>
                 <th></th>
-                <th{{ paginatorOptions.searchCriteria('province') ? ' class="cell-active"' : '' }}>
-                <select name="paginatorOptions[criteria][province]" class="form-control paginatorResetChange">
-                <option value="0">...</option>
-                {% for province in provinces %}
-                <option value="{{ province.id }}"
-                {{ paginatorOptions.searchCriteria('province') == province.id ? ' selected="selected"' : '' }}>
-                {{ province.name }}
-                </option>
-                {% endfor %}
-                </select>
-                </th>
-                <th{{ paginatorOptions.searchCriteria('city') ? ' class="cell-active"' : '' }}>
-                <br/>
-                {{ paginator.criteria('city', paginatorOptions) }}
-                </th>
-                <th></th>
                 <th>{{ paginator.criteria('name', paginatorOptions) }}</th>
-                <th></th>
                 <th></th>
                 <th></th>
             </tr>
             <tr>
                 <th>{{ paginator.ordering('id', paginatorOptions) }}</th>
-                <th>Province</th>
-                <th>City</th>
-                <th>Category</th>
                 <th>Name</th>
                 <th>Link</th>
                 <th>Action</th>
@@ -73,9 +50,6 @@
             {% for waypoint in waypoints %}
                 <tr>
                     <td>{{ waypoint.id }}</td>
-                    <td>{{ waypoint.province ? waypoint.province.name : 'n/a' }}</td>
-                    <td>{{ waypoint.city }}</td>
-                    <td>{{ waypoint.category ? waypoint.category.name : 'n/a' }}</td>
                     <td>{{ waypoint.name }}</td>
                     <td>
                         {% if get_url('intel') %}

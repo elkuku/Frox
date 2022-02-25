@@ -6,7 +6,6 @@ use App\Entity\Waypoint;
 use App\Form\WaypointFormType;
 use App\Form\WaypointFormTypeDetails;
 use App\Helper\Paginator\PaginatorTrait;
-use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +22,6 @@ class WaypointsController extends AbstractController
     #[Route(path: '/waypoints', name: 'waypoints')]
     public function index(
         WaypointRepository $repository,
-        ProvinceRepository $provinceRepository,
         Request $request
     ): Response {
         $paginatorOptions = $this->getPaginatorOptions($request);
@@ -40,7 +38,6 @@ class WaypointsController extends AbstractController
             'waypoints/index.html.twig',
             [
                 'waypoints'        => $waypoints,
-                'provinces'        => $provinceRepository->findAll(),
                 'paginatorOptions' => $paginatorOptions,
             ]
         );
@@ -49,7 +46,6 @@ class WaypointsController extends AbstractController
     #[Route(path: '/waypoints2', name: 'waypoints2')]
     public function index2(
         WaypointRepository $repository,
-        ProvinceRepository $provinceRepository,
         Request $request
     ): Response {
         $paginatorOptions = $this->getPaginatorOptions($request);
@@ -66,7 +62,6 @@ class WaypointsController extends AbstractController
             'waypoints/index2.html.twig',
             [
                 'waypoints'        => $waypoints,
-                'provinces'        => $provinceRepository->findAll(),
                 'paginatorOptions' => $paginatorOptions,
             ]
         );
@@ -77,7 +72,7 @@ class WaypointsController extends AbstractController
         Request $request,
         Waypoint $waypoint,
         EntityManagerInterface $entityManager
-    ) {
+    ): RedirectResponse|Response {
         $form = $this->createForm(WaypointFormType::class, $waypoint);
         $form->handleRequest($request);
 
@@ -104,7 +99,7 @@ class WaypointsController extends AbstractController
         Request $request,
         Waypoint $waypoint,
         EntityManagerInterface $entityManager
-    ) {
+    ): RedirectResponse|Response {
         $form = $this->createForm(WaypointFormTypeDetails::class, $waypoint);
         $form->handleRequest($request);
 

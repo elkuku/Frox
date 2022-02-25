@@ -20,11 +20,7 @@ class WaypointFormType extends AbstractType
         array $options
     ): void {
         $builder
-            ->add('name')
-            ->add('description')
-            ->add('province')
-            ->add('category')
-            ->add('city');
+            ->add('name');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

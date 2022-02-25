@@ -21,9 +21,6 @@ class WaypointFormTypeDetails extends AbstractType
     ): void {
         $builder
             ->add('name')
-            // ->add('description')
-            // ->add('province')
-            ->add('category')// ->add('city')
         ;
     }
 

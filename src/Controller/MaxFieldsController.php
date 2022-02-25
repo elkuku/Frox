@@ -12,6 +12,7 @@ use Knp\Snappy\Pdf;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -100,7 +101,7 @@ class MaxFieldsController extends AbstractController
         MailerInterface $mailer,
         Request $request,
         Pdf $pdf
-    ) {
+    ): JsonResponse {
         $agent = $request->get('agent');
         $email = $request->get('email');
         $item = $request->get('item');
@@ -252,7 +253,7 @@ class MaxFieldsController extends AbstractController
     public function maxfield2strike(
         MaxField2Strike $maxField2Strike,
         Request $request
-    ) {
+    ): JsonResponse {
         $opName = $request->query->get('opName');
         $maxfieldName = $request->query->get('maxfieldName');
 
@@ -268,7 +269,7 @@ class MaxFieldsController extends AbstractController
     }
 
     #[Route(path: '/log', name: 'maxfields-log')]
-    public function getLog(StrikeLogger $logger)
+    public function getLog(StrikeLogger $logger): Response
     {
         $response = new Response();
         $response->headers->set('Content-Type', 'text/plain');

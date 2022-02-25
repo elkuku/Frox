@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Helper\Paginator\PaginatorTrait;
-use App\Repository\ProvinceRepository;
 use App\Repository\WaypointRepository;
 use App\Service\MaxFieldGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,11 +18,10 @@ class ExportController extends AbstractController
     #[Route(path: '/export', name: 'export')]
     public function index(
         WaypointRepository $repository,
-        ProvinceRepository $provinceRepository,
         MaxFieldGenerator $maxFieldGenerator,
         Request $request
     ): Response {
-        $points = $request->request->get('points');
+        $points = $request->request->all('points');
 
         if ($points) {
             $wayPoints = $repository->findBy(['id' => $points]);
@@ -31,7 +29,7 @@ class ExportController extends AbstractController
             return $this->render(
                 'export/result.html.twig',
                 [
-                    'gpx'      => $maxFieldGenerator->createGpx($wayPoints),
+                    'gpx'      => '',//$maxFieldGenerator->createGpx($wayPoints),
                     'maxField' => $maxFieldGenerator->convertWayPointsToMaxFields(
                         $wayPoints
                     ),
@@ -54,7 +52,6 @@ class ExportController extends AbstractController
             [
                 'waypoints'        => $waypoints,
                 'waypoints_cnt'    => $waypoints->count(),
-                'provinces'        => $provinceRepository->findAll(),
                 'paginatorOptions' => $paginatorOptions,
             ]
         );
@@ -66,7 +63,7 @@ class ExportController extends AbstractController
         MaxFieldGenerator $maxFieldGenerator,
         Request $request
     ): JsonResponse {
-        $points = $request->request->get('points');
+        $points = $request->request->all('points');
 
         if ($points) {
             $wayPoints = $repository->findBy(['id' => $points]);
@@ -74,7 +71,7 @@ class ExportController extends AbstractController
                 'maxfield' => $maxFieldGenerator->convertWayPointsToMaxFields(
                     $wayPoints
                 ),
-                'gpx'      => $maxFieldGenerator->createGpx($wayPoints),
+                'gpx'      => '',//$maxFieldGenerator->createGpx($wayPoints),
             ];
         } else {
             $message = 'No WayPoints Selected!';
