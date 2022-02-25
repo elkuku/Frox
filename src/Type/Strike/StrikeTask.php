@@ -77,9 +77,9 @@ class StrikeTask
      * Array    [{name: “char”, portalID: “char”, lat: float, lon: float}]
      * Required if to-do=8
      *
-     * @
+     * @var array<int, \stdClass> $linkTarget
      */
-    public $linkTarget;
+    public array $linkTarget;
 
     /*
     createdAt	When it was created	datetime	Set by backend	X

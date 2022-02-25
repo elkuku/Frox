@@ -20,10 +20,15 @@ abstract class AbstractParser
     abstract protected function getType(): string;
 
     /**
+     * @param array<string> $data
+     *
      * @return Waypoint[]
      */
     abstract public function parse(array $data): array;
 
+    /**
+     * @param array<string> $data
+     */
     public function supports(array $data): bool
     {
         $type = $this->gettype();
@@ -37,6 +42,9 @@ abstract class AbstractParser
         return $this->check($type, $data);
     }
 
+    /**
+     * @param array<string>  $data
+     */
     protected function check(string $key, array $data): bool
     {
         return array_key_exists($key, $data) && $data[$key];

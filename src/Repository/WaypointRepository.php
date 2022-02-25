@@ -6,6 +6,7 @@ use App\Entity\Waypoint;
 use App\Helper\Paginator\PaginatorOptions;
 use App\Helper\Paginator\PaginatorRepoTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Waypoint|null findOneBy(array $criteria, array $orderBy = null)
  * @method Waypoint[]    findAll()
  * @method Waypoint[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @extends ServiceEntityRepository<WaypointRepository>
  */
 class WaypointRepository extends ServiceEntityRepository
 {
@@ -27,7 +30,7 @@ class WaypointRepository extends ServiceEntityRepository
     /**
      * @return Waypoint[] Returns an array of Waypoint objects
      */
-    public function findById($id): array
+    public function findById(int $id): array
     {
         return $this->createQueryBuilder('w')
             ->andWhere('w.exampleField = :val')
@@ -39,6 +42,8 @@ class WaypointRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array<int> $ids
+     *
      * @return Waypoint[]
      */
     public function findByIds(array $ids): array
@@ -51,6 +56,8 @@ class WaypointRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array<int> $ids
+     *
      * @return Waypoint[]
      */
     public function findDetailsByIds(array $ids): array
@@ -79,7 +86,7 @@ class WaypointRepository extends ServiceEntityRepository
     /**
      * @param PaginatorOptions $options
      *
-     * @return Paginator
+     * @return Paginator<Query>
      */
     public function getRawList(PaginatorOptions $options): Paginator
     {

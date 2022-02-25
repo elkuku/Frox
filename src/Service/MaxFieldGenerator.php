@@ -60,6 +60,9 @@ class MaxFieldGenerator
         $this->googleApiSecret = $googleApiSecret;
     }
 
+    /**
+     * @param array<string, bool>  $options
+     */
     public function generate(
         string $projectName,
         string $wayPointList,
@@ -109,6 +112,9 @@ class MaxFieldGenerator
         }
     }
 
+    /**
+     * @return array<string>
+     */
     public function getContentList(string $item): array
     {
         $list = [];

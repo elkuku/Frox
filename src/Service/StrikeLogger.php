@@ -6,16 +6,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class StrikeLogger
 {
-    private $logFile = '';
+    private string $logFile = '';
 
-    /**
-     * @var Filesystem
-     */
-    private $fileSystem;
+    private Filesystem $fileSystem;
 
-    private $started = false;
+    private bool $started = false;
 
-    public function __construct($rootDir)
+    public function __construct(string $rootDir)
     {
         $this->fileSystem = new Filesystem();
         $this->logFile = $rootDir.'/var/log/strikelog.txt';

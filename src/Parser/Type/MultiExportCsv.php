@@ -49,7 +49,10 @@ class MultiExportCsv extends AbstractParser
         return $waypoints;
     }
 
-    private function parseFishyCsvLine2(string $line)
+    /**
+     * @return array<string>
+     */
+    private function parseFishyCsvLine2(string $line): array
     {
         $parts = explode(',', $line);
 

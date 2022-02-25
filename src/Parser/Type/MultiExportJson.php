@@ -12,6 +12,9 @@ class MultiExportJson extends AbstractParser
         return 'multiexport-json';
     }
 
+    /**
+     * @inheritDoc
+     */
     public function parse(array $data): array
     {
         $waypoints = [];

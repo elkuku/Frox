@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Waypoint;
 use App\Form\ImportFormType;
 use App\Parser\WayPointParser;
 use App\Repository\WaypointRepository;
@@ -55,6 +56,9 @@ class ImportController extends AbstractController
         );
     }
 
+    /**
+     * @param array<Waypoint> $wayPoints
+     */
     private function storeWayPoints(
         array $wayPoints,
         WaypointRepository $repository,

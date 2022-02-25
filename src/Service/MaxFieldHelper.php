@@ -15,6 +15,9 @@ class MaxFieldHelper
         $this->rootDir = $rootDir.'/public/maxfields';
     }
 
+    /**
+     * @return array<string>
+     */
     public function getList(): array
     {
         $list = [];

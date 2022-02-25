@@ -34,12 +34,16 @@ class VAPI
         return $this->restClient->request('GET', $this->generateURL($command));
     }
 
-    public function post(string $command, $payload): ResponseInterface
+    public function post(string $command, string $payload): ResponseInterface
     {
-        return $this->restClient->request('POST', $this->generateURL($command), ['body'=>$payload]);
+        return $this->restClient->request(
+            'POST',
+            $this->generateURL($command),
+            ['body' => $payload]
+        );
     }
 
-    private function generateURL($command): string
+    private function generateURL(string $command): string
     {
         return "$this->apiBaseUrl/$command?apikey=$this->apiKey";
     }

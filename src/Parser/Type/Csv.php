@@ -49,6 +49,11 @@ class Csv extends AbstractParser
         return $waypoints;
     }
 
+    /**
+     * @param array<string> $parts
+     *
+     * @return array<string>
+     */
     private function parseFishyCsvLine(array $parts): array
     {
         $returnValues = [];

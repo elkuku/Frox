@@ -5,12 +5,12 @@ namespace App\Type\Strike;
 class StrikeLink
 {
     public string $originName = '';
-    public $originLat = 0;
-    public $originLon = 0;
+    public float $originLat = 0;
+    public float $originLon = 0;
 
     public string $destinationName = '';
-    public $destinationLat = 0;
-    public $destinationLon = 0;
+    public float $destinationLat = 0;
+    public float $destinationLon = 0;
 
     public function __construct(
         string $originName = '',

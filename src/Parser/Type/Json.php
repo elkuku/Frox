@@ -2,9 +2,8 @@
 
 namespace App\Parser\Type;
 
-use App\Entity\Category;
-use App\Entity\Waypoint;
 use App\Parser\AbstractParser;
+use JsonException;
 
 class Json extends AbstractParser
 {
@@ -21,8 +20,21 @@ class Json extends AbstractParser
     {
         $waypoints = [];
 
-        foreach ($data as $item) {
-            $latlng = explode(',', $item->latlng);
+        try {
+            $items = json_decode(
+                $data[$this->getType()],
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+        } catch (JsonException $e) {
+            throw new \UnexpectedValueException(
+                'Invalid multiexport JSON data'
+            );
+        }
+
+        foreach ($items as $item) {
+            $latlng = explode(',', $item['latlng']);
 
             if (2 !== count($latlng)) {
                 throw new \UnexpectedValueException('Invalid latlng JSON data');
@@ -32,7 +44,7 @@ class Json extends AbstractParser
                 '',
                 (float)$latlng[0],
                 (float)$latlng[1],
-                $item->title,
+                $item['title'],
             );
         }
 

@@ -19,6 +19,8 @@ class WayPointParser
     }
 
     /**
+     * @param array<string> $data
+     *
      * @return Waypoint[]
      */
     public function parse(array $data): array

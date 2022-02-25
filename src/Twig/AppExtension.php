@@ -35,7 +35,7 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function getUrl($type)
+    public function getUrl(string $type): string
     {
         switch ($type) {
             case 'intel':
@@ -50,7 +50,7 @@ class AppExtension extends AbstractExtension
      *
      * @param object $classObject
      *
-     * @return array
+     * @return array<string, string>
      */
     public function objectFilter(object $classObject): array
     {
