@@ -2,8 +2,6 @@
 
 namespace App\Parser\Type;
 
-use App\Entity\Category;
-use App\Entity\Waypoint;
 use App\Parser\AbstractParser;
 
 class OffleJson extends AbstractParser
@@ -20,14 +18,19 @@ class OffleJson extends AbstractParser
     public function parse(array $data): array
     {
         $waypoints = [];
-        $jsonData = json_decode($data, false);
+        $jsonData = json_decode(
+            $data[$this->getType()],
+            false,
+            512,
+            JSON_THROW_ON_ERROR
+        );
 
         if (!$jsonData) {
             throw new \UnexpectedValueException('Invalid JSON data received');
         }
 
         foreach ($jsonData as $item) {
-            if (isset($item->name)) {
+            if (isset($item->name, $item->guid, $item->lat, $item->lng)) {
                 $waypoints[] = $this->createWayPoint(
                     $item->guid,
                     $item->lat,

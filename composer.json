@@ -30,6 +30,7 @@
     "symfony/form": "*",
     "symfony/framework-bundle": "*",
     "symfony/google-mailer": "6.*",
+    "symfony/http-client": "6.*",
     "symfony/mailer": "6.*",
     "symfony/monolog-bundle": "^3.1",
     "symfony/process": "*",
@@ -47,6 +48,8 @@
   },
   "require-dev": {
     "hautelook/alice-bundle": "^2.7",
+    "phpstan/extension-installer": "^1.1",
+    "phpstan/phpstan-doctrine": "^1.2",
     "phpunit/phpunit": "^9.5",
     "rector/rector": "^0.12.16",
     "roave/security-advisories": "dev-latest",
@@ -66,7 +69,8 @@
     "sort-packages": true,
     "allow-plugins": {
       "symfony/flex": true,
-      "symfony/runtime": true
+      "symfony/runtime": true,
+      "phpstan/extension-installer": true
     }
   },
   "autoload": {

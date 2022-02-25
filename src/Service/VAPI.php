@@ -3,43 +3,40 @@
 namespace App\Service;
 
 use App\Type\Strike\StrikeTask;
-use Circle\RestClientBundle\Services\RestClient;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class VAPI
 {
-    public $apiBaseUrl = 'https://tasks.enl.one/api';
+    public string $apiBaseUrl = 'https://tasks.enl.one/api';
 
-    /**
-     * @var RestClient
-     */
-    private $restClient;
-
-    private $apiKey;
-
-    // public function __construct(RestClient $restClient, $apiKey)
-    public function __construct($apiKey)
-    {
-        // $this->restClient = $restClient;
-        $this->apiKey = $apiKey;
+    public function __construct(
+        private string $apiKey,
+        private HttpClientInterface $restClient
+    ) {
     }
 
-    public function newTask(int $opId, StrikeTask $task)
+    public function newTask(int $opId, StrikeTask $task): ResponseInterface
     {
         $command = "op/$opId/task";
-        $payload = json_encode($task);
+        $payload = json_encode($task, JSON_THROW_ON_ERROR);
 
-        return $this->restClient->post($this->generateURL($command), $payload);
+        return $this->restClient->request(
+            'POST', $this->generateURL($command),
+            [
+                'body' => $payload,
+            ]
+        );
     }
 
-    public function get(string $command): Response
+    public function get(string $command): ResponseInterface
     {
-        return $this->restClient->get($this->generateURL($command));
+        return $this->restClient->request('GET', $this->generateURL($command));
     }
 
-    public function post(string $command, $payload): Response
+    public function post(string $command, $payload): ResponseInterface
     {
-        return $this->restClient->post($this->generateURL($command), $payload);
+        return $this->restClient->request('POST', $this->generateURL($command), ['body'=>$payload]);
     }
 
     private function generateURL($command): string

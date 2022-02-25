@@ -2,51 +2,34 @@
 
 namespace App\Service;
 
-use App\Type\AgentInfoType;
 use App\Type\Strike\StrikeLink;
 use App\Type\Strike\StrikePortal;
 use App\Type\Strike\StrikeTask;
+use Elkuku\MaxfieldParser\MaxfieldParser;
+use Elkuku\MaxfieldParser\Type\AgentInfo;
 
 class MaxField2Strike
 {
-    /**
-     * @var VAPI
-     */
-    private $VAPI;
-
-    /**
-     * @var MaxFieldGenerator
-     */
-    private $maxFieldGenerator;
-
-    private $opId = 0;
+    private int $opId = 0;
 
     /**
      * @var StrikePortal[]
      */
-    private $portals = [];
+    private array $portals = [];
 
     /**
-     * @var AgentInfoType[]
+     * @var AgentInfo[]
      */
-    private $agentInfos;
-
-    /**
-     * @var StrikeLogger
-     */
-    private $logger;
+    private array $agentInfos;
 
     public function __construct(
-        MaxFieldGenerator $maxFieldGenerator,
-        VAPI $VAPI,
-        StrikeLogger $logger
+        private MaxfieldParser $maxfieldParser,
+        private VAPI $VAPI,
+        private StrikeLogger $logger
     ) {
-        $this->maxFieldGenerator = $maxFieldGenerator;
-        $this->VAPI = $VAPI;
-        $this->logger = $logger;
     }
 
-    public function generateOp(string $OpName, string $maxfieldName)
+    public function generateOp(string $OpName, string $maxfieldName): string
     {
         $this->logger->add('Start creating OP '.$OpName);
 
@@ -66,19 +49,19 @@ class MaxField2Strike
 
     private function collectData(string $maxfieldName): self
     {
-        $mfInfo = $this->maxFieldGenerator->getInfo($maxfieldName);
+        $mfInfo = $this->maxfieldParser->parse($maxfieldName);
 
         $this->agentInfos = $mfInfo->agentsInfo;
 
         // Read portals file
-        $portals = $this->maxFieldGenerator->parseWayPointsFile($maxfieldName);
+        $portals = $this->maxfieldParser->getWayPoints($maxfieldName);
 
         foreach ($portals as $portal) {
             $p = new StrikePortal();
 
-            $p->name = $portal->getName();
-            $p->lat = $portal->getLat();
-            $p->lon = $portal->getLon();
+            $p->name = $portal->name;
+            $p->lat = $portal->lat;
+            $p->lon = $portal->lon;
 
             $this->portals[] = $p;
         }

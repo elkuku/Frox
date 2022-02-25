@@ -9,15 +9,8 @@
 namespace App\Service;
 
 use App\Entity\Waypoint;
-use App\Type\AgentInfoType;
-use App\Type\AgentLinkType;
-use App\Type\InfoKeyPrepType;
-use App\Type\InfoStepType;
-use App\Type\MaxFields\MaxFieldType;
-use App\Type\WayPointPrepType;
 use DirectoryIterator;
 use Exception;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -91,7 +84,7 @@ class MaxFieldGenerator
 
                 if ($this->googleApiKey) {
                     $command .= ' --google_api_key '.$this->googleApiKey;
-                    // $command .= ' --google_api_secret '.$this->googleApiSecret;
+                    $command .= ' --google_api_secret '.$this->googleApiSecret;
                 }
 
                 if ($options['skip_plots']) {

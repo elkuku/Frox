@@ -38,7 +38,7 @@ class Csv extends AbstractParser
                 '',
                 (float)$parts[1],
                 (float)$parts[2],
-                (float)$parts[0]
+                $parts[0]
             );
 
 

@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Repository\WaypointRepository;
-use App\Service\GpxHelper;
 use App\Service\MaxField2Strike;
 use App\Service\MaxFieldGenerator;
 use App\Service\MaxFieldHelper;
 use App\Service\StrikeLogger;
+use Elkuku\MaxfieldParser\GpxHelper;
 use Knp\Snappy\Pdf;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -166,9 +166,9 @@ class MaxFieldsController extends AbstractController
     }
 
     #[Route(path: '/gpx/{item}', name: 'max_fields_gpx')]
-    public function getGpx(string $item, GpxHelper $gpxHelper): void
+    public function getGpx(string $item, GpxHelper $gpxHelper, MaxFieldHelper $maxFieldHelper): void
     {
-        $gpx = $gpxHelper->getWaypointsGpx($item);
+        $gpx = $gpxHelper->getWaypointsGpx($maxFieldHelper->getParser($item));
 
         header('Content-type: text/plain');
         header(
@@ -182,9 +182,9 @@ class MaxFieldsController extends AbstractController
     }
 
     #[Route(path: '/gpxroute/{item}', name: 'max_fields_gpxroute')]
-    public function getGpxRoute(GpxHelper $gpxHelper, string $item): void
+    public function getGpxRoute(GpxHelper $gpxHelper, MaxFieldHelper $maxFieldHelper, string $item): void
     {
-        $gpx = $gpxHelper->getRouteGpx($item);
+        $gpx = $gpxHelper->getRouteGpx($maxFieldHelper->getParser($item));
 
         header('Content-type: text/plain');
         header(
@@ -197,9 +197,9 @@ class MaxFieldsController extends AbstractController
     }
 
     #[Route(path: '/gpxtrack/{item}', name: 'max_fields_gpxtrack')]
-    public function getGpxTrack(GpxHelper $gpxHelper, string $item): void
+    public function getGpxTrack(GpxHelper $gpxHelper, MaxFieldHelper $maxFieldHelper, string $item): void
     {
-        $gpx = $gpxHelper->getTrackGpx($item);
+        $gpx = $gpxHelper->getTrackGpx($maxFieldHelper->getParser($item));
 
         header('Content-type: text/plain');
         header(
@@ -212,9 +212,9 @@ class MaxFieldsController extends AbstractController
     }
 
     #[Route(path: '/gpxroutetrack/{item}', name: 'max_fields_gpxroutetrack')]
-    public function getGpxRouteTrack(GpxHelper $gpxHelper, string $item): void
+    public function getGpxRouteTrack(GpxHelper $gpxHelper, MaxFieldHelper $maxFieldHelper, string $item): void
     {
-        $gpx = $gpxHelper->getRouteTrackGpx($item);
+        $gpx = $gpxHelper->getRouteTrackGpx($maxFieldHelper->getParser($item));
 
         header('Content-type: text/plain');
         header(

@@ -30,10 +30,16 @@ class MaxFieldHelper
         return $list;
     }
 
+    public function getParser(string $item = ''): MaxfieldParser
+    {
+        $dir = $item ? $this->rootDir.'/'.$item : $this->rootDir;
+
+        return new MaxfieldParser($dir);
+    }
+
     public function getMaxField(string $item): MaxField
     {
-        return (new MaxfieldParser($this->rootDir))
-            ->parse($item);
+        return $this->getParser()->parse($item);
     }
 
     public function getMaxfieldVersion(): int
