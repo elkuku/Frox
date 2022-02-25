@@ -2,8 +2,6 @@
 
 namespace App\Parser\Type;
 
-use App\Entity\Category;
-use App\Entity\Waypoint;
 use App\Parser\AbstractParser;
 
 class Csv extends AbstractParser
@@ -13,22 +11,10 @@ class Csv extends AbstractParser
         return 'csvRaw';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function parse(array $data): array
     {
-        $repository = $this->getDoctrine()
-            ->getRepository(Waypoint::class);
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['id' => 1]);
-
-        $lines = explode("\n", $csvRaw);
-        $cnt = 0;
+        $lines = explode("\n", $data[$this->getType()]);
+        $waypoints = [];
 
         foreach ($lines as $i => $line) {
             $line = trim($line);
@@ -48,38 +34,19 @@ class Csv extends AbstractParser
                 }
             }
 
-            $lat = (float)$parts[1];
-            $lon = (float)$parts[2];
-
-            $wayPoint = $repository->findOneBy(
-                [
-                    'lat' => $lat,
-                    'lon' => $lon,
-                ]
+            $waypoints[] = $this->createWayPoint(
+                '',
+                (float)$parts[1],
+                (float)$parts[2],
+                (float)$parts[0]
             );
 
-            if (!$wayPoint) {
-                $wayPoint = new Waypoint();
-
-                $wayPoint->setName($parts[0]);
-                $wayPoint->setLat($lat);
-                $wayPoint->setLon($lon);
-                $wayPoint->setCategory($category);
-                $wayPoint->setProvince($province);
-                $wayPoint->setCity($city);
-
-                $entityManager->persist($wayPoint);
-
-                $entityManager->flush();
-
-                $cnt++;
-            }
 
             // Check image
-            $wayPointHelper->checkImage($wayPoint->getId(), trim($parts[3]));
+            // $this->wayPointHelper->checkImage($wayPoint->getId(), trim($parts[3]));
         }
 
-        return $cnt;
+        return $waypoints;
     }
 
     private function parseFishyCsvLine(array $parts): array

@@ -2,9 +2,8 @@
 
 namespace App\Parser\Type;
 
-use App\Entity\Category;
-use App\Entity\Waypoint;
 use App\Parser\AbstractParser;
+use Exception;
 
 class Gpx extends AbstractParser
 {
@@ -14,45 +13,25 @@ class Gpx extends AbstractParser
         return 'gpxRaw';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function parse(array $data): array
     {
         try {
-            $xml = simplexml_load_string($dagpxData);
-        } catch (Exception $exception) {
+            $xml = simplexml_load_string($data[$this->getType()]);
+        } catch (Exception) {
             throw new \UnexpectedValueException('Invalid GPX data received!');
         }
 
-        $cnt = 0;
+        $waypoints = [];
 
         foreach ($xml->children() as $wp) {
-            $w = $repository->findOneBy(
-                [
-                    'lat' => $wp['lat'],
-                    'lon' => $wp['lon'],
-                ]
+            $waypoints[] = $this->createWayPoint(
+                '',
+                (float)$wp['lat'],
+                (float)$wp['lon'],
+                $wp->name
             );
-
-            if (!$w) {
-                $wayPoint = new Waypoint();
-
-                $wayPoint->setName($wp->name);
-                $wayPoint->setLat((float)$wp['lat']);
-                $wayPoint->setLon((float)$wp['lon']);
-                $wayPoint->setCategory($category);
-                $wayPoint->setProvince($province);
-                $wayPoint->setCity($city);
-
-                $entityManager->persist($wayPoint);
-
-                $entityManager->flush();
-
-                $cnt++;
-            }
         }
 
-        return $cnt;
+        return $waypoints;
     }
 }
