@@ -76,6 +76,7 @@ class MaxFieldGenerator
             $fileSystem->mkdir($projectRoot);
             $fileName = $projectRoot.'/'.$projectName.'.waypoints';
             $fileSystem->appendToFile($fileName, $wayPointList);
+            $fileSystem->appendToFile($projectRoot.'/portals.txt', $wayPointList);
 
             if ($this->maxfieldVersion < 4) {
                 $command = "python {$this->maxfieldExec} $fileName"

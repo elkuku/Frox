@@ -8,6 +8,7 @@ use App\Service\MaxFieldGenerator;
 use App\Service\MaxFieldHelper;
 use App\Service\StrikeLogger;
 use Elkuku\MaxfieldParser\GpxHelper;
+use Elkuku\MaxfieldParser\JsonHelper;
 use Knp\Snappy\Pdf;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -222,6 +223,22 @@ class MaxFieldsController extends AbstractController
         );
 
         echo $gpx;
+
+        exit();
+    }
+
+    #[Route(path: '/json/{item}', name: 'max_fields_json')]
+    public function getJson(MaxFieldHelper $maxFieldHelper, string $item): void
+    {
+        $json = (new JsonHelper())
+            ->getJson($maxFieldHelper->getParser($item));
+
+        header('Content-type: text/plain');
+        header(
+            'Content-Disposition: attachment; filename="'.$item.'-maxfield.json"'
+        );
+
+        echo $json;
 
         exit();
     }
