@@ -13,6 +13,9 @@
           data-item="{{ item }}"
           data-steps="{{ info.steps|json_encode }}"
     ></span>
+    <a href="{{ path('max_fields_json', {'item': item}) }}" class="btn btn-sm btn-outline-success">
+        JSON
+    </a>
     <a href="{{ path('max_fields_gpx', {'item': item}) }}" class="btn btn-sm btn-outline-success">
         {{ 'Download GPX'|trans }}
     </a>
