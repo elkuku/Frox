@@ -84,7 +84,7 @@ class MaxFieldGenerator
             } else {
                 $command = "{$this->maxfieldExec} $fileName"
                     ." --outdir $projectRoot --num_agents $playersNum --output_csv"
-                    ." --num_cpus 0 --num_field_iterations 100 --max_route_solutions 100";
+                    ." --num_cpus 0 --num_field_iterations 10 --max_route_solutions 10";
 
                 if ($this->googleApiKey) {
                     $command .= ' --google_api_key '.$this->googleApiKey;
