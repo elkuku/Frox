@@ -17,17 +17,16 @@ let map, selectionMode
 
 const LeafIcon = L.Icon.extend({
     options: {
-        shadowUrl: '/build/img/leaf-shadow.png',
-        iconSize: [38, 95],
-        shadowSize: [50, 64],
-        iconAnchor: [22, 94],
-        shadowAnchor: [4, 62],
-        popupAnchor: [-3, -76]
+        shadowUrl: '/build/img/map-marker/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
     }
 })
 
-const redIcon = new LeafIcon({iconUrl: '/build/img/leaf-red.png'}),
-    orangeIcon = new LeafIcon({iconUrl: '/build/img/leaf-orange.png'})
+const redIcon = new LeafIcon({iconUrl: '/build/img/map-marker/marker-icon-red.png'}),
+    orangeIcon = new LeafIcon({iconUrl: '/build/img/map-marker/marker-icon-orange.png'})
 
 const selectedMarkers = []
 const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
@@ -161,7 +160,7 @@ function copyToClipboard(elementId) {
         alert('Content has been copied to your clipboard.')
         // console.log('Async: Copying to clipboard was successful!')
     }, function (err) {
-        alert('Could not copy text: '+ err)
+        alert('Could not copy text: ' + err)
         // console.error('Async: Could not copy text: ', err)
     })
 }

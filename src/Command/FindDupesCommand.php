@@ -4,47 +4,25 @@ namespace App\Command;
 
 use App\Repository\WaypointRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:find-dupes',
+    description: 'Find duplicated entries'
+)]
 class FindDupesCommand extends Command
 {
-    protected static $defaultName = 'finddupes';
-
-    private EntityManagerInterface $entityManager;
-    private WaypointRepository $waypointRepository;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        WaypointRepository $waypointRepository
+        private EntityManagerInterface $entityManager,
+        private WaypointRepository $waypointRepository
     ) {
         parent::__construct();
-
-        $this->entityManager = $entityManager;
-        $this->waypointRepository = $waypointRepository;
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setDescription('Add a short description for your command')
-            ->addArgument(
-                'arg1',
-                InputArgument::OPTIONAL,
-                'Argument description'
-            )
-            ->addOption(
-                'option1',
-                null,
-                InputOption::VALUE_NONE,
-                'Option description'
-            );
     }
 
     protected function execute(

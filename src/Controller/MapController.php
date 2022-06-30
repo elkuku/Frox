@@ -10,20 +10,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class MapController extends AbstractController
 {
     #[Route(path: '/maxfield', name: 'map-maxfield')]
-    public function map(): Response
+    public function maxfield(): Response
     {
         return $this->render('maps/maxfield.html.twig');
     }
 
-    #[Route(path: '/map2', name: 'map2')]
-    public function map2(): Response
+    #[Route(path: '/edit', name: 'map-edit')]
+    public function edit(): Response
     {
-        return $this->render('default/map2.html.twig');
-    }
-
-    #[Route(path: '/map3', name: 'map3')]
-    public function map3(): Response
-    {
-        return $this->render('default/map3.html.twig');
+        return $this->render('maps/edit.html.twig');
     }
 }

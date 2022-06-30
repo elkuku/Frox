@@ -5,49 +5,25 @@ namespace App\Command;
 use App\Repository\WaypointRepository;
 use App\Service\WayPointHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:cleandb',
+    description: 'Cleanup the database'
+)]
 class CleandbCommand extends Command
 {
-    protected static $defaultName = 'cleandb';
-
-    private EntityManagerInterface $entityManager;
-    private WaypointRepository $waypointRepository;
-    private WayPointHelper $wayPointHelper;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        WaypointRepository $waypointRepository,
-        WayPointHelper $wayPointHelper
+        private EntityManagerInterface $entityManager,
+        private WaypointRepository $waypointRepository,
+        private WayPointHelper $wayPointHelper
     ) {
         parent::__construct();
-
-        $this->entityManager = $entityManager;
-        $this->waypointRepository = $waypointRepository;
-        $this->wayPointHelper = $wayPointHelper;
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setDescription('Add a short description for your command')
-            ->addArgument(
-                'arg1',
-                InputArgument::OPTIONAL,
-                'Argument description'
-            )
-            ->addOption(
-                'option1',
-                null,
-                InputOption::VALUE_NONE,
-                'Option description'
-            );
     }
 
     protected function execute(

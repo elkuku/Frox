@@ -5,10 +5,7 @@ require('leaflet.markercluster')
 require('leaflet.markercluster/dist/MarkerCluster.css')
 require('leaflet.markercluster/dist/MarkerCluster.Default.css')
 
-require('leaflet-draw')
-require('leaflet-draw/dist/leaflet.draw.css')
-
-require('../css/map-decode.css')
+require('../../css/map/edit.css')
 
 const map  = new L.Map('map')
 const markers = L.markerClusterGroup({disableClusteringAtZoom: 16})
@@ -23,35 +20,6 @@ function initmap() {
 
     const editableLayers = new L.FeatureGroup()
     map.addLayer(editableLayers)
-
-    const drawPluginOptions = {
-        position: 'topright',
-        draw: {
-            polygon: {
-                allowIntersection: false, // Restricts shapes to simple polygons
-                drawError: {
-                    color: '#e1e100', // Color the shape will turn when intersects
-                    message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-                },
-                shapeOptions: {
-                    color: '#97009c'
-                }
-            },
-            // disable toolbar item by setting it to false
-            // polyline: true,
-            circle: false,
-            rectangle: true,
-            marker: false,
-        },
-        edit: {
-            featureGroup: editableLayers, //REQUIRED!!
-            remove: false
-        }
-    }
-
-    // Initialise the draw control and pass it the FeatureGroup of editable layers
-    const drawControl = new L.Control.Draw(drawPluginOptions)
-    map.addControl(drawControl)
 
     map.on('draw:created', function (e) {
         const type = e.layerType,

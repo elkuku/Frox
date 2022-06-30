@@ -43,30 +43,6 @@ class WaypointsController extends AbstractController
         );
     }
 
-    #[Route(path: '/waypoints2', name: 'waypoints2')]
-    public function index2(
-        WaypointRepository $repository,
-        Request $request
-    ): Response {
-        $paginatorOptions = $this->getPaginatorOptions($request);
-
-        $waypoints = $repository->getRawList($paginatorOptions);
-
-        $paginatorOptions->setMaxPages(
-            (int)ceil(
-                $waypoints->count() / $paginatorOptions->getLimit()
-            )
-        );
-
-        return $this->render(
-            'waypoints/index2.html.twig',
-            [
-                'waypoints'        => $waypoints,
-                'paginatorOptions' => $paginatorOptions,
-            ]
-        );
-    }
-
     #[Route(path: '/waypoint/{id}', name: 'waypoints_edit')]
     public function edit(
         Request $request,

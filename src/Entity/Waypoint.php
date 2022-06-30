@@ -2,41 +2,34 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
+use App\Repository\WaypointRepository;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\WaypointRepository")
- * @ApiResource
- */
+#[Entity(repositoryClass: WaypointRepository::class)]
 class Waypoint
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[Column, Id, GeneratedValue]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column]
     private string $name = '';
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=6)
-     */
+    #[Column(type: 'decimal', precision: 10, scale: 6)]
     private float $lat = 0;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=6)
-     */
+    #[Column(type: 'decimal', precision: 10, scale: 6)]
     private float $lon = 0;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
+    #[Column(length: 100, nullable: true)]
     private ?string $guid = '';
+
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 
     public function getId(): ?int
     {
@@ -77,15 +70,6 @@ class Waypoint
         $this->lon = $lon;
 
         return $this;
-    }
-
-    public function getGpxRaw(): void
-    {
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
     }
 
     public function getGuid(): ?string

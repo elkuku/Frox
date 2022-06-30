@@ -3,9 +3,8 @@
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
            aria-expanded="false">{{ 'Maps'|trans }}</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="{{ path('map2') }}">{{ 'Portal edit'|trans }}</a>
             <a class="dropdown-item" href="{{ path('map-maxfield') }}">{{ 'MaxField planner'|trans }}</a>
-            <a class="dropdown-item" href="{{ path('map3') }}">{{ 'Agents'|trans }}</a>
+            <a class="dropdown-item" href="{{ path('map-edit') }}">{{ 'Portal edit'|trans }}</a>
         </div>
     </li>
     <li class="nav-item">
@@ -24,9 +23,7 @@
            aria-expanded="false">Admin</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
             <a class="dropdown-item" href="{{ path('import') }}">Import</a>
-            <a class="dropdown-item" href="{{ path('export') }}">Export</a>
             <a class="dropdown-item" href="{{ path('waypoints') }}">Waypoints</a>
-            <a class="dropdown-item" href="{{ path('waypoints2') }}">Waypoints2</a>
         </div>
     </li>
 </ul>

@@ -15,48 +15,6 @@ class ExportController extends AbstractController
 {
     use PaginatorTrait;
 
-    #[Route(path: '/export', name: 'export')]
-    public function index(
-        WaypointRepository $repository,
-        MaxFieldGenerator $maxFieldGenerator,
-        Request $request
-    ): Response {
-        $points = $request->request->all('points');
-
-        if ($points) {
-            $wayPoints = $repository->findBy(['id' => $points]);
-
-            return $this->render(
-                'export/result.html.twig',
-                [
-                    'gpx'      => '',//$maxFieldGenerator->createGpx($wayPoints),
-                    'maxField' => $maxFieldGenerator->convertWayPointsToMaxFields(
-                        $wayPoints
-                    ),
-                ]
-            );
-        }
-
-        $paginatorOptions = $this->getPaginatorOptions($request);
-
-        $waypoints = $repository->getRawList($paginatorOptions);
-
-        $paginatorOptions->setMaxPages(
-            (int)ceil(
-                $waypoints->count() / $paginatorOptions->getLimit()
-            )
-        );
-
-        return $this->render(
-            'export/index.html.twig',
-            [
-                'waypoints'        => $waypoints,
-                'waypoints_cnt'    => $waypoints->count(),
-                'paginatorOptions' => $paginatorOptions,
-            ]
-        );
-    }
-
     #[Route(path: '/export2', name: 'export2')]
     public function export2(
         WaypointRepository $repository,

@@ -23,16 +23,10 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('map-maxfield', './assets/js/map/maxfield.js')
-    .addEntry('map2', './assets/js/map2.js')
-    .addEntry('map3', './assets/js/map3.js')
-    .addEntry('map-decode', './assets/js/map-decode.js')
-    .addEntry('export', './assets/js/export.js')
+    .addEntry('map-edit', './assets/js/map/edit.js')
     .addEntry('maxfields', './assets/js/maxfields.js')
     .addEntry('paginator', './assets/js/paginator.js')
     .addEntry('background', './assets/js/background.js')
-    .addEntry('gallery', './assets/js/gallery.js')
-
-    .addEntry('vue/waypoints', './assets/js/vue/waypoints.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -98,7 +92,7 @@ Encore
         styles: path.resolve(__dirname, 'assets', 'scss'),
     })
 
-    .enableVueLoader()
+    // .enableVueLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
